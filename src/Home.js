@@ -101,7 +101,7 @@ function Home({ user, isLoggedIn }) {
                 <div className="watch-frame">
                   <img
                     src={watchImages[currentImageIndex]}
-                    alt="Reloj destacado CataWatchs"
+                    alt="Reloj destacado Velorum"
                     className="hero-watch-image"
                   />
                   <div className="image-indicators">

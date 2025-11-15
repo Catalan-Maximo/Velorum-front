@@ -1,6 +1,3 @@
-// 🔐 **LOGIN.JS** - PÁGINA DE INICIO DE SESIÓN Y REGISTRO
-// filepath: c:\Users\Catalan\Documents\GitHub\CataWatchs-Front\catawatchs\src\Login.js
-
 // 📦 IMPORTACIONES NECESARIAS
 import React, { useState, useEffect } from 'react';           // ➕ Agregar useEffect
 import { useNavigate } from 'react-router-dom';
@@ -210,7 +207,7 @@ function Login() {
             </div>
             <h2 className="success-title">¡Iniciaste sesión correctamente!</h2>
             <p className="success-subtitle">
-              Bienvenido a CataWatchs
+              Bienvenido a Velorum
               <span className="redirect-spinner"></span>
             </p>
             <p style={{fontSize: '14px', color: '#666', marginTop: '15px'}}>

@@ -10,7 +10,7 @@ function About() {
       {/* 🎯 HERO SECTION */}
       <section className="about-hero">
         <div className="hero-content">
-          <h1 className="hero-title">Acerca de CataWatchs</h1>
+          <h1 className="hero-title">Acerca de Velorum</h1>
           <p className="hero-subtitle">
             Más que relojes, creamos experiencias que trascienden el tiempo
           </p>
@@ -27,7 +27,7 @@ function About() {
           <div className="content-grid">
             <div className="content-text">
               <p>
-                CataWatchs nació en 2020 con una visión clara: crear relojes excepcionales 
+                Velorum nació en 2020 con una visión clara: crear relojes excepcionales 
                 que combinen la artesanía tradicional con el diseño contemporáneo. Desde 
                 nuestros humildes comienzos, hemos crecido hasta convertirnos en una marca 
                 reconocida internacionalmente.
@@ -43,7 +43,7 @@ function About() {
               <div className="history-timeline">
                 <div className="timeline-item">
                   <div className="year">2020</div>
-                  <div className="milestone">Fundación de CataWatchs</div>
+                  <div className="milestone">Fundación de Velorum</div>
                 </div>
                 <div className="timeline-item">
                   <div className="year">2021</div>
@@ -199,9 +199,9 @@ function About() {
             <div className="contact-buttons">
               <button
                 className="btn-primary contact-main-btn"
-                aria-label="Enviar correo a CataWatchs"
+                aria-label="Enviar correo a Velorum"
                 onClick={() => {
-                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Consulta%20CataWatchs','_blank');
+                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Consulta%20Velorum','_blank');
                 }}
               >
                 CONTÁCTANOS
