@@ -14,6 +14,12 @@ const AdminPanel = () => {
         console.log('📊 user_data:', localStorage.getItem("user_data"));
     }, []);
 
+    // 📦 Cargar datos al montar el componente
+    useEffect(() => {
+        fetchUsers();
+        fetchDashboard();
+    }, []);
+
     // Estados principales
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);

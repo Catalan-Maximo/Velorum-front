@@ -1,5 +1,5 @@
 // Configuración base (revertida a localhost fijo a pedido del usuario)
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://catawatchs-production.up.railway.app/api';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
 
 // Función para obtener headers de autenticación
 export const getAuthHeaders = () => {
@@ -40,7 +40,7 @@ export const apiRequest = async (endpoint, options = {}) => {
 // =============================================================================
 export const authService = {
   login: async (username, password) => {
-    const response = await fetch(`${API_BASE_URL}/token/`, {
+    const response = await fetch(`${API_BASE_URL}/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -138,10 +138,10 @@ export const userService = {
     console.log('🔍 Token disponible:', !!token); // 🔍 Debug
     console.log('🔑 Token value:', token ? token.substring(0, 20) + '...' : 'null'); // 🔍 Debug
     
-    const response = await fetch(`${API_BASE_URL}/account_admin/model/customers/`, {
+    const response = await fetch(`${API_BASE_URL}/users/`, {
       headers: getAuthHeaders()
     });
-    console.log('🔍 Making request to:', `${API_BASE_URL}/account_admin/model/customers/`); // 🔍 Debug
+    console.log('🔍 Making request to:', `${API_BASE_URL}/users/`); // 🔍 Debug
     console.log('🔑 Headers:', getAuthHeaders()); // 🔍 Debug
     console.log('📊 Response status:', response.status); // 🔍 Debug
     
@@ -163,7 +163,7 @@ export const userService = {
   },
 
   create: async (userData) => {
-    const response = await fetch(`${API_BASE_URL}/register/`, {
+    const response = await fetch(`${API_BASE_URL}/create-user/`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(userData)
@@ -172,7 +172,7 @@ export const userService = {
   },
 
   update: async (userId, userData) => {
-    const response = await fetch(`${API_BASE_URL}/account_admin/model/customers/${userId}/`, {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/`, {
       method: "PUT",
       headers: getAuthHeaders(),
       body: JSON.stringify(userData)
@@ -181,7 +181,7 @@ export const userService = {
   },
 
   delete: async (userId) => {
-    const response = await fetch(`${API_BASE_URL}/account_admin/model/customers/${userId}/`, {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/`, {
       method: "DELETE",
       headers: getAuthHeaders()
     });
@@ -189,7 +189,7 @@ export const userService = {
   },
   getById: async (userId) => {
     // Usamos el mismo endpoint del viewset de customers
-    const response = await fetch(`${API_BASE_URL}/account_admin/model/customers/${userId}/`, {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/`, {
       method: 'GET',
       headers: getAuthHeaders()
     });
@@ -198,7 +198,7 @@ export const userService = {
   },
 
   toggleStatus: async (userId, isActive) => {
-    const response = await fetch(`${API_BASE_URL}/account_admin/model/customers/${userId}/`, {
+    const response = await fetch(`${API_BASE_URL}/users/${userId}/`, {
       method: "PATCH",
       headers: getAuthHeaders(),
       body: JSON.stringify({ is_active: isActive })
@@ -494,13 +494,21 @@ export const favoritesService = {
     const response = await fetch(`${API_BASE_URL}/market/model/favorites/`, {
       method: "POST",
       headers: getAuthHeaders(),
-      body: JSON.stringify({ product: productId })
+      body: JSON.stringify({ product_id: productId })
     });
     return response;
   },
 
   remove: async (favoriteId) => {
     const response = await fetch(`${API_BASE_URL}/market/model/favorites/${favoriteId}/`, {
+      method: "DELETE",
+      headers: getAuthHeaders()
+    });
+    return response;
+  },
+
+  removeByProductId: async (productId) => {
+    const response = await fetch(`${API_BASE_URL}/market/model/favorites/?product_id=${productId}`, {
       method: "DELETE",
       headers: getAuthHeaders()
     });
@@ -520,28 +528,27 @@ export const cartService = {
   },
 
   add: async (productId, quantity = 1) => {
-    const response = await fetch(`${API_BASE_URL}/market/model/cart/`, {
+    const response = await fetch(`${API_BASE_URL}/market/model/products/${productId}/add_to_cart/`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify({ 
-        product: productId, 
-        quantity: quantity 
+        cantidad: quantity 
       })
     });
     return response;
   },
 
   update: async (cartItemId, quantity) => {
-    const response = await fetch(`${API_BASE_URL}/market/model/cart/${cartItemId}/`, {
+    const response = await fetch(`${API_BASE_URL}/market/model/cart-items/${cartItemId}/`, {
       method: "PATCH",
       headers: getAuthHeaders(),
-      body: JSON.stringify({ quantity })
+      body: JSON.stringify({ cantidad: quantity })
     });
     return response;
   },
 
   remove: async (cartItemId) => {
-    const response = await fetch(`${API_BASE_URL}/market/model/cart/${cartItemId}/`, {
+    const response = await fetch(`${API_BASE_URL}/market/model/cart-items/${cartItemId}/`, {
       method: "DELETE",
       headers: getAuthHeaders()
     });
@@ -550,6 +557,14 @@ export const cartService = {
 
   clear: async () => {
     const response = await fetch(`${API_BASE_URL}/market/model/cart/clear/`, {
+      method: "POST",
+      headers: getAuthHeaders()
+    });
+    return response;
+  },
+
+  checkout: async () => {
+    const response = await fetch(`${API_BASE_URL}/market/model/cart/checkout/`, {
       method: "POST",
       headers: getAuthHeaders()
     });
