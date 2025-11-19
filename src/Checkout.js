@@ -638,7 +638,7 @@ const Checkout = () => {
                                 <p><strong>Banco:</strong> Banco Nacional</p>
                                 <p><strong>Cuenta:</strong> 1234-5678-9012-3456</p>
                                 <p><strong>CBU:</strong> 1234567890123456789012</p>
-                                <p><strong>Titular:</strong> CataWatchs S.A.</p>
+                                <p><strong>Titular:</strong> Velorum S.A.</p>
                                 <p className="transfer-note">
                                     💡 Luego de realizar la transferencia presiona "Confirmar Pedido" y se abrirá WhatsApp para enviar el comprobante.
                                     <br/>Si no se abre automáticamente, hacé click aquí:{' '}

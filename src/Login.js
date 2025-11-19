@@ -1,6 +1,3 @@
-// 🔐 **LOGIN.JS** - PÁGINA DE INICIO DE SESIÓN Y REGISTRO
-// filepath: c:\Users\Catalan\Documents\GitHub\CataWatchs-Front\catawatchs\src\Login.js
-
 // 📦 IMPORTACIONES NECESARIAS
 import React, { useState, useEffect } from 'react';           // ➕ Agregar useEffect
 import { useNavigate } from 'react-router-dom';
@@ -66,7 +63,7 @@ function Login() {
       // 🌐 DETERMINAR A QUÉ URL ENVIAR LOS DATOS
       const url = isLogin 
         ? `${API_BASE_URL}/login/`      // 🔐 Endpoint login dinámico
-        : `${API_BASE_URL}/register/`;  // 📝 Endpoint registro dinámico
+        : `${API_BASE_URL}/create-user/`;  // 📝 Endpoint registro dinámico
       
       // 📦 PREPARAR LOS DATOS SEGÚN EL TIPO DE FORMULARIO
       let dataToSend;
@@ -121,25 +118,44 @@ function Login() {
           loginCard.classList.add('success');
         }
         
-        // 💾 GUARDAR TOKENS
+        // 💾 GUARDAR TOKENS PRIMERO
         localStorage.setItem('token', data.access);
+        localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         
-        // 👤 GUARDAR INFORMACIÓN REAL DEL USUARIO
-        const userInfo = {
-          username: data.user_info?.username || formData.username,
-          first_name: data.user_info?.first_name || '',
-          last_name: data.user_info?.last_name || '',
-          email: data.user_info?.email || formData.email || formData.username, // 📧 Email real
-          phone: data.user_info?.phone || '',
-          address: data.user_info?.address || '',
-          role: data.user_info?.role || 'user', // 🎭 ROL DEL USUARIO (¡IMPORTANTE!)
-          id: data.user_info?.id || null
-        };
-        
-        console.log('💾 Guardando información del usuario:', userInfo); // 🔍 Debug
-        console.log('🎭 Rol del usuario:', userInfo.role); // 🔍 Debug adicional
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        // 👤 OBTENER INFORMACIÓN COMPLETA DEL USUARIO DESDE /profile/
+        try {
+          const profileResponse = await fetch(`${API_BASE_URL}/profile/`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${data.access}`
+            }
+          });
+          
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+            
+            // 💾 GUARDAR INFORMACIÓN COMPLETA DEL USUARIO
+            const userInfo = {
+              id: profileData.id,
+              username: profileData.username,
+              first_name: profileData.first_name || '',
+              last_name: profileData.last_name || '',
+              email: profileData.email || '',
+              phone: profileData.phone || '',
+              address: profileData.address || '',
+              role: profileData.role || 'client', // 🎭 ROL DEL USUARIO (¡IMPORTANTE!)
+            };
+            
+            console.log('💾 Guardando información del usuario:', userInfo); // 🔍 Debug
+            console.log('🎭 Rol del usuario:', userInfo.role); // 🔍 Debug adicional
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
+          } else {
+            console.error('❌ Error al obtener perfil del usuario');
+          }
+        } catch (profileError) {
+          console.error('❌ Error al cargar perfil:', profileError);
+        }
         
         // 📢 NOTIFICAR A OTROS COMPONENTES QUE EL USUARIO SE LOGUEÓ
         window.dispatchEvent(new Event('storage'));
@@ -191,7 +207,7 @@ function Login() {
             </div>
             <h2 className="success-title">¡Iniciaste sesión correctamente!</h2>
             <p className="success-subtitle">
-              Bienvenido a CataWatchs
+              Bienvenido a Velorum
               <span className="redirect-spinner"></span>
             </p>
             <p style={{fontSize: '14px', color: '#666', marginTop: '15px'}}>

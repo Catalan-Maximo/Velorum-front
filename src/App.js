@@ -106,7 +106,7 @@ function AppContent() {
         return (
           <div>
             <h2>Carreras</h2>
-            <p>Próximamente publicaremos oportunidades para sumarte al equipo CataWatchs (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:m.catalan@alumno.um.edu.ar?subject=CV%20CataWatchs">m.catalan@alumno.um.edu.ar</a>.</p>
+            <p>Próximamente publicaremos oportunidades para sumarte al equipo Velorum (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:m.catalan@alumno.um.edu.ar?subject=CV%20Velorum">m.catalan@alumno.um.edu.ar</a>.</p>
           </div>
         );
       default:
@@ -509,15 +509,15 @@ function AppContent() {
                 aria-expanded={footerOpen.company}
                 aria-controls="footer-company"
               >
-                <span>CataWatchs</span>
+                <span>Velorum</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" className={footerOpen.company ? 'open' : ''}><polyline fill="none" stroke="currentColor" strokeWidth="2" points="6,9 12,15 18,9"/></svg>
               </button>
             ) : (
-              <h3>CataWatchs</h3>
+              <h3>Velorum</h3>
             )}
             <ul id="footer-company" style={isMobile && !footerOpen.company ? {display:'none'} : undefined}>
               <li><button type="button" className="footer-link" onClick={()=>navigate('/about')}>Acerca de nosotros</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Contacto%20CataWatchs','_blank'); }}>Contacto</button></li>
+              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Contacto%20Velorum','_blank'); }}>Contacto</button></li>
               <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('careers')}>Carreras</button></li>
             </ul>
           </div>
@@ -562,7 +562,7 @@ function AppContent() {
               <h3>Soporte</h3>
             )}
             <ul id="footer-support" style={isMobile && !footerOpen.support ? {display:'none'} : undefined}>
-              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Soporte%20T%C3%A9cnico%20CataWatchs','_blank'); }}>Centro de ayuda</button></li>
+              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Soporte%20T%C3%A9cnico%20Velorum','_blank'); }}>Centro de ayuda</button></li>
               <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('envios')}>Envíos</button></li>
               <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('devoluciones')}>Devoluciones</button></li>
             </ul>
@@ -571,7 +571,7 @@ function AppContent() {
         
         {/* 📄 COPYRIGHT */}
         <div className="footer-bottom">
-          <p>&copy; 2025 CataWatchs. Todos los derechos SON MIOS WACHIN.</p>
+          <p>&copy; 2025 Velorum. Todos los derechos SON MIOS WACHIN(Puto el que lee).</p>
         </div>
       </footer>
 
