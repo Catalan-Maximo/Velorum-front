@@ -244,10 +244,10 @@ function AppContent() {
           <div className="navbar-center">
             <button 
               onClick={() => navigate('/')}
-
-              className="logo-button"
+              className="logo-button nav-item"
+              style={{ fontSize: '17px', fontWeight: '400', letterSpacing: '4px' }} /* Ajustar espaciado entre letras */
             >
-              CATAWATCHS
+              VELORUM
             </button>
           </div>
           

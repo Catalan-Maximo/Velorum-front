@@ -101,10 +101,8 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(255, 77, 79, 0.01) 0%, transparent 50%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 100%);
+  background: #09101A; /* Cambiar el color del filtro sobre el video */
+  opacity: 0.9; /* Subir un poco la opacidad para mayor visibilidad */
   z-index: -2;
   pointer-events: none;
 }
@@ -152,7 +150,7 @@ body::after {
   font-weight: 800;
   line-height: 1.05;
   margin-bottom: 24px; /* Reducido de 28px a 24px */
-  color: #0f172a;
+  color: #D3D3CE; /* Cambiar el color de la tipografía en el hero */
   opacity: 0;
   animation: fadeInUp 1s ease-out 0.4s forwards;
   letter-spacing: -2px;
@@ -175,7 +173,7 @@ body::after {
 /* DESCRIPCIÓN SOFISTICADA */
 .hero-description {
   font-size: 22px;
-  color: #475569;
+  color: #D3D3CE; /* Cambiar el color de la tipografía en el hero */
   margin-bottom: 32px; /* Reducido de 40px a 32px */
   line-height: 1.6;
   opacity: 0;
@@ -204,8 +202,9 @@ body::after {
 .btn-secondary.pill:hover { background:#111; color:#fff; border-color:#111; }
 
 /* Botón principal minimalista */
-.btn-primary { background: var(--graphite);
-  color: white;
+.btn-primary { background: #0D4CA3 !important; /* Cambiar el color del botón 'Shop Now' */
+  transition: none; /* Eliminar el efecto de transición */
+  color: #D3D3CE; /* Cambiar el color de la tipografía en el hero */
   padding: 22px 44px;
   border: none;
   border-radius: 12px;
@@ -213,7 +212,6 @@ body::after {
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-soft), 0 0 0 1px rgba(255,255,255,.1), inset 0 1px 0 rgba(255,255,255,.15);
   text-decoration: none;
   display: inline-flex;
@@ -337,12 +335,13 @@ body::after {
 }
 
 .hero-watch-image {
-  width: 330px;
-  height: 330px;
-  object-fit: cover;
-  border-radius: 50%;
-  filter: brightness(1.05) contrast(1.1) saturate(0.9);
-  transition: all 0.4s ease;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 0;
+  filter: none;
+  transition: none;
 }
 
 .watch-frame:hover .hero-watch-image {
@@ -849,7 +848,7 @@ body::after {
 @media (max-width:900px){ .product-image-new { height:300px; } }
 @media (max-width:680px){
   .product-image-new { height:260px; padding:12px 10px; }
-  .product-image-new img { width:auto; height:100%; object-fit:contain; } /* móvil: mostrar reloj completo */
+  .product_image_new img { width:auto; height:100%; object-fit:contain; } /* móvil: mostrar reloj completo */
 }
 @media (max-width:480px){
   .product-image-new { height:230px; }
@@ -1329,9 +1328,8 @@ body::after {
 @media (max-width:680px){
   .product-card-new { border-radius:18px; }
   .product-image-new { height:260px; padding:0; }
-  .product-image-new img { width:100%; height:100%; object-fit:cover; }
-  .product-info-new { padding:26px; }
-  .product-info-new h4 { font-size:21px; }
+  .product_image_new img { width:100%; height:100%; object-fit:cover; }
+  .product-info_new h4 { font-size:21px; }
   .product-price { font-size:27px; }
   .original-price { font-size:17px; }
   .add-to-cart-new { padding:14px 22px; font-size:13.5px; }

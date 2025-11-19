@@ -72,58 +72,21 @@ function Home({ user, isLoggedIn }) {
           <source src="/videotest.webm" type="video/webm" />
           Tu navegador no soporta video HTML5.
         </video>
-        
+
+        {/* 📦 NUEVO CONTENIDO HERO */}
         <div className="hero-container">
           <div className="hero-text">
-            <span className="hero-subtitle">{heroText.subtitle}</span>
-            <h1 className="hero-title">
-              {heroText.title.split(' ').map((word, index) => (
-                <span key={index} className={word === 'ti' ? 'accent-text' : ''}>
-                  {word}{' '}
-                </span>
-              ))}
+            <h1 className="hero-title" style={{ color: '#D3D3CE', textTransform: 'uppercase' }}>
+              PREMIUM<br />WATCHES
             </h1>
-            <p className="hero-description">
-              {heroText.description}
-            </p>
-            <div className="action-buttons refined">
-              <button className="btn-primary pill" onClick={() => navigate('/products')}>
-                {heroText.primaryButton}
-              </button>
-              {isLoggedIn && (
-                <button className="btn-secondary pill" onClick={() => navigate('/favorites')}>Favoritos</button>
-              )}
-            </div>
+            <p className="hero-description" style={{ color: '#D3D3CE' }}>Discover Modern Luxury</p>
+            <button className="btn-primary" style={{ color: '#D3D3CE' }}>Shop Now</button>
           </div>
-          {!isMobile && (
-            <div className="hero-visual">
-              <div className="watch-showcase">
-                <div className="watch-frame">
-                  <img
-                    src={watchImages[currentImageIndex]}
-                    alt="Reloj destacado CataWatchs"
-                    className="hero-watch-image"
-                  />
-                  <div className="image-indicators">
-                    {watchImages.map((_, index) => (
-                      <div
-                        key={index}
-                        className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
-                        onClick={() => setCurrentImageIndex(index)}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className="floating-elements">
-                  {floatingElements.map((element, index) => (
-                    <div key={index} className={`element element-${index + 1}`}>
-                      {element}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
+          <img
+            src="/relojdelhero.png"
+            alt="Reloj del Hero"
+            className="hero-watch-image"
+          />
         </div>
       </section>
  

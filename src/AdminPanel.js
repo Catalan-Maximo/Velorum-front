@@ -352,6 +352,9 @@ const AdminPanel = () => {
                                 </svg>
                                 {showCreateForm ? 'Cerrar' : 'Nuevo'}
                             </button>
+                            <button className="btn-add-product" onClick={() => navigate('/add-product')}>
+                                Agregar Productos
+                            </button>
                         </div>
                     </div>
                 </div>
