@@ -82,15 +82,6 @@ function AdminProductsPanel() {
 
     return (
         <div className="admin-products-panel">
-            <div className="products-header">
-                <h2>Gestión de Productos</h2>
-                <div className="products-stats">
-                    <span className="stat">Total: {productos.length}</span>
-                    <span className="stat">Disponibles: {productos.filter(p => p.stock_ilimitado || p.stock_proveedor > 0).length}</span>
-                    <span className="stat">Sin stock: {productos.filter(p => !p.stock_ilimitado && p.stock_proveedor === 0).length}</span>
-                </div>
-            </div>
-
             <div className="products-filters">
                 <input
                     type="text"
@@ -115,6 +106,10 @@ function AdminProductsPanel() {
                     <option value="disponibles">Solo disponibles</option>
                     <option value="sin-stock">Sin stock</option>
                 </select>
+                
+                <span className="stat">Total: {productos.length}</span>
+                <span className="stat">Disponibles: {productos.filter(p => p.stock_ilimitado || p.stock_proveedor > 0).length}</span>
+                <span className="stat">Sin stock: {productos.filter(p => !p.stock_ilimitado && p.stock_proveedor === 0).length}</span>
             </div>
 
             <div className="products-table-container">
@@ -158,12 +153,19 @@ function AdminProductsPanel() {
                                     )}
                                 </td>
                                 <td>
-                                    {producto.stock_ilimitado ? '♾️ Ilimitado' : producto.stock_proveedor}
+                                    {producto.stock_ilimitado ? (
+                                        <span className="stock-badge ilimitado">
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0xOC42IDYuNjJDMjEuNTggNi42MiAyNCA5IDI0IDEyYzAgMi45Ni0yLjQyIDUuMzctNS40IDUuMzdjLTEuNDUgMC0yLjgtLjU2LTMuODItMS41N0wxMiAxMy4zNGwtMi44MyAyLjUxYy0uOTcuOTctMi4zMyAxLjUzLTMuNzcgMS41M0MyLjQyIDE3LjM4IDAgMTQuOTYgMCAxMnMyLjQyLTUuMzggNS40LTUuMzhjMS40NCAwIDIuOC41NiAzLjgyIDEuNThMMTIgMTAuNjZsMi44My0yLjUxYy45Ny0uOTcgMi4zMy0xLjUzIDMuNzctMS41M003LjggMTQuMzlMMTAuNSAxMkw3Ljg0IDkuNjVjLS42OC0uNjgtMS41My0xLjAzLTIuNDQtMS4wM0MzLjUzIDguNjIgMiAxMC4xMyAyIDEyczEuNTMgMy4zOCAzLjQgMy4zOGMuOTEgMCAxLjc2LS4zNSAyLjQtLjk5bTguNC00Ljc4TDEzLjUgMTJsMi42NiAyLjM1Yy42OC42OCAxLjU0IDEuMDMgMi40NCAxLjAzYzEuODcgMCAzLjQtMS41MSAzLjQtMy4zOHMtMS41My0zLjM4LTMuNC0zLjM4Yy0uOTEgMC0xLjc2LjM1LTIuNC45OSIvPjwvc3ZnPg==" alt="Ilimitado" style={{width: '20px', height: '20px'}} />
+                                        </span>
+                                    ) : producto.stock_proveedor}
                                 </td>
                                 <td>{producto.stock_vendido || 0}</td>
                                 <td>
                                     <span className={`stock-badge ${(producto.stock_ilimitado || producto.stock_proveedor > 0) ? 'disponible' : 'agotado'}`}>
-                                        {(producto.stock_ilimitado || producto.stock_proveedor > 0) ? '✅' : '❌'}
+                                        {(producto.stock_ilimitado || producto.stock_proveedor > 0) ? 
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Im05LjU1IDE4bC01LjctNS43bDEuNDI1LTEuNDI1TDkuNTUgMTUuMTVsOS4xNzUtOS4xNzVMMjAuMTUgNy40eiIvPjwvc3ZnPg==" alt="Disponible" style={{width: '20px', height: '20px'}} /> : 
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0xMiAyMGE4IDggMCAwIDEtOC04SDJjMCA1LjUyMyA0LjQ3NyAxMCAxMCAxMHptMC0xNmE4IDggMCAwIDEgOCA4aDJjMC01LjUyMy00LjQ3Ny0xMC0xMC0xMHptLTggOGE3Ljk3IDcuOTcgMCAwIDEgMi4zNDMtNS42NTdMNC45MyA0LjkzQTkuOTcgOS45NyAwIDAgMCAyIDExLjk5OXptMi4zNDMtNS42NTdBNy45NyA3Ljk3IDAgMCAxIDEyIDRWMmE5Ljk3IDkuOTcgMCAwIDAtNy4wNzEgMi45Mjl6bS0xLjQxNCAwbDEyLjcyOCAxMi43MjhsMS40MTQtMS40MTRMNi4zNDMgNC45Mjl6TTIwIDEyYTcuOTcgNy45NyAwIDAgMS0yLjM0MyA1LjY1N2wxLjQxNCAxLjQxNEE5Ljk3IDkuOTcgMCAwIDAgMjIgMTJ6bS0yLjM0MyA1LjY1N0E3Ljk3IDcuOTcgMCAwIDEgMTIgMjB2MmE5Ljk3IDkuOTcgMCAwIDAgNy4wNzEtMi45Mjl6Ii8+PC9zdmc+" alt="No disponible" style={{width: '20px', height: '20px'}} />
+                                        }
                                     </span>
                                 </td>
                                 <td className="last-sync">
@@ -221,55 +223,43 @@ function AdminProductsPanel() {
 
             {/* PAGINACIÓN */}
             {totalPaginas > 1 && (
-                <div className="pagination" style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    padding: '40px 20px',
-                    flexWrap: 'wrap'
-                }}>
+                <div className="pagination">
                     <button
                         onClick={() => setPaginaActual(p => Math.max(1, p - 1))}
                         disabled={paginaActual === 1}
-                        style={{
-                            padding: '10px 15px',
-                            border: '1px solid #ddd',
-                            background: paginaActual === 1 ? '#eee' : 'white',
-                            cursor: paginaActual === 1 ? 'not-allowed' : 'pointer',
-                            borderRadius: '5px'
-                        }}
+                        className="pagination-btn"
                     >
                         ← Anterior
                     </button>
                     
-                    {[...Array(totalPaginas)].map((_, i) => (
-                        <button
-                            key={i + 1}
-                            onClick={() => setPaginaActual(i + 1)}
-                            style={{
-                                padding: '10px 15px',
-                                border: paginaActual === i + 1 ? '2px solid #d4af37' : '1px solid #ddd',
-                                background: paginaActual === i + 1 ? '#d4af37' : 'white',
-                                color: paginaActual === i + 1 ? 'white' : '#333',
-                                cursor: 'pointer',
-                                borderRadius: '5px',
-                                fontWeight: paginaActual === i + 1 ? 'bold' : 'normal'
-                            }}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
+                    {(() => {
+                        const maxVisible = 8;
+                        let startPage = Math.max(1, paginaActual - Math.floor(maxVisible / 2));
+                        let endPage = Math.min(totalPaginas, startPage + maxVisible - 1);
+                        
+                        if (endPage - startPage + 1 < maxVisible) {
+                            startPage = Math.max(1, endPage - maxVisible + 1);
+                        }
+                        
+                        const pages = [];
+                        for (let i = startPage; i <= endPage; i++) {
+                            pages.push(
+                                <button
+                                    key={i}
+                                    onClick={() => setPaginaActual(i)}
+                                    className={`pagination-btn ${paginaActual === i ? 'active' : ''}`}
+                                >
+                                    {i}
+                                </button>
+                            );
+                        }
+                        return pages;
+                    })()}
                     
                     <button
                         onClick={() => setPaginaActual(p => Math.min(totalPaginas, p + 1))}
                         disabled={paginaActual === totalPaginas}
-                        style={{
-                            padding: '10px 15px',
-                            border: '1px solid #ddd',
-                            background: paginaActual === totalPaginas ? '#eee' : 'white',
-                            cursor: paginaActual === totalPaginas ? 'not-allowed' : 'pointer',
-                            borderRadius: '5px'
-                        }}
+                        className="pagination-btn"
                     >
                         Siguiente →
                     </button>

@@ -48,7 +48,7 @@
 .empty-actions.refined { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
 .cluster-like { border:none; cursor:pointer; font-size:12px; font-weight:600; letter-spacing:.5px; padding:14px 20px; border-radius:18px; background:#111; color:#f4f4f4; box-shadow:0 6px 24px -8px rgba(0,0,0,.5); transition:.2s; }
 .cluster-like:hover { background:#1d1d1d; }
-.cluster-like.accent { background:var(--accent-grad); color:#1a1200; }
+.cluster-like.accent { background:linear-gradient(135deg,#1e5bb8 0%,#0d4ca3 45%,#0a3d82 100%); color:#ffffff; }
 .cluster-like.accent:hover { filter:brightness(1.06); }
 .cluster-like.ghost { background:#fff; color:#222; border:1px solid #d0d4d8; }
 .cluster-like.ghost:hover { background:#f6f8f9; }
@@ -64,7 +64,7 @@
 .summary-actions { display:flex; gap:14px; flex-wrap:wrap; }
 .summary-btn { flex:1; min-width:140px; height:46px; padding:0 20px; border-radius:16px; border:1px solid #d5d7db; background:#fff; cursor:pointer; font-size:.75rem; font-weight:600; letter-spacing:.5px; display:inline-flex; align-items:center; justify-content:center; transition:.18s; }
 .summary-btn:hover { background:#111; color:#fff; border-color:#111; }
-.summary-btn.accent { background:var(--accent-grad); color:#1a1200; border:1px solid var(--accent-dark); box-shadow:0 4px 14px -4px rgba(var(--accent-rgb),.5); }
+.summary-btn.accent { background:linear-gradient(135deg,#1e5bb8 0%,#0d4ca3 45%,#0a3d82 100%); color:#ffffff; border:1px solid #0a3d82; box-shadow:0 4px 14px -4px rgba(13,76,163,.5); }
 .summary-btn.accent:hover { filter:brightness(1.07); }
 .summary-btn.ghost { background:#fff; }
 

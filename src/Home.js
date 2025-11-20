@@ -5,12 +5,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from './CartContext';
 import { useFavorites } from './FavoritesContext';
+import { productService } from './services';
 import './Home.css';
 
 function Home({ user, isLoggedIn }) {
   const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   // Detectar tamaño para condicionalmente ocultar el círculo
   useEffect(() => {
@@ -20,6 +23,25 @@ function Home({ user, isLoggedIn }) {
   }, []);
   const { addToCart, isInCart, getItemQuantity, setIsCartOpen } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
+
+  // Cargar productos destacados desde la API
+  useEffect(() => {
+    const loadFeaturedProducts = async () => {
+      try {
+        setLoadingProducts(true);
+        const products = await productService.getAll();
+        // Tomar los primeros 4 productos disponibles
+        setFeaturedProducts(products.slice(0, 4));
+      } catch (error) {
+        console.error('Error cargando productos destacados:', error);
+        setFeaturedProducts([]);
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    loadFeaturedProducts();
+  }, []);
   
   // Array de imágenes de relojes elegantes - RELOJES REALES
   const watchImages = [
@@ -80,7 +102,7 @@ function Home({ user, isLoggedIn }) {
               PREMIUM<br />WATCHES
             </h1>
             <p className="hero-description" style={{ color: '#D3D3CE' }}>Discover Modern Luxury</p>
-            <button className="btn-primary" style={{ color: '#D3D3CE' }}>Shop Now</button>
+            <button className="btn-primary" style={{ color: '#D3D3CE' }} onClick={() => navigate('/products')}>Shop Now</button>
           </div>
           <img
             src="/relojdelhero.png"
@@ -103,71 +125,24 @@ function Home({ user, isLoggedIn }) {
             </button>
           </div>
           <div className="products-carousel">
-            {(
-              // Featured products list — limited to first 4 to keep a single row of 4 columns
-              [
-                {
-                  id: 1,
-                  name: "Rolex Submariner",
-                  price: 18999,
-                  originalPrice: 22999,
-                  image: "/Hombre/Rolex Submarino.png",
-                  badge: "Bestseller",
-                  reviews: 567
-                },
-                {
-                  id: 2,
-                  name: "Cartier Oro 18k",
-                  price: 15999,
-                  originalPrice: 18999,
-                  image: "/Mujer/Cartier oro 18k.png",
-                  badge: "Premium",
-                  reviews: 187
-                },
-                {
-                  id: 3,
-                  name: "Patek Philippe",
-                  price: 32999,
-                  originalPrice: 39999,
-                  image: "/Hombre/Patek Philippe.png",
-                  badge: "Exclusivo",
-                  reviews: 89
-                },
-                {
-                  id: 4,
-                  name: "Chopard Happy Diamonds",
-                  price: 12999,
-                  originalPrice: 15999,
-                  image: "/Mujer/Chopard.png",
-                  badge: "Elegante",
-                  reviews: 298
-                },
-                {
-                  id: 5,
-                  name: "Casio G-Shock",
-                  price: 399,
-                  originalPrice: 499,
-                  image: "/Hombre/Casio G shock.png",
-                  badge: "Deportivo",
-                  reviews: 892
-                },
-                {
-                  id: 6,
-                  name: "TAG Heuer Aquaracer",
-                  price: 2999,
-                  originalPrice: 3999,
-                  image: "/Mujer/Tag heuer Aquaracer.png",
-                  badge: "Nuevo",
-                  reviews: 234
-                }
-              ]
-            ).slice(0,4).map(product => (
+            {loadingProducts ? (
+              <div style={{ textAlign: 'center', padding: '40px', gridColumn: '1 / -1' }}>
+                <p>Cargando productos...</p>
+              </div>
+            ) : featuredProducts.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '40px', gridColumn: '1 / -1' }}>
+                <p>No hay productos disponibles</p>
+              </div>
+            ) : (
+              featuredProducts.map(product => {
+                const categoryName = product.categoria?.nombre || product.categoria || 'Premium';
+                return (
               <div key={product.id} className="product-card-new">
-                <div className={`product-badge ${product.badge.toLowerCase()}`}>
-                  {product.badge}
+                <div className={`product-badge ${String(categoryName).toLowerCase()}`}>
+                  {categoryName}
                 </div>
                 <div className="product-image-new">
-                  <img src={product.image} alt={product.name} />
+                  <img src={product.imagen_url || product.image || '/placeholder.png'} alt={product.nombre || product.name} />
                   <div className="product-overlay">
                     <button className="quick-view-btn" onClick={() => navigate(`/product/${product.id}`)}>
                       Vista rápida
@@ -184,12 +159,11 @@ function Home({ user, isLoggedIn }) {
                 <div className="product-info-new">
                   <div className="product-rating">
                     <span className="stars">★★★★★</span>
-                    <span className="rating-text">({product.reviews})</span>
+                    <span className="rating-text">(0)</span>
                   </div>
-                  <h4>{product.name}</h4>
+                  <h4>{product.nombre || product.name}</h4>
                   <div className="product-pricing">
-                    <p className="product-price">${product.price.toLocaleString()}</p>
-                    {/* original price removed */}
+                    <p className="product-price">${Number(product.precio || product.price || 0).toLocaleString()}</p>
                   </div>
                   <button
                     className={`add-to-cart-new ${isInCart && isInCart(product.id) ? 'in-cart' : ''}`}
@@ -199,21 +173,10 @@ function Home({ user, isLoggedIn }) {
                         return;
                       }
                       if (isInCart && isInCart(product.id)) {
-                        // Ya está: abrir carrito para que lo vea
                         setIsCartOpen(true);
                       } else {
-                        // Mapear badge a categoría visible (fallback a badge)
-                        const categoryMap = {
-                          Bestseller: 'Bestseller',
-                          Premium: 'Premium',
-                          Exclusivo: 'Exclusivo',
-                          Elegante: 'Elegante',
-                          Deportivo: 'Deportivo',
-                          Nuevo: 'Nuevo'
-                        };
-                        const withCategory = { ...product, category: categoryMap[product.badge] || product.badge };
-                        addToCart(withCategory);
-                        setIsCartOpen(true); // abrir inmediatamente para feedback visual
+                        addToCart(product);
+                        setIsCartOpen(true);
                       }
                     }}
                   >
@@ -223,7 +186,9 @@ function Home({ user, isLoggedIn }) {
                   </button>
                 </div>
               </div>
-            ))}
+            );
+            }))}
+
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 // 🛍️ **PRODUCTDETAIL.JS** - PÁGINA DE DETALLES DEL PRODUCTO
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProductDetail.css';
 import { useFavorites } from './FavoritesContext';
@@ -14,6 +14,9 @@ function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+  const [isZooming, setIsZooming] = useState(false);
+  const imageRef = useRef(null);
   const { toggleFavorite, isFavorite } = useFavorites();
   const { addToCart, setIsCartOpen, isInCart, getItemQuantity, updateQuantity } = useCart();
 
@@ -48,7 +51,39 @@ function ProductDetail() {
   // 💖 FAVORITO
   const handleToggleFavorite = () => {
     if (!product) return;
-    toggleFavorite(product);
+    
+    // Normalizar el objeto del producto para que tenga la estructura esperada por FavoritesContext
+    const normalizedProduct = {
+      id: product.id,
+      name: product.nombre || product.name || 'Producto',
+      image: (product.imagenes && product.imagenes.length > 0) ? product.imagenes[0] : (product.image || '/logo192.png'),
+      price: Number(product.precio || product.price) || 0,
+      originalPrice: product.originalPrice || product.precio_original,
+      category: product.categoria?.nombre || product.category || 'Relojes',
+      badge: product.en_oferta ? 'Oferta' : (product.badge || 'Nuevo'),
+      reviews: product.reviews || 0,
+      description: product.descripcion || product.description || '',
+      stock: product.stock_disponible || product.stock || 0
+    };
+    
+    toggleFavorite(normalizedProduct);
+  };
+
+  // 🔍 ZOOM EN IMAGEN
+  const handleMouseMove = (e) => {
+    if (!imageRef.current) return;
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomPosition({ x, y });
+  };
+
+  const handleMouseEnter = () => {
+    setIsZooming(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsZooming(false);
   };
 
   if (loading) {
@@ -81,11 +116,21 @@ function ProductDetail() {
       <div className="product-detail-container">
         {/* 🖼️ GALERÍA DE IMÁGENES */}
         <div className="product-gallery">
-          <div className="main-image">
+          <div 
+            className={`main-image ${isZooming ? 'zooming' : ''}`}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            ref={imageRef}
+          >
             <img 
               src={Array.isArray(product.imagenes) && product.imagenes.length > 0 ? product.imagenes[selectedImage] : product.imagen_principal} 
               alt={product.nombre} 
               className="main-product-image"
+              style={isZooming ? {
+                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                transform: 'scale(2)'
+              } : {}}
             />
           </div>
           <div className="image-thumbnails">

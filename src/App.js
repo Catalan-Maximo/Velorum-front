@@ -11,8 +11,6 @@ import Login from './Login';
 import Products from './Products';
 import ProductDetail from './ProductDetail';
 import About from './About';
-import MenWatches from './MenWatches';
-import WomenWatches from './WomenWatches';
 import Favorites from './Favorites';
 import Profile from './Profile';
 import Orders from './Orders';
@@ -215,20 +213,6 @@ function AppContent() {
             </button>
             <button 
               className="nav-item"
-              onClick={() => navigate('/women-watches')}
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              MUJER
-            </button>
-            <button 
-              className="nav-item"
-              onClick={() => navigate('/men-watches')}
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              HOMBRE
-            </button>
-            <button 
-              className="nav-item"
               onClick={() => navigate('/products')}
               style={{ background: 'none', border: 'none', cursor: 'pointer' }}
             >
@@ -250,7 +234,7 @@ function AppContent() {
           {/* ⚙️ SECCIÓN DERECHA - Acciones */}
           <div className="navbar-right">
             {/* 🔍 BARRA DE BÚSQUEDA (solo desktop/tablet) */}
-            {!isMobile && <SearchBar className="navbar-search" />}
+            {/* !isMobile && <SearchBar className="navbar-search" /> */}
             
             {/* �👤 USUARIO LOGUEADO */}
             {isLoggedIn ? (
@@ -364,8 +348,6 @@ function AppContent() {
             <nav className="mobile-menu-nav">
               <button className="mobile-link" onClick={() => navigateAndClose('/')}>INICIO</button>
               <button className="mobile-link" onClick={() => navigateAndClose('/about')}>ACERCA DE</button>
-              <button className="mobile-link" onClick={() => navigateAndClose('/women-watches')}>MUJER</button>
-              <button className="mobile-link" onClick={() => navigateAndClose('/men-watches')}>HOMBRE</button>
               <button className="mobile-link" onClick={() => navigateAndClose('/products')}>PRODUCTOS</button>
               {isLoggedIn && (
                 <>
@@ -402,8 +384,6 @@ function AppContent() {
         
         {/* 📦 PÁGINAS DE PRODUCTOS */}
         <Route path="/products" element={<Products />} />
-        <Route path="/men-watches" element={<MenWatches />} />
-        <Route path="/women-watches" element={<WomenWatches />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         
         {/* 🏢 PÁGINA DE INFORMACIÓN */}

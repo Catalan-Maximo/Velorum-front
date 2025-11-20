@@ -120,8 +120,8 @@ body {
   height: 54px;
   border-radius: 18px;
   border: 1px solid #d5d7db;
-  background: linear-gradient(135deg,#e3ce8a,#c9a646,#b28b24);
-  color:#1a1200;
+  background: #0d4ca3;
+  color:#ffffff;
   cursor:pointer;
   display:flex;
   align-items:center;

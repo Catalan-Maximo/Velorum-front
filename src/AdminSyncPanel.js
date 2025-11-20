@@ -84,7 +84,7 @@ function AdminSyncPanel() {
 
             <div className="sync-stats">
                 <div className="stat-card">
-                    <div className="stat-icon">📦</div>
+                    <div className="stat-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0yMiAzSDJ2NmgxdjExYTIgMiAwIDAgMCAyIDJoMTRhMiAyIDAgMCAwIDItMlY5aDF6TTQgNWgxNnYySDR6bTE1IDE1SDVWOWgxNHpNOSAxMWg2YTIgMiAwIDAgMS0yIDJoLTJhMiAyIDAgMCAxLTItMiIvPjwvc3ZnPg==" alt="" style={{width: '32px', height: '32px'}} /></div>
                     <div className="stat-content">
                         <div className="stat-value">{stats.totalProductos}</div>
                         <div className="stat-label">Productos Totales</div>
@@ -92,7 +92,7 @@ function AdminSyncPanel() {
                 </div>
 
                 <div className="stat-card">
-                    <div className="stat-icon">⏰</div>
+                    <div className="stat-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgNDggNDgiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSI0Ij48Y2lyY2xlIGN4PSIyNCIgY3k9IjI4IiByPSIxNiIvPjxwYXRoIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZD0iTTI4IDRoLThtNCAwdjhtMTEgNGwzLTNNMjQgMjh2LTZtMCA2aC02Ii8+PC9nPjwvc3ZnPg==" alt="" style={{width: '32px', height: '32px'}} /></div>
                     <div className="stat-content">
                         <div className="stat-value">{stats.ultimaSync}</div>
                         <div className="stat-label">Última Sincronización</div>
@@ -100,7 +100,7 @@ function AdminSyncPanel() {
                 </div>
 
                 <div className="stat-card">
-                    <div className="stat-icon">🔄</div>
+                    <div className="stat-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00IDIwdi0yaDIuNzVsLS40LS4zNXEtMS4yMjUtMS4yMjUtMS43ODctMi42NjJUNCAxMi4wNXEwLTIuNzc1IDEuNjYzLTQuOTM3VDEwIDQuMjV2Mi4xUTguMiA3IDcuMSA4LjU2M1Q2IDEyLjA1cTAgMS4xMjUuNDI1IDIuMTg4VDcuNzUgMTYuMmwuMjUuMjVWMTRoMnY2em0xMC0uMjV2LTIuMXExLjgtLjY1IDIuOS0yLjIxMlQxOCAxMS45NXEwLTEuMTI1LS40MjUtMi4xODdUMTYuMjUgNy44TDE2IDcuNTVWMTBoLTJWNGg2djJoLTIuNzVsLjQuMzVxMS4yMjUgMS4yMjUgMS43ODggMi42NjNUMjAgMTEuOTVxMCAyLjc3NS0xLjY2MiA0LjkzOFQxNCAxOS43NSIvPjwvc3ZnPg==" alt="" style={{width: '32px', height: '32px'}} /></div>
                     <div className="stat-content">
                         <div className="stat-value">1 hora</div>
                         <div className="stat-label">Frecuencia Automática</div>
@@ -121,7 +121,7 @@ function AdminSyncPanel() {
                         </>
                     ) : (
                         <>
-                            <span className="sync-icon">🔄</span>
+                            <span className="sync-icon"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik00IDIwdi0yaDIuNzVsLS40LS4zNXEtMS4yMjUtMS4yMjUtMS43ODctMi42NjJUNCAxMi4wNXEwLTIuNzc1IDEuNjYzLTQuOTM3VDEwIDQuMjV2Mi4xUTguMiA3IDcuMSA4LjU2M1Q2IDEyLjA1cTAgMS4xMjUuNDI1IDIuMTg4VDcuNzUgMTYuMmwuMjUuMjVWMTRoMnY2em0xMC0uMjV2LTIuMXExLjgtLjY1IDIuOS0yLjIxMlQxOCAxMS45NXEwLTEuMTI1LS40MjUtMi4xODdUMTYuMjUgNy44TDE2IDcuNTVWMTBoLTJWNGg2djJoLTIuNzVsLjQuMzVxMS4yMjUgMS4yMjUgMS43ODggMi42NjNUMjAgMTEuOTVxMCAyLjc3NS0xLjY2MiA0LjkzOFQxNCAxOS43NSIvPjwvc3ZnPg==" alt="" style={{width: '20px', height: '20px', marginRight: '8px'}} /></span>
                             Sincronizar Ahora
                         </>
                     )}

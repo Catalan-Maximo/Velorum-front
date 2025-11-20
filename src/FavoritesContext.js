@@ -86,20 +86,33 @@ export const FavoritesProvider = ({ children }) => {
   }, [favorites]);
 
   // 💖 FUNCIÓN PARA AGREGAR/QUITAR FAVORITOS
-  const toggleFavorite = (product) => {
-    if (!product) return;
-    // Aceptamos llamada con ID legacy (número)
-    if (typeof product === 'number') {
-      setFavorites(prev => prev.filter(p => p.id !== product));
+  const toggleFavorite = (productOrId) => {
+    if (!productOrId) return;
+    
+    // Si recibimos solo un ID (número), necesitamos el objeto completo del producto
+    // Por ahora, si es número, lo removemos o no hacemos nada
+    if (typeof productOrId === 'number') {
+      setFavorites(prev => {
+        const exists = prev.some(p => p.id === productOrId);
+        if (exists) {
+          return prev.filter(p => p.id !== productOrId);
+        }
+        // Si no existe y solo tenemos el ID, no podemos agregarlo sin más datos
+        console.warn('toggleFavorite: Se recibió solo un ID para agregar, se necesita el objeto completo del producto');
+        return prev;
+      });
       return;
     }
+    
+    // Si recibimos un objeto producto completo
     setFavorites(prev => {
-      if (prev.some(p => p.id === product.id)) {
-        return prev.filter(p => p.id !== product.id);
+      const exists = prev.some(p => p.id === productOrId.id);
+      if (exists) {
+        return prev.filter(p => p.id !== productOrId.id);
       }
       // Guardamos sólo campos esenciales para sidebar (evita almacenar funciones u objetos enormes)
-      const { id, name, image, price, originalPrice, category, badge, reviews } = product;
-      return [...prev, { id, name, image, price, originalPrice, category, badge, reviews }];
+      const { id, name, image, price, originalPrice, category, badge, reviews, description, stock } = productOrId;
+      return [...prev, { id, name, image, price, originalPrice, category, badge, reviews, description, stock }];
     });
   };
 

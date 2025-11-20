@@ -249,25 +249,25 @@ const AdminPanel = () => {
                     className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
                     onClick={() => setActiveTab('users')}
                 >
-                    👥 Usuarios
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0xNy41IDEyYTUuNSA1LjUgMCAxIDEgMCAxMWE1LjUgNS41IDAgMCAxIDAtMTFtLTIuNjQ2IDUuMTQ3YS41LjUgMCAxIDAtLjcwNy43MDdsMiAyYS41LjUgMCAwIDAgLjcwNyAwbDQtNGEuNS41IDAgMSAwLS43MDctLjcwN0wxNi41IDE4Ljc5M3pNMTIuMDIzIDE0YTYuNSA2LjUgMCAwIDAtLjcwOSAxLjVINC4yNTNhLjc1Ljc1IDAgMCAwLS43NS43NXYuNTc3YzAgLjUzNS4xOTIgMS4wNTMuNTQgMS40NmMxLjI1MyAxLjQ2OSAzLjIyIDIuMjE0IDUuOTU3IDIuMjE0cS44OTYgMCAxLjY4LS4xMDZjLjI0Ni40OTUuNTUzLjk1NC45MTIgMS4zNjdxLTEuMTkzLjI0LTIuNTkyLjI0Yy0zLjE0NSAwLTUuNTMyLS45MDYtNy4wOTgtMi43NGEzLjc1IDMuNzUgMCAwIDEtLjg5OC0yLjQzNXYtLjU3OEEyLjI1IDIuMjUgMCAwIDEgNC4yNTMgMTR6TTEwIDIuMDA1YTUgNSAwIDEgMSAwIDEwYTUgNSAwIDAgMSAwLTEwbTAgMS41YTMuNSAzLjUgMCAxIDAgMCA3YTMuNSAzLjUgMCAwIDAgMC03Ii8+PC9zdmc+" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Usuarios
                 </button>
                 <button 
                     className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
                     onClick={() => setActiveTab('orders')}
                 >
-                    📦 Pedidos
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Im0xNy4yNzUgMjAuMjVsMy40NzUtMy40NWwtMS4wNS0xLjA1bC0yLjQyNSAyLjM3NWwtLjk3NS0uOTc1bC0xLjA1IDEuMDc1ek02IDloMTJWN0g2em0xMiAxNHEtMi4wNzUgMC0zLjUzNy0xLjQ2M1QxMyAxOHQxLjQ2My0zLjUzN1QxOCAxM3QzLjUzOCAxLjQ2M1QyMyAxOHQtMS40NjMgMy41MzhUMTggMjNNMyAyMlY1cTAtLjgyNS41ODgtMS40MTJUNSAzaDE0cS44MjUgMCAxLjQxMy41ODhUMjEgNXY2LjY3NXEtLjQ3NS0uMjI1LS45NzUtLjM3NVQxOSAxMS4wNzVWNUg1djE0LjA1aDYuMDc1cS4xMjUuNzc1LjM4OCAxLjQ3NXQuNjg3IDEuMzI1TDEyIDIybC0xLjUtMS41TDkgMjJsLTEuNS0xLjVMNiAyMmwtMS41LTEuNXptMy01aDUuMDc1cS4wNzUtLjUyNS4yMjUtMS4wMjV0LjM3NS0uOTc1SDZ6bTAtNGg3LjFxLjk1LS45MjUgMi4yMTMtMS40NjNUMTggMTFINnptLTEgNi4wNVY1eiIvPjwvc3ZnPg==" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Pedidos
                 </button>
                 <button 
                     className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
                     onClick={() => setActiveTab('products')}
                 >
-                    🛍️ Productos
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMTAyNCAxMDI0Ij48cGF0aCBmaWxsPSIjMDAwMDAwIiBkPSJNMzIwIDI4OHYtMjIuMzM2QzMyMCAxNTQuNjg4IDQwNS41MDQgNjQgNTEyIDY0czE5MiA5MC42ODggMTkyIDIwMS42NjR2MjIuNGgxMzEuMDcyYTMyIDMyIDAgMCAxIDMxLjgwOCAyOC44bDU3LjYgNTc2YTMyIDMyIDAgMCAxLTMxLjgwOCAzNS4ySDEzMS4zMjhhMzIgMzIgMCAwIDEtMzEuODA4LTM1LjJsNTcuNi01NzZhMzIgMzIgMCAwIDEgMzEuODA4LTI4LjhIMzIwem02NCAwaDI1NnYtMjIuMzM2QzY0MCAxODkuMjQ4IDU4Mi4yNzIgMTI4IDUxMiAxMjhzLTEyOCA2MS4yNDgtMTI4IDEzNy42NjR2MjIuNHptLTY0IDY0SDIxNy45MmwtNTEuMiA1MTJoNjkwLjU2bC01MS4yNjQtNTEySDcwNHY5NmEzMiAzMiAwIDEgMS02NCAwdi05NkgzODR2OTZhMzIgMzIgMCAwIDEtNjQgMHoiLz48L3N2Zz4=" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Productos
                 </button>
                 <button 
                     className={`tab-btn ${activeTab === 'sync' ? 'active' : ''}`}
                     onClick={() => setActiveTab('sync')}
                 >
-                    🔄 Sincronización
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00IDIwdi0yaDIuNzVsLS40LS4zNXEtMS4yMjUtMS4yMjUtMS43ODctMi42NjJUNCAxMi4wNXEwLTIuNzc1IDEuNjYzLTQuOTM3VDEwIDQuMjV2Mi4xUTguMiA3IDcuMSA4LjU2M1Q2IDEyLjA1cTAgMS4xMjUuNDI1IDIuMTg4VDcuNzUgMTYuMmwuMjUuMjVWMTRoMnY2em0xMC0uMjV2LTIuMXExLjgtLjY1IDIuOS0yLjIxMlQxOCAxMS45NXEwLTEuMTI1LS40MjUtMi4xODdUMTYuMjUgNy44TDE2IDcuNTVWMTBoLTJWNGg2djJoLTIuNzVsLjQuMzVxMS4yMjUgMS4yMjUgMS43ODggMi42NjNUMjAgMTEuOTVxMCAyLjc3NS0xLjY2MiA0LjkzOFQxNCAxOS43NSIvPjwvc3ZnPg==" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Sincronización
                 </button>
             </div>
             
@@ -362,20 +362,6 @@ const AdminPanel = () => {
                     </div>
                     <div className="control-actions">
                         <div className="action-group">
-                            <button
-                                onClick={() => navigate('/admin/orders')}
-                                className="ag-btn ghost"
-                                aria-label="Ir a pedidos"
-                            >
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"/>
-                                    <line x1="3" y1="10" x2="21" y2="10"/>
-                                    <line x1="8" y1="15" x2="8" y2="15"/>
-                                    <line x1="12" y1="15" x2="12" y2="15"/>
-                                    <line x1="16" y1="15" x2="16" y2="15"/>
-                                </svg>
-                                Pedidos
-                            </button>
                             <button 
                                 className="ag-btn icon" 
                                 onClick={fetchUsers}

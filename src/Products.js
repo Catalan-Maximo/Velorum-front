@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFavorites } from './FavoritesContext';
 import { useCart } from './CartContext';
@@ -12,11 +12,20 @@ function Products() {
   
   const [allProducts, setAllProducts] = useState([]);
   const [categoriaFiltro, setCategoriaFiltro] = useState('Todos');
+  const [precioMin, setPrecioMin] = useState(0);
+  const [precioMax, setPrecioMax] = useState(1000000);
+  const [precioMinInput, setPrecioMinInput] = useState(0);
+  const [precioMaxInput, setPrecioMaxInput] = useState(1000000);
+  const priceTrackRef = useRef(null);
+  const [busqueda, setBusqueda] = useState('');
+  const [ordenamiento, setOrdenamiento] = useState('destacados');
   const [paginaActual, setPaginaActual] = useState(1);
   const [loading, setLoading] = useState(true);
-  const PRODUCTOS_POR_PAGINA = 10;
+  const [filtersOpen, setFiltersOpen] = useState(true);
+  const PRODUCTOS_POR_PAGINA = 12;
 
   useEffect(() => {
+    // keep cargarProductos isolated in this effect (initial load)
     const cargarProductos = async () => {
       try {
         console.log('🔍 Cargando productos desde:', `${API_BASE_URL}/market/model/products/`);
@@ -42,6 +51,19 @@ function Products() {
               if (index === 0) console.log('  ⚠️ Usando imagen por defecto');
             }
             
+            // Determinar género basado en el nombre de la categoría o del producto
+            let genero = 'Unisex';
+            const nombreLower = (p.nombre || '').toLowerCase();
+            const categoriaLower = (p.categoria?.nombre || '').toLowerCase();
+            
+            if (nombreLower.includes('mujer') || nombreLower.includes('woman') || nombreLower.includes('women') ||
+                categoriaLower.includes('mujer') || categoriaLower.includes('woman') || categoriaLower.includes('women')) {
+              genero = 'Mujer';
+            } else if (nombreLower.includes('hombre') || nombreLower.includes('man') || nombreLower.includes('men') ||
+                       categoriaLower.includes('hombre') || categoriaLower.includes('man') || categoriaLower.includes('men')) {
+              genero = 'Hombre';
+            }
+            
             return {
               id: p.id,
               watch_id: p.id,
@@ -50,6 +72,7 @@ function Products() {
               price: Number(p.precio) || 0,
               image: imagen,
               category: p.categoria?.nombre || 'Relojes',
+              genero: genero,
               badge: p.en_oferta ? 'Oferta' : 'Nuevo',
               reviews: 0,
               description: p.descripcion || '',
@@ -59,6 +82,17 @@ function Products() {
           
           console.log('✅ Productos cargados:', mappedProducts.length);
           setAllProducts(mappedProducts);
+          
+          // Calcular rango de precios
+          if (mappedProducts.length > 0) {
+            const precios = mappedProducts.map(p => p.price);
+            const min = Math.floor(Math.min(...precios));
+            const max = Math.ceil(Math.max(...precios));
+            setPrecioMin(min);
+            setPrecioMax(max);
+            setPrecioMinInput(min);
+            setPrecioMaxInput(max);
+          }
         }
       } catch (e) {
         console.error('❌ Error cargando productos:', e);
@@ -70,10 +104,48 @@ function Products() {
     cargarProductos();
   }, []);
 
-  // Filtrar productos por categoría
-  const productosFiltrados = categoriaFiltro === 'Todos' 
-    ? allProducts 
-    : allProducts.filter(p => p.category === categoriaFiltro);
+  // Actualiza el fondo del track del slider cuando cambian los valores de precio
+  useEffect(() => {
+    if (!priceTrackRef.current || precioMax <= precioMin) return;
+    const range = precioMax - precioMin || 1;
+    const minPct = ((precioMinInput - precioMin) / range) * 100;
+    const maxPct = ((precioMaxInput - precioMin) / range) * 100;
+    // color azul para el rango seleccionado con gradiente suave
+    priceTrackRef.current.style.background = `linear-gradient(90deg, #e2e8f0 0%, #e2e8f0 ${minPct}%, #0d4ca3 ${minPct}%, #1e5bb8 ${maxPct}%, #e2e8f0 ${maxPct}%, #e2e8f0 100%)`;
+  }, [precioMinInput, precioMaxInput, precioMin, precioMax]);
+
+  // Filtrar productos
+  let productosFiltrados = allProducts.filter(p => {
+    // Filtro por categoría
+    if (categoriaFiltro !== 'Todos' && p.category !== categoriaFiltro) return false;
+
+    // Filtro por precio
+    if (p.price < precioMinInput || p.price > precioMaxInput) return false;
+
+    // Filtro por búsqueda
+    if (busqueda && !p.name.toLowerCase().includes(busqueda.toLowerCase())) return false;
+
+    return true;
+  });
+
+  // Ordenar productos
+  switch (ordenamiento) {
+    case 'precio-asc':
+      productosFiltrados = [...productosFiltrados].sort((a, b) => a.price - b.price);
+      break;
+    case 'precio-desc':
+      productosFiltrados = [...productosFiltrados].sort((a, b) => b.price - a.price);
+      break;
+    case 'nombre-asc':
+      productosFiltrados = [...productosFiltrados].sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'nombre-desc':
+      productosFiltrados = [...productosFiltrados].sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    default:
+      // destacados (sin ordenar)
+      break;
+  }
 
   // Calcular paginación
   const totalPaginas = Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA);
@@ -81,8 +153,17 @@ function Products() {
   const indiceFin = indiceInicio + PRODUCTOS_POR_PAGINA;
   const productosPaginados = productosFiltrados.slice(indiceInicio, indiceFin);
 
-  // Categorías disponibles
-  const categorias = ['Todos', ...new Set(allProducts.map(p => p.category))];
+    const categorias = ['Todos', ...Array.from(new Set(allProducts.map(p => p.category).filter(c => c && c.toLowerCase() !== 'relojes')) )];
+
+  // Limpiar todos los filtros
+  const limpiarFiltros = () => {
+    setCategoriaFiltro('Todos');
+    setPrecioMinInput(precioMin);
+    setPrecioMaxInput(precioMax);
+    setBusqueda('');
+    setOrdenamiento('destacados');
+    setPaginaActual(1);
+  };
 
   if (loading) {
     return (
@@ -100,53 +181,131 @@ function Products() {
       <div className="products-header">
         <div className="products-header-content">
           <h1>Catálogo de Productos</h1>
-          <p>Todos nuestros relojes disponibles</p>
+          <p>Descubre nuestra colección completa de relojes</p>
           <div className="products-stats">
-            {productosFiltrados.length} productos {categoriaFiltro !== 'Todos' && `en ${categoriaFiltro}`}
+            {productosFiltrados.length} {productosFiltrados.length === 1 ? 'producto' : 'productos'} encontrados
           </div>
         </div>
       </div>
 
-      {/* FILTROS */}
-      <div className="products-filters" style={{
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '10px',
-        padding: '20px',
-        flexWrap: 'wrap'
-      }}>
-        {categorias.map(cat => (
-          <button
-            key={cat}
-            onClick={() => {
-              setCategoriaFiltro(cat);
-              setPaginaActual(1);
-            }}
-            style={{
-              padding: '10px 20px',
-              border: categoriaFiltro === cat ? '2px solid #d4af37' : '1px solid #ddd',
-              background: categoriaFiltro === cat ? '#d4af37' : 'white',
-              color: categoriaFiltro === cat ? 'white' : '#333',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontWeight: categoriaFiltro === cat ? 'bold' : 'normal'
-            }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      {/* GRID DE PRODUCTOS */}
+      {/* CONTENEDOR PRINCIPAL */}
       <div className="products-container">
-        <div className="products-grid">
+        {/* FILTROS LATERALES */}
+        <aside className="products-filters">
+          <div className="filters-header">
+            <h3>Filtros</h3>
+            {(categoriaFiltro !== 'Todos' || precioMinInput !== precioMin || precioMaxInput !== precioMax || busqueda) && (
+              <button className="clear-filters-btn" onClick={limpiarFiltros}>
+                Limpiar
+              </button>
+            )}
+          </div>
+
+          {filtersOpen && (
+            <div className="filters-content">
+              {/* Búsqueda */}
+              <div className="filter-group">
+                <h4>Buscar</h4>
+                <input
+                  type="text"
+                  className="search-filter-input"
+                  placeholder="Nombre del producto..."
+                  value={busqueda}
+                  onChange={(e) => {
+                    setBusqueda(e.target.value);
+                    setPaginaActual(1);
+                  }}
+                />
+              </div>
+
+              {/* Categoría */}
+              <div className="filter-group">
+                <h4>Categoría</h4>
+                <div className="filter-options-list">
+                  {categorias.map(cat => (
+                    <label key={cat} className="filter-checkbox-label">
+                      <input
+                        type="radio"
+                        name="categoria"
+                        checked={categoriaFiltro === cat}
+                        onChange={() => {
+                          setCategoriaFiltro(cat);
+                          setPaginaActual(1);
+                        }}
+                      />
+                      <span>{cat}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rango de Precio */}
+              <div className="filter-group">
+                <h4>Rango de Precio</h4>
+                <div className="price-range-display">
+                  <span>${precioMinInput.toLocaleString()}</span>
+                  <span>${precioMaxInput.toLocaleString()}</span>
+                </div>
+                <div className="price-slider-container" ref={priceTrackRef}>
+                  <input
+                    type="range"
+                    min={precioMin}
+                    max={precioMax}
+                    value={precioMinInput}
+                    className="price-slider price-slider-min"
+                    onChange={(e) => {
+                      const value = Math.min(Number(e.target.value), precioMaxInput - 1);
+                      setPrecioMinInput(value);
+                      setPaginaActual(1);
+                    }}
+                  />
+                  <input
+                    type="range"
+                    min={precioMin}
+                    max={precioMax}
+                    value={precioMaxInput}
+                    className="price-slider price-slider-max"
+                    onChange={(e) => {
+                      const value = Math.max(Number(e.target.value), precioMinInput + 1);
+                      setPrecioMaxInput(value);
+                      setPaginaActual(1);
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Ordenamiento */}
+              <div className="filter-group">
+                <h4>Ordenar por</h4>
+                <select
+                  className="sort-select-filter"
+                  value={ordenamiento}
+                  onChange={(e) => {
+                    setOrdenamiento(e.target.value);
+                    setPaginaActual(1);
+                  }}
+                >
+                  <option value="destacados">Destacados</option>
+                  <option value="precio-asc">Precio: Menor a Mayor</option>
+                  <option value="precio-desc">Precio: Mayor a Menor</option>
+                  <option value="nombre-asc">Nombre: A-Z</option>
+                  <option value="nombre-desc">Nombre: Z-A</option>
+                </select>
+              </div>
+            </div>
+          )}
+        </aside>
+
+        {/* GRID DE PRODUCTOS */}
+        <div className="products-grid-container">
+          <div className="products-grid">
           {productosPaginados.map(product => (
             <div key={product.id} className="product-card">
               <div className={`product-badge ${product.badge.toLowerCase()}`}>
                 {product.badge}
               </div>
               
-              <div className="product-image">
+              <div className="product-image" onClick={() => navigate(`/product/${product.id}`)}>
                 <img
                   src={product.image}
                   alt={product.name}
@@ -162,6 +321,7 @@ function Products() {
                     className={`wishlist-btn ${isFavorite(product.id) ? 'active' : ''}`}
                     onClick={(e) => {
                       e.stopPropagation();
+                      // Enviamos el objeto completo del producto para que el contexto tenga toda la info
                       toggleFavorite(product);
                     }}
                   >
@@ -195,7 +355,15 @@ function Products() {
                     }}
                     disabled={product.stock === 0}
                   >
-                    {product.stock > 0 ? '🛒 Agregar al Carrito' : '❌ Sin Stock'}
+                    {product.stock > 0 ? (
+                      <>
+                        <img 
+                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xOSAyMGMwIDEuMTEtLjg5IDItMiAyYTIgMiAwIDAgMS0yLTJjMC0xLjExLjg5LTIgMi0yYTIgMiAwIDAgMSAyIDJNNyAxOGMtMS4xMSAwLTIgLjg5LTIgMmEyIDIgMCAwIDAgMiAyYzEuMTEgMCAyLS44OSAyLTJzLS44OS0yLTItMm0uMi0zLjM3bC0uMDMuMTJjMCAuMTQuMTEuMjUuMjUuMjVIMTl2Mkg3YTIgMiAwIDAgMS0yLTJjMC0uMzUuMDktLjY4LjI0LS45NmwxLjM2LTIuNDVMMyA0SDFWMmgzLjI3bC45NCAySDIwYy41NSAwIDEgLjQ1IDEgMWMwIC4xNy0uMDUuMzQtLjEyLjVsLTMuNTggNi40N2MtLjM0LjYxLTEgMS4wMy0xLjc1IDEuMDNIOC4xek04LjUgMTFIMTBWOUg3LjU2ek0xMSA5djJoM1Y5em0zLTFWNmgtM3Yyem0zLjExIDFIMTV2Mmgxem0xLjY3LTNIMTV2MmgyLjY3ek02LjE0IDZsLjk0IDJIMTBWNnoiLz48L3N2Zz4="
+                          alt="Cart"
+                          style={{ width: '20px', height: '20px' }}
+                        />
+                      </>
+                    ) : 'No hay stock'}
                   </button>
                   <button 
                     className="view-details-btn"
@@ -207,66 +375,63 @@ function Products() {
               </div>
             </div>
           ))}
+          </div>
+
+          {/* PAGINACIÓN */}
+          {totalPaginas > 1 && (
+            <div className="pagination">
+              <button
+                onClick={() => {
+                  setPaginaActual(p => Math.max(1, p - 1));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={paginaActual === 1}
+                className="pagination-btn"
+              >
+                ← Anterior
+              </button>
+              
+              {(() => {
+                const maxVisible = 8;
+                let startPage = Math.max(1, paginaActual - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPaginas, startPage + maxVisible - 1);
+                
+                if (endPage - startPage + 1 < maxVisible) {
+                  startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+                
+                const pages = [];
+                for (let i = startPage; i <= endPage; i++) {
+                  pages.push(
+                    <button
+                      key={i}
+                      onClick={() => {
+                        setPaginaActual(i);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className={`pagination-btn ${paginaActual === i ? 'active' : ''}`}
+                    >
+                      {i}
+                    </button>
+                  );
+                }
+                return pages;
+              })()}
+              
+              <button
+                onClick={() => {
+                  setPaginaActual(p => Math.min(totalPaginas, p + 1));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                disabled={paginaActual === totalPaginas}
+                className="pagination-btn"
+              >
+                Siguiente →
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* PAGINACIÓN */}
-      
-      {totalPaginas > 1 && (
-        <div className="pagination" style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '10px',
-          padding: '40px 20px',
-          flexWrap: 'wrap'
-        }}>
-          <button
-            onClick={() => setPaginaActual(p => Math.max(1, p - 1))}
-            disabled={paginaActual === 1}
-            style={{
-              padding: '10px 15px',
-              border: '1px solid #ddd',
-              background: paginaActual === 1 ? '#eee' : 'white',
-              cursor: paginaActual === 1 ? 'not-allowed' : 'pointer',
-              borderRadius: '5px'
-            }}
-          >
-            ← Anterior
-          </button>
-          
-          {[...Array(totalPaginas)].map((_, i) => (
-            <button
-              key={i + 1}
-              onClick={() => setPaginaActual(i + 1)}
-              style={{
-                padding: '10px 15px',
-                border: paginaActual === i + 1 ? '2px solid #d4af37' : '1px solid #ddd',
-                background: paginaActual === i + 1 ? '#d4af37' : 'white',
-                color: paginaActual === i + 1 ? 'white' : '#333',
-                cursor: 'pointer',
-                borderRadius: '5px',
-                fontWeight: paginaActual === i + 1 ? 'bold' : 'normal'
-              }}
-            >
-              {i + 1}
-            </button>
-          ))}
-          
-          <button
-            onClick={() => setPaginaActual(p => Math.min(totalPaginas, p + 1))}
-            disabled={paginaActual === totalPaginas}
-            style={{
-              padding: '10px 15px',
-              border: '1px solid #ddd',
-              background: paginaActual === totalPaginas ? '#eee' : 'white',
-              cursor: paginaActual === totalPaginas ? 'not-allowed' : 'pointer',
-              borderRadius: '5px'
-            }}
-          >
-            Siguiente →
-          </button>
-        </div>
-      )}
     </div>
   );
 }

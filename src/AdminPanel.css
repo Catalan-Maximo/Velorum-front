@@ -1,10 +1,10 @@
 /* ADMIN PANEL STYLES - ULTRA MINIMALISTA */
 :root {
-    --accent:#c9a646;
-    --accent-rgb:201,166,70;
-    --accent-dark:#b28b24;
-    --accent-light:#e3ce8a;
-    --accent-grad:linear-gradient(135deg,#e3ce8a 0%,#c9a646 45%,#b28b24 100%);
+    --accent:#0d4ca3;
+    --accent-rgb:13,76,163;
+    --accent-dark:#0a3a7a;
+    --accent-light:#5e8fc9;
+    --accent-grad:linear-gradient(135deg,#5e8fc9 0%,#0d4ca3 45%,#0a3a7a 100%);
     --surface:#ffffff;
     --surface-alt:#fafbfc;
     --border:#eceef0;

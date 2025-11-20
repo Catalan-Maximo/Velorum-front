@@ -34,10 +34,8 @@ function FavoritesSidebar() {
   ];
 
   // 💖 OBTENER PRODUCTOS FAVORITOS
-  // Si ya almacenamos objetos completos, usamos favorites directamente; fallback a mapping ids
-  const favoriteProducts = Array.isArray(favorites) && favorites.length > 0 && typeof favorites[0] === 'object'
-    ? favorites
-    : allProducts.filter(p => favorites.includes(p.id));
+  // Ahora siempre usamos los objetos completos almacenados en favorites
+  const favoriteProducts = Array.isArray(favorites) ? favorites : [];
 
   // 🚫 Si no hay usuario logueado mostramos un prompt pequeño (y no el sidebar vacío)
   if (!isUserLoggedIn()) {
