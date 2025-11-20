@@ -245,15 +245,37 @@ function Login() {
                     )}
                   </div>
                   {!isLogin && regStep === 1 && (
-                    <button type="button" className="login-button" disabled={loading} onClick={() => {
-                      const pwErrs = validatePasswordPolicy(formData.password); setPasswordErrors(pwErrs); if (pwErrs.length) { setError('La contraseña no puede estar vacía'); return; }
-                      if (!formData.username || !formData.email) { setError('Completa usuario y email'); return; }
-                      setError('');
-                      setRegStep(2);
-                    }}>Continuar</button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <button type="button" className="login-button" disabled={loading} onClick={() => {
+                        const pwErrs = validatePasswordPolicy(formData.password); setPasswordErrors(pwErrs); if (pwErrs.length) { setError('La contraseña no puede estar vacía'); return; }
+                        if (!formData.username || !formData.email) { setError('Completa usuario y email'); return; }
+                        setError('');
+                        setRegStep(2);
+                      }}>Continuar</button>
+                      <button
+                        className="back-home-button"
+                        type="button"
+                        onClick={() => navigate('/')}
+                      >
+                        {/* Solo el símbolo de flecha */}
+                      </button>
+                    </div>
                   )}
                   {isLogin && (
-                    <button type="submit" className={`login-button ${isSuccess ? 'success' : ''}`} disabled={loading}>{loading ? 'Procesando...' : 'Iniciar Sesión'}</button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button
+            className="login-button"
+            type="submit"
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            className="back-home-button"
+            onClick={() => navigate('/')}
+          >
+            {/* Solo el símbolo de flecha */}
+          </button>
+        </div>
                   )}
                 </>
               )}
@@ -295,6 +317,9 @@ function Login() {
             </p>
           </>
         )}
+        
+        {/* 🔙 BOTÓN VOLVER AL INICIO */}
+        
       </div>
     </div>
   );

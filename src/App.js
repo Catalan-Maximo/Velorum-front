@@ -72,6 +72,8 @@ function AppContent() {
   const openFooterInfo = (type) => setFooterInfo({ type });
   const closeFooterInfo = () => setFooterInfo({ type: null });
 
+  // Newsletter handler removed (newsletter UI removed)
+
   // Contenidos dinámicos del footer
   const renderFooterContent = () => {
     switch (footerInfo.type) {
@@ -239,7 +241,7 @@ function AppContent() {
             <button 
               onClick={() => navigate('/')}
               className="logo-button nav-item"
-              style={{ fontSize: '17px', fontWeight: '400', letterSpacing: '4px' }} /* Ajustar espaciado entre letras */
+              style={{ fontSize: '17px', fontWeight: '400', letterSpacing: '4px' }}
             >
               VELORUM
             </button>
@@ -491,81 +493,36 @@ function AppContent() {
       </Routes>
 
       {/* 🦶 FOOTER - PIE DE PÁGINA GLOBAL (aparece en todas las páginas) */}
-      <footer className="footer">
-        <div className="footer-content">
-          {/* 📋 SECCIÓN 1: INFORMACIÓN DE LA EMPRESA */}
-          <div className={"footer-section" + (isMobile ? ' collapsible' : '')}>
-            {isMobile ? (
-              <button
-                type="button"
-                className="footer-collapse-btn"
-                onClick={()=>setFooterOpen(o=>({...o,company:!o.company}))}
-                aria-expanded={footerOpen.company}
-                aria-controls="footer-company"
-              >
-                <span>Velorum</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" className={footerOpen.company ? 'open' : ''}><polyline fill="none" stroke="currentColor" strokeWidth="2" points="6,9 12,15 18,9"/></svg>
-              </button>
-            ) : (
-              <h3>Velorum</h3>
-            )}
-            <ul id="footer-company" style={isMobile && !footerOpen.company ? {display:'none'} : undefined}>
-              <li><button type="button" className="footer-link" onClick={()=>navigate('/about')}>Acerca de nosotros</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Contacto%20Velorum','_blank'); }}>Contacto</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('careers')}>Carreras</button></li>
+      <footer className="footer" role="contentinfo">
+        <div className="footer-content footer-container">
+          <div className="footer-section">
+            <div className="footer-logo">VELORUM</div>
+            <p className="footer-tag">Curamos y vendemos relojes seleccionados por calidad y estilo.</p>
+            {/* social links removed per request */}
+          </div>
+
+          <div className="footer-section">
+            <h3>Enlaces</h3>
+            <ul>
+              <li><button className="footer-link" onClick={() => navigate('/products')}>Productos</button></li>
+              <li><button className="footer-link" onClick={() => navigate('/about')}>Acerca de</button></li>
             </ul>
           </div>
-          
-          {/* 📋 SECCIÓN 2: PRODUCTOS */}
-          <div className={"footer-section" + (isMobile ? ' collapsible' : '')}>
-            {isMobile ? (
-              <button
-                type="button"
-                className="footer-collapse-btn"
-                onClick={()=>setFooterOpen(o=>({...o,products:!o.products}))}
-                aria-expanded={footerOpen.products}
-                aria-controls="footer-products"
-              >
-                <span>Productos</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" className={footerOpen.products ? 'open' : ''}><polyline fill="none" stroke="currentColor" strokeWidth="2" points="6,9 12,15 18,9"/></svg>
-              </button>
-            ) : (
-              <h3>Productos</h3>
-            )}
-            <ul id="footer-products" style={isMobile && !footerOpen.products ? {display:'none'} : undefined}>
-              <li><button type="button" className="footer-link" onClick={()=>navigate('/products#luxury')}>Relojes de lujo</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>navigate('/products#sport')}>Relojes deportivos</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>navigate('/products#smart')}>Relojes inteligentes</button></li>
+
+          <div className="footer-section">
+            <h3>Soporte</h3>
+            <ul>
+              <li><button className="footer-link" onClick={() => openFooterInfo('envios')}>Envíos</button></li>
+              <li><button className="footer-link" onClick={() => openFooterInfo('devoluciones')}>Devoluciones</button></li>
+              <li><button className="footer-link" onClick={() => openFooterInfo('careers')}>Carreras</button></li>
             </ul>
           </div>
-          
-          {/* 📋 SECCIÓN 3: SOPORTE */}
-          <div className={"footer-section" + (isMobile ? ' collapsible' : '')}>
-            {isMobile ? (
-              <button
-                type="button"
-                className="footer-collapse-btn"
-                onClick={()=>setFooterOpen(o=>({...o,support:!o.support}))}
-                aria-expanded={footerOpen.support}
-                aria-controls="footer-support"
-              >
-                <span>Soporte</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" className={footerOpen.support ? 'open' : ''}><polyline fill="none" stroke="currentColor" strokeWidth="2" points="6,9 12,15 18,9"/></svg>
-              </button>
-            ) : (
-              <h3>Soporte</h3>
-            )}
-            <ul id="footer-support" style={isMobile && !footerOpen.support ? {display:'none'} : undefined}>
-              <li><button type="button" className="footer-link" onClick={()=>{ window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Soporte%20T%C3%A9cnico%20Velorum','_blank'); }}>Centro de ayuda</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('envios')}>Envíos</button></li>
-              <li><button type="button" className="footer-link" onClick={()=>openFooterInfo('devoluciones')}>Devoluciones</button></li>
-            </ul>
-          </div>
+
+          {/* Contact section removed per request */}
         </div>
-        
-        {/* 📄 COPYRIGHT */}
+
         <div className="footer-bottom">
-          <p>&copy; 2025 Velorum. Todos los derechos SON MIOS WACHIN(Puto el que lee).</p>
+          <p>&copy; 2025 Velorum. Todos los derechos reservados.</p>
         </div>
       </footer>
 

@@ -205,16 +205,12 @@ function Favorites() {
                       alt={item.name}
                       onError={(e)=>{ e.target.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRjhGOUZBIi8+CjxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjEyIiBzdHJva2U9IiNENUQ5REQiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgo8L3N2Zz4K'; }}
                     />
-                    {item.originalPrice && (
-                      <span className="fav-discount">-{Math.round(((item.originalPrice-item.price)/item.originalPrice)*100)}%</span>
-                    )}
                   </div>
                   <div className="fav-info">
                     <h4>{item.name}</h4>
                     <p className="fav-cat">{item.category}</p>
                     <div className="fav-prices">
                       <span className="price">${item.price}</span>
-                      {item.originalPrice && <span className="old">${item.originalPrice}</span>}
                     </div>
                   </div>
                   <div className="fav-actions">

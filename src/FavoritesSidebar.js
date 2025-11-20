@@ -131,9 +131,6 @@ function FavoritesSidebar() {
                       </div>
                       <div className="favorite-price">
                         <span className="current-price">${product.price.toLocaleString()}</span>
-                        {product.originalPrice && (
-                          <span className="original-price">${product.originalPrice.toLocaleString()}</span>
-                        )}
                       </div>
                       <div className="favorite-rating">
                         <span className="stars">★★★★★</span>

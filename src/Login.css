@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f3;              /* 🎨 Gris más claro */
+  background: #09101A;              /* 🎨 Gris más claro */
   font-family: 'Poppins', sans-serif;
   padding: 20px;
   position: fixed;                  /* 📌 Posición fija */
@@ -30,12 +30,11 @@ body.login-active {
 
 /* 📦 TARJETA CON ANIMACIÓN SUTIL */
 .login-card {
-  background: #f0f0f3;
-  border-radius: 40px;
-  box-shadow: 
-    25px 25px 50px #d1d1d4,
-    -25px -25px 50px #ffffff;
-  padding: 50px;
+  background: #ffffff;              /* Fondo blanco puro */
+  border: 1px solid #e0e0e0;       /* Borde gris claro */
+  border-radius: 20px;             /* Bordes menos redondeados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);  /* Agregar sombra debajo del bloque */
+  padding: 40px;                   /* Ajuste de padding */
   width: 100%;
   max-width: 480px;
   max-height: 90vh;                /* 📏 Altura máxima del 90% de la ventana */
@@ -43,13 +42,39 @@ body.login-active {
   position: relative;
   z-index: 10;
   border: none;
-  animation: cardFloat 4s ease-in-out infinite;  /* 🎈 Solo la tarjeta flota */
+  animation: none;                 /* Sin animación */
 }
 
-/* 🎬 ANIMACIÓN SUTIL DE LA TARJETA */
-@keyframes cardFloat {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+/* Botón para volver al inicio */
+.back-home-button {
+  width: 15%; /* Botón de volver más pequeño */
+  padding: 10px; /* Ajustar padding para mantener diseño cuadrado */
+  text-align: center;
+  font-size: 18px; /* Solo mostrar el símbolo */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0; /* Eliminar margen superior */
+  background: #0D4CA3; /* Mismo color que el botón principal */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  height: auto; /* Ajustar altura para que coincida con el botón de inicio de sesión */
+  padding: 16px; /* Igualar padding al botón de inicio de sesión */
+}
+
+.back-home-button:hover {
+  background: #092c6e; /* Color más oscuro al pasar el mouse */
+}
+
+.back-home-button::before {
+  content: '\21A9'; /* Cambiar el símbolo a una flecha curva hacia la izquierda */
+  margin: 0; /* Eliminar margen lateral */
+  display: block; /* Asegurar que el icono esté centrado */
+  text-align: center; /* Centrar el contenido */
 }
 
 /* 📝 ENCABEZADO DEL FORMULARIO */
@@ -140,9 +165,10 @@ body.login-active {
 
 /* 🔘 BOTÓN PRINCIPAL */
 .login-button {
-  width: 100%;
+  width: 80%; /* Aumentar el ancho del botón de inicio de sesión */
+  display: inline-block;
   padding: 16px;
-  background: #000000;
+  background: #0D4CA3; /* Cambiar color al solicitado */
   color: rgb(255, 255, 255);
   border: none;
   border-radius: 10px;
@@ -333,6 +359,38 @@ body.login-active {
   border-top-color: transparent;
   animation: spin 1s linear infinite;
   margin-left: 10px;
+}
+
+/* ESTILOS DEL BOTÓN "VOLVER AL INICIO" */
+.back-home-button {
+  width: 15%; /* Botón de volver más pequeño */
+  padding: 10px; /* Ajustar padding para mantener diseño cuadrado */
+  text-align: center;
+  font-size: 18px; /* Solo mostrar el símbolo */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0; /* Eliminar margen superior */
+  background: #0D4CA3; /* Mismo color que el botón principal */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  height: auto; /* Ajustar altura para que coincida con el botón de inicio de sesión */
+  padding: 16px; /* Igualar padding al botón de inicio de sesión */
+}
+
+.back-home-button:hover {
+  background: #092c6e; /* Color más oscuro al pasar el mouse */
+}
+
+.back-home-button::before {
+  content: '\21A9'; /* Cambiar el símbolo a una flecha curva hacia la izquierda */
+  margin: 0; /* Eliminar margen lateral */
+  display: block; /* Asegurar que el icono esté centrado */
+  text-align: center; /* Centrar el contenido */
 }
 
 /* ANIMACIONES */

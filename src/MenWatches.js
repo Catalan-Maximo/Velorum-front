@@ -313,44 +313,45 @@ function MenWatches() {
         </div>
       </div>
 
-      {/* 🔧 FILTROS Y ORDENAMIENTO */}
-      <div className="products-controls">
-        <div className="controls-container">
-          <div className="filters-section">
-            <h3>Categorías</h3>
-            <div className="filter-buttons">
-              {categories.map(category => (
-                <button 
-                  key={category}
-                  className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="sort-section">
-            <label htmlFor="sort">Ordenar por:</label>
-            <select 
-              id="sort" 
-              className="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="featured">Destacados</option>
-              <option value="price-low">Precio: Menor a Mayor</option>
-              <option value="price-high">Precio: Mayor a Menor</option>
-              <option value="rating">Mejor Valorados</option>
-              <option value="newest">Más Nuevos</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       {/* 📱 GRID DE PRODUCTOS */}
       <div className="products-container">
+        {/* 🔍 SECCIÓN DE FILTROS */}
+        <div className="products-filters">
+          <h3>Filtros</h3>
+          
+          <div className="filter-group">
+            <h4>Categoría</h4>
+            <div className="filter-option">
+              <input type="checkbox" id="luxury" />
+              <label htmlFor="luxury">Lujo</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="sport" />
+              <label htmlFor="sport">Deportivo</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="classic" />
+              <label htmlFor="classic">Clásico</label>
+            </div>
+          </div>
+
+          <div className="filter-group">
+            <h4>Precio</h4>
+            <div className="filter-option">
+              <input type="checkbox" id="price1" />
+              <label htmlFor="price1">Menos de $10,000</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="price2" />
+              <label htmlFor="price2">$10,000 - $30,000</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="price3" />
+              <label htmlFor="price3">Más de $30,000</label>
+            </div>
+          </div>
+        </div>
+
         <div className="products-grid">
           {sortedWatches.map(watch => (
             <div key={watch.id} className="product-card">
@@ -390,9 +391,6 @@ function MenWatches() {
                 <h3>{watch.name}</h3>
                 <div className="product-pricing">
                   <span className="product-price">${watch.price}</span>
-                  {watch.originalPrice && (
-                    <span className="original-price">${watch.originalPrice}</span>
-                  )}
                 </div>
                 <div className="product-actions-bottom">
                   <button 
@@ -402,7 +400,7 @@ function MenWatches() {
                       addToCart(watch);
                     }}
                   >
-                    🛒 Agregar al Carrito
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xOSAyMGMwIDEuMTEtLjg5IDItMiAyYTIgMiAwIDAgMS0yLTJjMC0xLjExLjg5LTIgMi0yYTIgMiAwIDAgMSAyIDJNNyAxOGMtMS4xMSAwLTIgLjg5LTIgMmEyIDIgMCAwIDAgMiAyYzEuMTEgMCAyLS44OSAyLTJzLS44OS0yLTItMm0uMi0zLjM3bC0uMDMuMTJjMCAuMTQuMTEuMjUuMjUuMjVIMTl2Mkg3YTIgMiAwIDAgMS0yLTJjMC0uMzUuMDktLjY4LjI0LS45NmwxLjM2LTIuNDVMMyA0SDFWMmgzLjI3bC45NCAySDIwYy41NSAwIDEgLjQ1IDEgMWMwIC4xNy0uMDUuMzQtLjEyLjVsLTMuNTggNi40N2MtLjM0LjYxLTEgMS4wMy0xLjc1IDEuMDNIOC4xek04LjUgMTFIMTBWOUg3LjU2ek0xMSA5djJoM1Y5em0zLTFWNmgtM3Yyem0zLjExIDFIMTV2Mmgxem0xLjY3LTNIMTV2MmgyLjY3ek02LjE0IDZsLjk0IDJIMTBWNnoiLz48L3N2Zz4=" alt="Agregar al carrito" style={{width: '20px', height: '20px'}} />
                   </button>
                   <button 
                     className="view-details-btn"

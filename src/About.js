@@ -12,7 +12,7 @@ function About() {
         <div className="hero-content">
           <h1 className="hero-title">Acerca de Velorum</h1>
           <p className="hero-subtitle">
-            Más que relojes, creamos experiencias que trascienden el tiempo
+            Curamos y vendemos relojes de alta calidad seleccionados por su rendimiento y estilo
           </p>
         </div>
       </section>
@@ -22,48 +22,35 @@ function About() {
         <div className="section-container">
           <div className="section-header">
             <h2>Nuestra Historia</h2>
-            <div className="section-line"></div>
           </div>
           <div className="content-grid">
             <div className="content-text">
               <p>
-                Velorum nació en 2020 con una visión clara: crear relojes excepcionales 
-                que combinen la artesanía tradicional con el diseño contemporáneo. Desde 
-                nuestros humildes comienzos, hemos crecido hasta convertirnos en una marca 
-                reconocida internacionalmente.
+                Velorum arrancó en 2023 con una idea sencilla: acercar a los coleccionistas y
+                aficionados relojes seleccionados por su calidad y trayectoria. En lugar de
+                fabricar, nos dedicamos a buscar, verificar y traer al mercado piezas que
+                realmente valgan la pena.
               </p>
               <p>
-                Cada reloj que creamos cuenta una historia única, fusionando técnicas 
-                heredadas de generaciones de relojeros con la innovación tecnológica más 
-                avanzada. Nuestro compromiso es ofrecer piezas que no solo marquen el tiempo, 
-                sino que se conviertan en compañeros de vida.
+                Trabajamos con proveedores y distribuidores fiables para seleccionar relojes
+                que cumplan altos estándares de funcionamiento, estética y durabilidad. Nuestro
+                objetivo es ofrecer opciones que los clientes disfruten y con las que se sientan
+                tranquilos al comprar.
               </p>
             </div>
             <div className="content-image">
               <div className="history-timeline">
                 <div className="timeline-item">
-                  <div className="year">2020</div>
-                  <div className="milestone">Fundación de Velorum</div>
-                </div>
-                <div className="timeline-item">
-                  <div className="year">2021</div>
-                  <div className="milestone">Primera colección lanzada</div>
-                </div>
-                <div className="timeline-item">
-                  <div className="year">2022</div>
-                  <div className="milestone">Expansión internacional</div>
-                </div>
-                <div className="timeline-item">
                   <div className="year">2023</div>
-                  <div className="milestone">Certificación ISO de calidad</div>
+                  <div className="milestone">Inicio de actividades: selección y curación</div>
                 </div>
                 <div className="timeline-item">
                   <div className="year">2024</div>
-                  <div className="milestone">50,000 relojes vendidos</div>
+                  <div className="milestone">Crecimiento del catálogo curado</div>
                 </div>
                 <div className="timeline-item">
                   <div className="year">2025</div>
-                  <div className="milestone">Nueva línea premium</div>
+                  <div className="milestone">Ampliamos alcance nacional</div>
                 </div>
               </div>
             </div>
@@ -76,31 +63,30 @@ function About() {
         <div className="section-container">
           <div className="section-header">
             <h2>Nuestra Misión</h2>
-            <div className="section-line"></div>
           </div>
           <div className="mission-grid">
             <div className="mission-card">
-              <div className="mission-icon">🎨</div>
-              <h3>Diseñar con Intención</h3>
+              <div className="mission-icon">🔎</div>
+              <h3>Curación estricta</h3>
               <p>
-                Lanzamos pocas piezas y refinamos cada una con feedback real de nuestros primeros clientes. 
-                Menos catálogo, más foco en que cada reloj valga la pena.
+                Seleccionamos cada referencia basándonos en calidad, estado y reputación del proveedor.
+                Nuestro proceso evita sorpresas y garantiza que lo que vendemos funciona y luce bien.
               </p>
             </div>
             <div className="mission-card">
-              <div className="mission-icon">⚙️</div>
-              <h3>Mejorar Iterando</h3>
+              <div className="mission-icon">🤝</div>
+              <h3>Relaciones confiables</h3>
               <p>
-                Somos un equipo chico: priorizamos ajustar mecanismos, acabados y empaques 
-                rápido sobre inflar números. Cada lote trae pequeñas mejoras.
+                Trabajamos con distribuidores y vendedores verificados para asegurar trazabilidad y
+                condiciones justas en cada adquisición.
               </p>
             </div>
             <div className="mission-card">
               <div className="mission-icon">🌟</div>
-              <h3>Accesible y Honesto</h3>
+              <h3>Transparencia para comprar</h3>
               <p>
-                Queremos que un buen reloj mecánico o híbrido no sea inalcanzable. Transparencia en materiales, 
-                procesos y precios desde el día uno.
+                Informamos claramente el estado del reloj, sus especificaciones y cualquier historia
+                relevante para que la compra sea segura y satisfactoria.
               </p>
             </div>
           </div>
@@ -112,12 +98,11 @@ function About() {
         <div className="section-container">
           <div className="section-header">
             <h2>Nuestro Equipo</h2>
-            <div className="section-line"></div>
           </div>
           <p className="team-intro">
-            Empezamos en 2024 como un proyecto entre amigos: diseño, ingeniería ligera y 
-            mucha curiosidad por relojería. Hoy somos un núcleo pequeño que hace de todo: 
-            ensamblar, empaquetar, responder correos y mejorar procesos.
+            Empezamos en 2023 como un proyecto entre amigos interesados en relojería. Nos
+            enfocamos en buscar, verificar y traer al mercado piezas con buen historial y
+            estado, gestionando todo el proceso de venta y posventa con cercanía.
           </p>
           <div className="team-stats">
             <div className="stat-item">
@@ -125,16 +110,16 @@ function About() {
               <div className="stat-label">Equipo Núcleo</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">1°</div>
-              <div className="stat-label">Año Activo</div>
+              <div className="stat-number">2</div>
+              <div className="stat-label">Años Activos</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">300</div>
-              <div className="stat-label">Piezas Entregadas</div>
+              <div className="stat-number">1,200</div>
+              <div className="stat-label">Piezas Gestionadas</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">3</div>
-              <div className="stat-label">Provincias Alcance</div>
+              <div className="stat-number">10</div>
+              <div className="stat-label">Regiones Alcance</div>
             </div>
           </div>
         </div>
@@ -145,7 +130,6 @@ function About() {
         <div className="section-container">
           <div className="section-header">
             <h2>Nuestros Valores</h2>
-            <div className="section-line"></div>
           </div>
           <div className="values-grid">
             <div className="value-item">
@@ -190,7 +174,6 @@ function About() {
           <div className="contact-inner">
             <div className="contact-head">
               <h2>¿Tienes Preguntas?</h2>
-              <div className="section-line gold"></div>
             </div>
             <p className="contact-text">
               Nos encantaría conocerte y contarte más sobre nuestros relojes. <br/>

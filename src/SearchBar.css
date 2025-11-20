@@ -14,7 +14,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background-color: var(--input-bg);
+  background-color: #0E2239; /* Cambiado a color solicitado */
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 6px 12px;
