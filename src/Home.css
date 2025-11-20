@@ -202,9 +202,9 @@ body::after {
 .btn-secondary.pill:hover { background:#111; color:#fff; border-color:#111; }
 
 /* Botón principal minimalista */
-.btn-primary { background: #0D4CA3 !important; /* Cambiar el color del botón 'Shop Now' */
-  transition: none; /* Eliminar el efecto de transición */
-  color: #D3D3CE; /* Cambiar el color de la tipografía en el hero */
+.btn-primary { 
+  background: #0D4CA3 !important;
+  color: #D3D3CE;
   padding: 22px 44px;
   border: none;
   border-radius: 12px;
@@ -218,32 +218,9 @@ body::after {
   align-items: center;
   justify-content: center;
   min-width: 200px;
-  position: relative;
-  overflow: hidden;
   text-transform: uppercase;
   letter-spacing: 1px;
   backdrop-filter: blur(20px);
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 77, 79, 0.2), transparent);
-  transition: left 0.6s;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-primary:hover { transform:translateY(-4px) scale(1.02); box-shadow:var(--shadow-hover),0 0 0 1px rgba(255,255,255,.2); background:linear-gradient(135deg,#111,#1e293b); }
-
-.btn-primary:active {
-  transform: translateY(-2px) scale(1.01);
 }
 
 /* Botón secundario para usuario logueado */
@@ -702,16 +679,23 @@ body::after {
 /* 🛍️ CARRUSEL DE PRODUCTOS SOFISTICADO */
 .products-carousel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  /* Force 4 columns on wide screens */
+  grid-template-columns: repeat(4, 1fr);
   gap: 50px;
   animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
+@media (max-width: 1200px){
+  /* 3 columns for medium-large screens */
+  .products-carousel { grid-template-columns: repeat(3, 1fr); gap:40px; }
+}
 @media (max-width: 900px){
-  .products-carousel { grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:38px; }
+  /* 2 columns for tablets */
+  .products-carousel { grid-template-columns: repeat(2, 1fr); gap:36px; }
 }
 @media (max-width: 680px){
-  .products-carousel { grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:30px; }
+  /* 1 column on small devices (will be converted to carousel under 480px) */
+  .products-carousel { grid-template-columns: 1fr; gap:30px; }
 }
 @media (max-width: 480px){
   .products-carousel { grid-template-columns: 1fr; gap:26px; }

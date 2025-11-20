@@ -944,17 +944,21 @@ ul {
 
 /* 🦶 FOOTER - PIE DE PÁGINA */
 .footer {
-  background-color: var(--text-accent);
-  color: var(--bg-primary);
-  padding: 50px 5% 20px;
-  transition: background-color 0.3s ease;
+  background: #09101A; /* user requested background */
+  color: #d3d3ce; /* user requested typography color */
+  padding: 56px 5% 28px;
+  transition: background 0.25s ease;
+  border-top: 1px solid rgba(211,211,206,0.03);
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
+  /* Use 3 columns now that Contact was removed */
+  grid-template-columns: 260px 1fr 1fr;
+  gap: 28px 40px;
+  align-items: start;
+  margin-bottom: 38px;
+  justify-items: center; /* center grid items horizontally */
 }
 @media (max-width:720px){ .footer { padding:42px 22px 18px; } .footer-content { grid-template-columns:1fr 1fr; gap:26px 30px; } }
 @media (max-width:480px){ .footer-content { grid-template-columns:1fr; gap:22px; } .footer { padding:38px 20px 16px; } .footer-section h3 { font-size:16px; } .footer-section ul li { margin-bottom:8px; } }
@@ -996,6 +1000,18 @@ ul {
   margin-bottom: 10px;
 }
 
+.footer-container { max-width: 1280px; margin: 0 auto; width: 100%; }
+.footer-logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 26px; letter-spacing: 6px; color: #d3d3ce; margin-bottom: 12px; }
+.footer-tag { color: rgba(211,211,206,0.9); font-size: 14px; max-width: 260px; line-height:1.5; margin-bottom: 14px; text-align: center; }
+.footer-social { display:flex; gap:10px; }
+.social-link { display:inline-flex; padding:8px 12px; align-items:center; justify-content:center; border-radius:8px; background:rgba(255,255,255,0.02); color:#d3d3ce; text-decoration:none; font-size:14px; font-weight:600; }
+
+.footer-section ul { padding:0; margin:0; list-style:none; }
+.footer-link { color:#d3d3ce; opacity:0.95; font-weight:600; }
+.footer-link:hover { text-decoration:underline; color:#ffffff; }
+
+.footer-section { text-align: center; }
+
 .footer-section ul li a:hover {
   text-decoration: underline;
 }
@@ -1005,8 +1021,8 @@ ul {
 
 .footer-bottom {
   text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.04);
 }
 
 /* Modal informativo del footer */

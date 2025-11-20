@@ -103,61 +103,65 @@ function Home({ user, isLoggedIn }) {
             </button>
           </div>
           <div className="products-carousel">
-            {[
-              {
-                id: 1,
-                name: "Rolex Submariner",
-                price: 18999,
-                originalPrice: 22999,
-                image: "/Hombre/Rolex Submarino.png",
-                badge: "Bestseller",
-                reviews: 567
-              },
-              {
-                id: 2,
-                name: "Cartier Oro 18k",
-                price: 15999,
-                originalPrice: 18999,
-                image: "/Mujer/Cartier oro 18k.png",
-                badge: "Premium",
-                reviews: 187
-              },
-              {
-                id: 3,
-                name: "Patek Philippe",
-                price: 32999,
-                originalPrice: 39999,
-                image: "/Hombre/Patek Philippe.png",
-                badge: "Exclusivo",
-                reviews: 89
-              },
-              {
-                id: 4,
-                name: "Chopard Happy Diamonds",
-                price: 12999,
-                originalPrice: 15999,
-                image: "/Mujer/Chopard.png",
-                badge: "Elegante",
-                reviews: 298
-              },
-              {
-                id: 5,
-                name: "Casio G-Shock",
-                price: 399,
-                originalPrice: 499,
-                image: "/Hombre/Casio G shock.png",
-                badge: "Deportivo",
-                reviews: 892
-              },
-              {
-                id: 6,
-                name: "TAG Heuer Aquaracer",
-                price: 2999,
-                originalPrice: 3999,
-                image: "/Mujer/Tag heuer Aquaracer.png",
-                badge: "Nuevo",
-                reviews: 234
-              }].map(product => (
+            {(
+              // Featured products list — limited to first 4 to keep a single row of 4 columns
+              [
+                {
+                  id: 1,
+                  name: "Rolex Submariner",
+                  price: 18999,
+                  originalPrice: 22999,
+                  image: "/Hombre/Rolex Submarino.png",
+                  badge: "Bestseller",
+                  reviews: 567
+                },
+                {
+                  id: 2,
+                  name: "Cartier Oro 18k",
+                  price: 15999,
+                  originalPrice: 18999,
+                  image: "/Mujer/Cartier oro 18k.png",
+                  badge: "Premium",
+                  reviews: 187
+                },
+                {
+                  id: 3,
+                  name: "Patek Philippe",
+                  price: 32999,
+                  originalPrice: 39999,
+                  image: "/Hombre/Patek Philippe.png",
+                  badge: "Exclusivo",
+                  reviews: 89
+                },
+                {
+                  id: 4,
+                  name: "Chopard Happy Diamonds",
+                  price: 12999,
+                  originalPrice: 15999,
+                  image: "/Mujer/Chopard.png",
+                  badge: "Elegante",
+                  reviews: 298
+                },
+                {
+                  id: 5,
+                  name: "Casio G-Shock",
+                  price: 399,
+                  originalPrice: 499,
+                  image: "/Hombre/Casio G shock.png",
+                  badge: "Deportivo",
+                  reviews: 892
+                },
+                {
+                  id: 6,
+                  name: "TAG Heuer Aquaracer",
+                  price: 2999,
+                  originalPrice: 3999,
+                  image: "/Mujer/Tag heuer Aquaracer.png",
+                  badge: "Nuevo",
+                  reviews: 234
+                }
+              ]
+            ).slice(0,4).map(product => (
               <div key={product.id} className="product-card-new">
                 <div className={`product-badge ${product.badge.toLowerCase()}`}>
                   {product.badge}
@@ -185,9 +189,7 @@ function Home({ user, isLoggedIn }) {
                   <h4>{product.name}</h4>
                   <div className="product-pricing">
                     <p className="product-price">${product.price.toLocaleString()}</p>
-                    {product.originalPrice && (
-                      <p className="original-price">${product.originalPrice.toLocaleString()}</p>
-                    )}
+                    {/* original price removed */}
                   </div>
                   <button
                     className={`add-to-cart-new ${isInCart && isInCart(product.id) ? 'in-cart' : ''}`}
@@ -226,58 +228,7 @@ function Home({ user, isLoggedIn }) {
         </div>
       </section>
 
-      {/* 🏷️ CATEGORÍAS */}
-      <section className="categories-section">
-        <div className="categories-container">
-          <div className="section-intro">
-            <h2 className="categories-title">Explora Nuestras Colecciones</h2>
-            <p className="categories-subtitle">
-              Cada colección cuenta una historia única de artesanía y precisión
-            </p>
-          </div>
-          <div className="categories-grid">
-            <div className="category-card luxury">
-              <div className="category-image">
-                <img src="/Hombre/Richard Mille.png" alt="Colección Lujo" />
-              </div>
-              <div className="category-content">
-                <h3>Luxury Heritage</h3>
-                <p>Desde $2,500</p>
-                <span className="category-count">Modelos exclusivos</span>
-                <button className="category-btn" onClick={() => navigate('/products?category=luxury')}>
-                  Descubrir →
-                </button>
-              </div>
-            </div>
-            <div className="category-card sport">
-              <div className="category-image">
-                <img src="/Hombre/Casio G shock.png" alt="Colección Deportiva" />
-              </div>
-              <div className="category-content">
-                <h3>Sport Performance</h3>
-                <p>Desde $899</p>
-                <span className="category-count">Modelos deportivos</span>
-                <button className="category-btn" onClick={() => navigate('/products?category=sport')}>
-                  Explorar →
-                </button>
-              </div>
-            </div>
-            <div className="category-card classic">
-              <div className="category-image">
-                <img src="/Hombre/Rolex Submarino.png" alt="Colección Clásica" />
-              </div>
-              <div className="category-content">
-                <h3>Classic Elegance</h3>
-                <p>Desde $1,200</p>
-                <span className="category-count">Modelos atemporales</span>
-                <button className="category-btn" onClick={() => navigate('/products?category=classic')}>
-                  Ver más →
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Categories section removed per request */}
     </div>
   );
 }

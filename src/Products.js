@@ -164,7 +164,56 @@ function Products() {
 
       {/* 📦 CONTENEDOR PRINCIPAL */}
       <div className="products-container">
-        {/* 🛍️ GRID DE PRODUCTOS - 3 COLUMNAS */}
+        {/* 🔍 SECCIÓN DE FILTROS */}
+        <div className="products-filters">
+          <h3>Filtros</h3>
+          
+          <div className="filter-group">
+            <h4>Categoría</h4>
+            <div className="filter-option">
+              <input type="checkbox" id="luxury" />
+              <label htmlFor="luxury">Lujo</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="sport" />
+              <label htmlFor="sport">Deportivo</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="smart" />
+              <label htmlFor="smart">Inteligente</label>
+            </div>
+          </div>
+
+          <div className="filter-group">
+            <h4>Género</h4>
+            <div className="filter-option">
+              <input type="checkbox" id="men" />
+              <label htmlFor="men">Hombre</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="women" />
+              <label htmlFor="women">Mujer</label>
+            </div>
+          </div>
+
+          <div className="filter-group">
+            <h4>Precio</h4>
+            <div className="filter-option">
+              <input type="checkbox" id="price1" />
+              <label htmlFor="price1">Menos de $10,000</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="price2" />
+              <label htmlFor="price2">$10,000 - $30,000</label>
+            </div>
+            <div className="filter-option">
+              <input type="checkbox" id="price3" />
+              <label htmlFor="price3">Más de $30,000</label>
+            </div>
+          </div>
+        </div>
+
+        {/* 🛍️ GRID DE PRODUCTOS - 4 COLUMNAS */}
         <div className="products-grid">
           {products.map(product => {
             // Convertir category a string y manejar null/undefined
@@ -174,8 +223,8 @@ function Products() {
             return (
             <div key={product.id} className="product-card" id={anchorId}>
               {/* 🏷️ BADGE */}
-              <div className={`product-badge ${product.originalPrice ? 'discount' : (product.badge || 'nuevo').toLowerCase()}`}>
-                {product.originalPrice ? `-${Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%` : (product.badge || 'Nuevo')}
+              <div className={`product-badge ${(product.badge || 'nuevo').toLowerCase()}`}>
+                {(product.badge || 'Nuevo')}
               </div>
               
               {/* 🖼️ IMAGEN */}
@@ -218,9 +267,6 @@ function Products() {
                 )}
                 <div className="product-pricing">
                   <span className="product-price">${product.price.toLocaleString()}</span>
-                  {product.originalPrice && (
-                    <span className="original-price">${product.originalPrice.toLocaleString()}</span>
-                  )}
                 </div>
                 <div className="product-actions-bottom">
                   <button 
@@ -230,7 +276,7 @@ function Products() {
                       addToCart(product);
                     }}
                   >
-                    🛒 Agregar al Carrito
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xOSAyMGMwIDEuMTEtLjg5IDItMiAyYTIgMiAwIDAgMS0yLTJjMC0xLjExLjg5LTIgMi0yYTIgMiAwIDAgMSAyIDJNNyAxOGMtMS4xMSAwLTIgLjg5LTIgMmEyIDIgMCAwIDAgMiAyYzEuMTEgMCAyLS44OSAyLTJzLS44OS0yLTItMm0uMi0zLjM3bC0uMDMuMTJjMCAuMTQuMTEuMjUuMjUuMjVIMTl2Mkg3YTIgMiAwIDAgMS0yLTJjMC0uMzUuMDktLjY4LjI0LS45NmwxLjM2LTIuNDVMMyA0SDFWMmgzLjI3bC45NCAySDIwYy41NSAwIDEgLjQ1IDEgMWMwIC4xNy0uMDUuMzQtLjEyLjVsLTMuNTggNi40N2MtLjM0LjYxLTEgMS4wMy0xLjc1IDEuMDNIOC4xek04LjUgMTFIMTBWOUg3LjU2ek0xMSA5djJoM1Y5em0zLTFWNmgtM3Yyem0zLjExIDFIMTV2Mmgxem0xLjY3LTNIMTV2MmgyLjY3ek02LjE0IDZsLjk0IDJIMTBWNnoiLz48L3N2Zz4=" alt="Agregar al carrito" style={{width: '20px', height: '20px'}} />
                   </button>
                   <button 
                     className="view-details-btn"

@@ -22,7 +22,6 @@ function ProductDetail() {
       id: 1,
       name: "Audemars Piguet Royal Oak",
       price: 45999,
-      originalPrice: 52999,
       rating: 4.9,
       reviews: 234,
       category: "luxury",
@@ -56,7 +55,6 @@ function ProductDetail() {
       id: 2,
       name: "Cartier Tank Cuero",
       price: 8999,
-      originalPrice: 10999,
       rating: 4.8,
       reviews: 189,
       category: "classic",
@@ -89,7 +87,6 @@ function ProductDetail() {
       id: 3,
       name: "Cartier Tank Metálico",
       price: 12999,
-      originalPrice: 15999,
       rating: 4.9,
       reviews: 156,
       category: "luxury",
@@ -122,7 +119,6 @@ function ProductDetail() {
       id: 4,
       name: "Casio G-Shock",
       price: 399,
-      originalPrice: 499,
       rating: 4.7,
       reviews: 892,
       category: "sport",
@@ -155,7 +151,6 @@ function ProductDetail() {
       id: 5,
       name: "Casio Water Resist",
       price: 299,
-      originalPrice: 389,
       rating: 4.6,
       reviews: 567,
       category: "sport",
@@ -188,7 +183,6 @@ function ProductDetail() {
       id: 6,
       name: "G-Shock Protection",
       price: 449,
-      originalPrice: 549,
       rating: 4.8,
       reviews: 423,
       category: "sport",
@@ -221,7 +215,6 @@ function ProductDetail() {
       id: 7,
       name: "Hamilton Automatic",
       price: 1899,
-      originalPrice: 2299,
       rating: 4.7,
       reviews: 234,
       category: "classic",
@@ -255,7 +248,6 @@ function ProductDetail() {
       id: 8,
       name: "Omega Seamaster",
       price: 6999,
-      originalPrice: 8999,
       rating: 4.9,
       reviews: 345,
       category: "luxury",
@@ -288,7 +280,6 @@ function ProductDetail() {
       id: 9,
       name: "Patek Philippe Calatrava",
       price: 32999,
-      originalPrice: 39999,
       rating: 5.0,
       reviews: 89,
       category: "luxury",
@@ -321,7 +312,6 @@ function ProductDetail() {
       id: 10,
       name: "Poedagar 930",
       price: 199,
-      originalPrice: 299,
       rating: 4.5,
       reviews: 678,
       category: "casual",
@@ -354,7 +344,6 @@ function ProductDetail() {
       id: 11,
       name: "Richard Mille",
       price: 89999,
-      originalPrice: 105999,
       rating: 4.9,
       reviews: 45,
       category: "luxury",
@@ -387,7 +376,6 @@ function ProductDetail() {
       id: 12,
       name: "Rolex Submariner",
       price: 18999,
-      originalPrice: 22999,
       rating: 4.9,
       reviews: 567,
       category: "luxury",
@@ -420,7 +408,6 @@ function ProductDetail() {
       id: 13,
       name: "Seiko Mod",
       price: 599,
-      originalPrice: 799,
       rating: 4.6,
       reviews: 234,
       category: "casual",
@@ -454,7 +441,6 @@ function ProductDetail() {
       id: 14,
       name: "Cartier Oro 18k",
       price: 15999,
-      originalPrice: 18999,
       rating: 4.9,
       reviews: 187,
       category: "luxury",
@@ -487,7 +473,6 @@ function ProductDetail() {
       id: 15,
       name: "Chopard Happy Diamonds",
       price: 12999,
-      originalPrice: 15999,
       rating: 4.8,
       reviews: 298,
       category: "luxury",
@@ -520,7 +505,6 @@ function ProductDetail() {
       id: 16,
       name: "Omega Constellation",
       price: 4999,
-      originalPrice: 6999,
       rating: 4.7,
       reviews: 156,
       category: "elegant",
@@ -553,7 +537,6 @@ function ProductDetail() {
       id: 17,
       name: "Patek Philippe Genève",
       price: 28999,
-      originalPrice: 34999,
       rating: 5.0,
       reviews: 67,
       category: "luxury",
@@ -586,7 +569,6 @@ function ProductDetail() {
       id: 18,
       name: "TAG Heuer Aquaracer",
       price: 2999,
-      originalPrice: 3999,
       rating: 4.6,
       reviews: 234,
       category: "sport",
@@ -728,14 +710,6 @@ function ProductDetail() {
 
           <div className="product-pricing">
             <span className="current-price">${product.price.toLocaleString()}</span>
-            {product.originalPrice && (
-              <span className="original-price">${product.originalPrice.toLocaleString()}</span>
-            )}
-            {product.originalPrice && (
-              <span className="discount alt-accent">
-                -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
-              </span>
-            )}
           </div>
 
           <p className="product-description">{product.description}</p>

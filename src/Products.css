@@ -15,7 +15,7 @@
   background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
   color: white;
   /* Ajustamos el padding superior ya que quitamos el espacio blanco externo */
-  padding: 60px 0 60px;
+  padding: 30px 0 30px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -43,16 +43,16 @@
 
 .products-header h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 48px;
+  font-size: 32px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   letter-spacing: -1px;
 }
 
 .products-header p {
-  font-size: 20px;
+  font-size: 16px;
   opacity: 0.9;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   font-family: 'Source Sans 3', sans-serif;
 }
 
@@ -72,14 +72,69 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 60px 5%;
+  display: flex;
+  gap: 30px;
 }
 
-/* 🛍️ GRID DE PRODUCTOS - 3 COLUMNAS EXACTAS */
+/* 🔍 SECCIÓN DE FILTROS */
+.products-filters {
+  width: 250px;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 15px 50px rgba(15, 23, 42, 0.1);
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  height: fit-content;
+  position: sticky;
+  top: 100px;
+}
+
+.products-filters h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #0f172a;
+}
+
+.filter-group {
+  margin-bottom: 24px;
+}
+
+.filter-group h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #334155;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.filter-option input[type="checkbox"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.filter-option label {
+  cursor: pointer;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* 🛍️ GRID DE PRODUCTOS - 4 COLUMNAS */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas */
-  gap: 40px;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas */
+  gap: 30px;
   margin-top: 0;
+  flex: 1;
 }
 
 /* 📦 TARJETA DE PRODUCTO */
@@ -175,7 +230,27 @@
 
 /* 📋 INFORMACIÓN DEL PRODUCTO */
 .product-info {
-  padding: 32px;
+  padding: 10px 15px;
+}
+
+.product-info .product-rating {
+  margin-bottom: 5px;
+}
+
+.product-info h3 {
+  margin: 5px 0;
+}
+
+.product-info .product-desc-short {
+  margin: 5px 0;
+}
+
+.product-info .product-pricing {
+  margin: 5px 0;
+}
+
+.product-info .product-actions-bottom {
+  margin-top: 10px;
 }
 
 .product-rating {
@@ -198,7 +273,7 @@
 
 .product-info h3 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
   color: #0f172a;
   margin-bottom: 12px;
@@ -228,7 +303,7 @@
 }
 
 .product-price {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 800;
   color: #0f172a;
   font-family: 'Montserrat', sans-serif;
@@ -245,21 +320,15 @@
   background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
   color: white;
   border: none;
-  padding: 16px 24px;
+  padding: 12px;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.add-to-cart-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.3);
-  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
 }
 
 /* 🛒 SECCIÓN DE BOTONES EN LA PARTE INFERIOR */
