@@ -122,18 +122,13 @@ function AppContent() {
       const token = localStorage.getItem('token');
       const userInfo = localStorage.getItem('userInfo');
       
-  console.log('🔍 Verificando autenticación...'); // 🔍 Debug
-      console.log('🔑 Token:', token ? 'Presente' : 'No encontrado'); // 🔍 Debug
-      console.log('👤 UserInfo:', userInfo); // 🔍 Debug
-      
       if (token && userInfo) {
         try {
           const parsedUser = JSON.parse(userInfo);
-          console.log('✅ Usuario parseado:', parsedUser); // 🔍 Debug
           setUser(parsedUser);
           setIsLoggedIn(true);
         } catch (error) {
-          console.error('❌ Error al parsear usuario:', error); // 🔍 Debug
+          console.error('Error al parsear usuario:', error);
           // Si hay error, limpiar datos
           localStorage.removeItem('userInfo');
           localStorage.removeItem('accessToken');
@@ -146,7 +141,6 @@ function AppContent() {
     
     // 📡 ESCUCHAR CAMBIOS EN EL STORAGE (cuando se hace login)
     const handleStorageChange = () => {
-      console.log('📡 Cambio detectado en localStorage'); // 🔍 Debug
       checkAuth();
     };
     

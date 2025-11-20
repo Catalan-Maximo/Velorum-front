@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userService, adminService } from './services';
+import AdminOrderPanel from './AdminOrderPanel';
+import AdminSyncPanel from './AdminSyncPanel';
+import AdminProductsPanel from './AdminProductsPanel';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
     const navigate = useNavigate();
+    const [activeTab, setActiveTab] = useState('users'); // users, orders, products, sync
     // 🔍 Debug: Verificar autenticación al cargar el componente
     useEffect(() => {
         console.log('🔍 AdminPanel mounted - checking authentication...');
@@ -17,7 +21,7 @@ const AdminPanel = () => {
     // 📦 Cargar datos al montar el componente
     useEffect(() => {
         fetchUsers();
-        fetchDashboard();
+        // fetchDashboard(); // Deshabilitado - endpoint no existe
     }, []);
 
     // Estados principales
@@ -239,6 +243,43 @@ const AdminPanel = () => {
                 <p className="subtitle">Gestión centralizada de usuarios y roles</p>
             </header>
             
+            {/* TABS NAVIGATION */}
+            <div className="admin-tabs">
+                <button 
+                    className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('users')}
+                >
+                    👥 Usuarios
+                </button>
+                <button 
+                    className={`tab-btn ${activeTab === 'orders' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('orders')}
+                >
+                    📦 Pedidos
+                </button>
+                <button 
+                    className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('products')}
+                >
+                    🛍️ Productos
+                </button>
+                <button 
+                    className={`tab-btn ${activeTab === 'sync' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('sync')}
+                >
+                    🔄 Sincronización
+                </button>
+            </div>
+            
+            {/* RENDER CONTENT BASED ON ACTIVE TAB */}
+            {activeTab === 'orders' && <AdminOrderPanel />}
+            {activeTab === 'products' && <AdminProductsPanel />}
+            {activeTab === 'sync' && <AdminSyncPanel />}
+            
+            {/* USERS TAB CONTENT (existing code) */}
+            {activeTab === 'users' && (
+            <>
+            
             {error && (
                 <div className="error-message">
                     {error}
@@ -357,9 +398,6 @@ const AdminPanel = () => {
                                     <line x1="5" y1="12" x2="19" y2="12"/>
                                 </svg>
                                 {showCreateForm ? 'Cerrar' : 'Nuevo'}
-                            </button>
-                            <button className="btn-add-product" onClick={() => navigate('/add-product')}>
-                                Agregar Productos
                             </button>
                         </div>
                     </div>
@@ -578,6 +616,8 @@ const AdminPanel = () => {
                         </div>
                     </div>
                 </div>
+            )}
+            </>
             )}
         </div>
 
