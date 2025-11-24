@@ -25,7 +25,6 @@ function Products() {
   const PRODUCTOS_POR_PAGINA = 12;
 
   useEffect(() => {
-    // keep cargarProductos isolated in this effect (initial load)
     const cargarProductos = async () => {
       try {
         console.log('🔍 Cargando productos desde:', `${API_BASE_URL}/market/model/products/`);
@@ -51,7 +50,6 @@ function Products() {
               if (index === 0) console.log('  ⚠️ Usando imagen por defecto');
             }
             
-            // Determinar género basado en el nombre de la categoría o del producto
             let genero = 'Unisex';
             const nombreLower = (p.nombre || '').toLowerCase();
             const categoriaLower = (p.categoria?.nombre || '').toLowerCase();
@@ -83,7 +81,6 @@ function Products() {
           console.log('✅ Productos cargados:', mappedProducts.length);
           setAllProducts(mappedProducts);
           
-          // Calcular rango de precios
           if (mappedProducts.length > 0) {
             const precios = mappedProducts.map(p => p.price);
             const min = Math.floor(Math.min(...precios));
@@ -104,31 +101,21 @@ function Products() {
     cargarProductos();
   }, []);
 
-  // Actualiza el fondo del track del slider cuando cambian los valores de precio
   useEffect(() => {
     if (!priceTrackRef.current || precioMax <= precioMin) return;
     const range = precioMax - precioMin || 1;
     const minPct = ((precioMinInput - precioMin) / range) * 100;
     const maxPct = ((precioMaxInput - precioMin) / range) * 100;
-    // color azul para el rango seleccionado con gradiente suave
     priceTrackRef.current.style.background = `linear-gradient(90deg, #e2e8f0 0%, #e2e8f0 ${minPct}%, #0d4ca3 ${minPct}%, #1e5bb8 ${maxPct}%, #e2e8f0 ${maxPct}%, #e2e8f0 100%)`;
   }, [precioMinInput, precioMaxInput, precioMin, precioMax]);
 
-  // Filtrar productos
   let productosFiltrados = allProducts.filter(p => {
-    // Filtro por categoría
     if (categoriaFiltro !== 'Todos' && p.category !== categoriaFiltro) return false;
-
-    // Filtro por precio
     if (p.price < precioMinInput || p.price > precioMaxInput) return false;
-
-    // Filtro por búsqueda
     if (busqueda && !p.name.toLowerCase().includes(busqueda.toLowerCase())) return false;
-
     return true;
   });
 
-  // Ordenar productos
   switch (ordenamiento) {
     case 'precio-asc':
       productosFiltrados = [...productosFiltrados].sort((a, b) => a.price - b.price);
@@ -143,19 +130,16 @@ function Products() {
       productosFiltrados = [...productosFiltrados].sort((a, b) => b.name.localeCompare(a.name));
       break;
     default:
-      // destacados (sin ordenar)
       break;
   }
 
-  // Calcular paginación
   const totalPaginas = Math.ceil(productosFiltrados.length / PRODUCTOS_POR_PAGINA);
   const indiceInicio = (paginaActual - 1) * PRODUCTOS_POR_PAGINA;
   const indiceFin = indiceInicio + PRODUCTOS_POR_PAGINA;
   const productosPaginados = productosFiltrados.slice(indiceInicio, indiceFin);
 
-    const categorias = ['Todos', ...Array.from(new Set(allProducts.map(p => p.category).filter(c => c && c.toLowerCase() !== 'relojes')) )];
+  const categorias = ['Todos', ...Array.from(new Set(allProducts.map(p => p.category).filter(c => c && c.toLowerCase() !== 'relojes')))];
 
-  // Limpiar todos los filtros
   const limpiarFiltros = () => {
     setCategoriaFiltro('Todos');
     setPrecioMinInput(precioMin);
@@ -192,18 +176,15 @@ function Products() {
       <div className="products-container">
         {/* FILTROS LATERALES */}
         <aside className="products-filters">
+          {/* 🏷️ TÍTULO + SEPARADOR AZUL */}
           <div className="filters-header">
-            <h3>Filtros</h3>
-            {(categoriaFiltro !== 'Todos' || precioMinInput !== precioMin || precioMaxInput !== precioMax || busqueda) && (
-              <button className="clear-filters-btn" onClick={limpiarFiltros}>
-                Limpiar
-              </button>
-            )}
+            <h3 className="filters-title">Filtros</h3>
+            <div className="filters-divider" />
           </div>
 
           {filtersOpen && (
             <div className="filters-content">
-              {/* Búsqueda */}
+              {/* 🔍 Búsqueda */}
               <div className="filter-group">
                 <h4>Buscar</h4>
                 <input
@@ -218,7 +199,7 @@ function Products() {
                 />
               </div>
 
-              {/* Categoría */}
+              {/* 📂 Categoría */}
               <div className="filter-group">
                 <h4>Categoría</h4>
                 <div className="filter-options-list">
@@ -239,13 +220,14 @@ function Products() {
                 </div>
               </div>
 
-              {/* Rango de Precio */}
+              {/* 💰 Rango de Precio */}
               <div className="filter-group">
                 <h4>Rango de Precio</h4>
                 <div className="price-range-display">
                   <span>${precioMinInput.toLocaleString()}</span>
                   <span>${precioMaxInput.toLocaleString()}</span>
                 </div>
+
                 <div className="price-slider-container" ref={priceTrackRef}>
                   <input
                     type="range"
@@ -259,6 +241,7 @@ function Products() {
                       setPaginaActual(1);
                     }}
                   />
+
                   <input
                     type="range"
                     min={precioMin}
@@ -274,7 +257,7 @@ function Products() {
                 </div>
               </div>
 
-              {/* Ordenamiento */}
+              {/* ↕ Ordenamiento */}
               <div className="filter-group">
                 <h4>Ordenar por</h4>
                 <select
@@ -292,6 +275,22 @@ function Products() {
                   <option value="nombre-desc">Nombre: Z-A</option>
                 </select>
               </div>
+
+              {/* 🧹 BOTÓN LIMPIAR ABAJO */}
+              <div className="filters-footer">
+                <button
+                  className="clear-filters-btn"
+                  onClick={limpiarFiltros}
+                  disabled={
+                    categoriaFiltro === 'Todos' &&
+                    precioMinInput === precioMin &&
+                    precioMaxInput === precioMax &&
+                    !busqueda
+                  }
+                >
+                  Limpiar filtros
+                </button>
+              </div>
             </div>
           )}
         </aside>
@@ -299,82 +298,81 @@ function Products() {
         {/* GRID DE PRODUCTOS */}
         <div className="products-grid-container">
           <div className="products-grid">
-          {productosPaginados.map(product => (
-            <div key={product.id} className="product-card">
-              <div className={`product-badge ${product.badge.toLowerCase()}`}>
-                {product.badge}
-              </div>
-              
-              <div className="product-image" onClick={() => navigate(`/product/${product.id}`)}>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  onError={(e) => {
-                    e.currentTarget.src = '/logo192.png';
-                  }}
-                />
-                <div className="product-actions">
-                  <button className="quick-view-btn" onClick={() => navigate(`/product/${product.id}`)}>
-                    👁️
-                  </button>
-                  <button 
-                    className={`wishlist-btn ${isFavorite(product.id) ? 'active' : ''}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      // Enviamos el objeto completo del producto para que el contexto tenga toda la info
-                      toggleFavorite(product);
-                    }}
-                  >
-                    {isFavorite(product.id) ? '❤️' : '♡'}
-                  </button>
+            {productosPaginados.map(product => (
+              <div key={product.id} className="product-card">
+                <div className={`product-badge ${product.badge.toLowerCase()}`}>
+                  {product.badge}
                 </div>
-              </div>
-              
-              <div className="product-info">
-                <div className="product-rating">
-                  <span className="stars">★★★★★</span>
-                </div>
-                <h3>{product.name}</h3>
-                {product.description && (
-                  <p 
-                    className="product-desc-short"
-                    dangerouslySetInnerHTML={{
-                      __html: product.description.slice(0, 100) + '...'
+                
+                <div className="product-image" onClick={() => navigate(`/product/${product.id}`)}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    onError={(e) => {
+                      e.currentTarget.src = '/logo192.png';
                     }}
                   />
-                )}
-                <div className="product-pricing">
-                  <span className="product-price">${product.price.toLocaleString()}</span>
+                  <div className="product-actions">
+                    <button className="quick-view-btn" onClick={() => navigate(`/product/${product.id}`)}>
+                      👁️
+                    </button>
+                    <button 
+                      className={`wishlist-btn ${isFavorite(product.id) ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(product);
+                      }}
+                    >
+                      {isFavorite(product.id) ? '❤️' : '♡'}
+                    </button>
+                  </div>
                 </div>
-                <div className="product-actions-bottom">
-                  <button 
-                    className="add-to-cart-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      addToCart(product);
-                    }}
-                    disabled={product.stock === 0}
-                  >
-                    {product.stock > 0 ? (
-                      <>
-                        <img 
-                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xOSAyMGMwIDEuMTEtLjg5IDItMiAyYTIgMiAwIDAgMS0yLTJjMC0xLjExLjg5LTIgMi0yYTIgMiAwIDAgMSAyIDJNNyAxOGMtMS4xMSAwLTIgLjg5LTIgMmEyIDIgMCAwIDAgMiAyYzEuMTEgMCAyLS44OSAyLTJzLS44OS0yLTItMm0uMi0zLjM3bC0uMDMuMTJjMCAuMTQuMTEuMjUuMjUuMjVIMTl2Mkg3YTIgMiAwIDAgMS0yLTJjMC0uMzUuMDktLjY4LjI0LS45NmwxLjM2LTIuNDVMMyA0SDFWMmgzLjI3bC45NCAySDIwYy41NSAwIDEgLjQ1IDEgMWMwIC4xNy0uMDUuMzQtLjEyLjVsLTMuNTggNi40N2MtLjM0LjYxLTEgMS4wMy0xLjc1IDEuMDNIOC4xek04LjUgMTFIMTBWOUg3LjU2ek0xMSA5djJoM1Y5em0zLTFWNmgtM3Yyem0zLjExIDFIMTV2Mmgxem0xLjY3LTNIMTV2MmgyLjY3ek02LjE0IDZsLjk0IDJIMTBWNnoiLz48L3N2Zz4="
-                          alt="Cart"
-                          style={{ width: '20px', height: '20px' }}
-                        />
-                      </>
-                    ) : 'No hay stock'}
-                  </button>
-                  <button 
-                    className="view-details-btn"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                    Ver detalles
-                  </button>
+                
+                <div className="product-info">
+                  <div className="product-rating">
+                    <span className="stars">★★★★★</span>
+                  </div>
+                  <h3>{product.name}</h3>
+                  {product.description && (
+                    <p 
+                      className="product-desc-short"
+                      dangerouslySetInnerHTML={{
+                        __html: product.description.slice(0, 100) + '...'
+                      }}
+                    />
+                  )}
+                  <div className="product-pricing">
+                    <span className="product-price">${product.price.toLocaleString()}</span>
+                  </div>
+                  <div className="product-actions-bottom">
+                    <button 
+                      className="add-to-cart-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                      disabled={product.stock === 0}
+                    >
+                      {product.stock > 0 ? (
+                        <>
+                          <img 
+                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xOSAyMGMwIDEuMTEtLjg5IDItMiAyYTIgMiAwIDAgMS0yLTJjMC0xLjExLjg5LTIgMi0yYTIgMiAwIDAgMSAyIDJNNyAxOGMtMS4xMSAwLTIgLjg5LTIgMmEyIDIgMCAwIDAgMiAyYzEuMTEgMCAyLS44OSAyLTJzLS44OS0yLTItMm0uMi0zLjM3bC0uMDMuMTJjMCAuMTQuMTEuMjUuMjUuMjVIMTl2Mkg3YTIgMiAwIDAgMS0yLTJjMC0uMzUuMDktLjY4LjI0LS45NmwxLjM2LTIuNDVMMyA0SDFWMmgzLjI3bC45NCAySDIwYy41NSAwIDEgLjQ1IDEgMWMwIC4xNy0uMDUuMzQtLjEyLjVsLTMuNTggNi40N2MtLjM0LjYxLTEgMS4wMy0xLjc1IDEuMDNIOC4xek04LjUgMTFIMTBWOUg3LjU2ek0xMSA5djJoM1Y5em0zLTFWNmgtM3Yyem0zLjExIDFIMTV2Mmgxem0xLjY3LTNIMTV2MmgyLjY3ek02LjE0IDZsLjk0IDJIMTBWNnoiLz48L3N2Zz4="
+                            alt="Cart"
+                            style={{ width: '20px', height: '20px' }}
+                          />
+                        </>
+                      ) : 'No hay stock'}
+                    </button>
+                    <button 
+                      className="view-details-btn"
+                      onClick={() => navigate(`/product/${product.id}`)}
+                    >
+                      Ver detalles
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
           </div>
 
           {/* PAGINACIÓN */}

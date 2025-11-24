@@ -560,90 +560,90 @@ ul {
 /* 👤 DROPDOWN DE USUARIO - BIEN PEGADO A LA DERECHA */
 .user-dropdown-container {
   position: relative;
-  order: 999;                           /* 📏 Último elemento */
-  margin-left: 30px;                    /* 📏 Aún más separación */
+  order: 999;
+  margin-left: 30px;
 }
 
-/* 👤 DROPDOWN DE USUARIO - CON FONDO SÓLIDO */
+/* 👤 DROPDOWN DE USUARIO - FONDO AZUL OSCURO */
 .user-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  background: var(--bg-primary);        /* 🎨 Fondo sólido blanco/negro */
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px var(--shadow-medium);
-  min-width: 200px;
+  background: #09101A !important;           /* 🔵 Fondo oscuro */
+  border: 1px solid rgba(211, 211, 206, 0.15);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  min-width: 220px;
   z-index: 1001;
   margin-top: 8px;
   overflow: hidden;
   animation: dropdownFadeIn 0.2s ease-out;
-  backdrop-filter: none;                /* ❌ Sin efecto blur */
+  backdrop-filter: none;
 }
 
-/* 📋 CABECERA DEL DROPDOWN - SOLO NOMBRE */
+/* 📋 CABECERA DEL DROPDOWN */
 .user-dropdown-header {
   padding: 16px;
-  background: #ffffff;      /* 🎨 Fondo blanco */
-  border-bottom: 1px solid var(--border-color);
+  background: #09101A !important;           /* 🔵 Fondo oscuro */
+  border-bottom: 1px solid rgba(211, 211, 206, 0.15);
+  text-align: center;
 }
 
 .user-dropdown-header strong {
   display: block;
   font-size: 16px;
-  color: var(--text-primary);          /* 📝 Texto principal bien visible */
-  font-weight: 600;                     /* 📝 Más peso para mejor legibilidad */
-  text-align: center;                   /* 📍 Centrar el nombre */
+  color: #D3D3CE !important;                /* 🎨 Texto claro */
+  font-weight: 600;
 }
 
-/* 🔘 ELEMENTOS DEL DROPDOWN - FONDO SÓLIDO AL HOVER */
+/* 🔘 ITEMS DEL DROPDOWN */
 .dropdown-item {
   width: 100%;
   padding: 12px 16px;
   border: none;
-  background: var(--bg-primary);       /* 🎨 Fondo sólido por defecto */
+  background: #09101A !important;           /* 🔵 Fondo oscuro */
   text-align: left;
   cursor: pointer;
   font-size: 14px;
-  color: var(--text-primary);          /* 📝 Texto principal bien visible */
+  color: #D3D3CE !important;                /* 🎨 Texto claro */
   font-family: 'Poppins', sans-serif;
-  transition: all 0.2s ease;           /* 🔄 Transición suave */
-  font-weight: 500;                     /* 📝 Más peso para mejor legibilidad */
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
 }
 
+/* ⭐ HOVER */
 .dropdown-item:hover {
-  background: #f5f5f5;     /* 🎨 Fondo gris claro al hover */
-  color: var(--text-accent);          /* 📝 Texto más oscuro al hover */
+  background: #0B1625 !important;           /* un poco más claro */
+  color: #ffffff !important;                /* texto blanco al hover */
 }
 
-/* 🚪 ELEMENTO DE CERRAR SESIÓN - ROJO VISIBLE */
-.logout-item {
-  color: #dc3545;                      /* 📝 Rojo más fuerte */
-  font-weight: 600;                    /* 📝 Más peso para énfasis */
-}
-
-.logout-item:hover {
-  background: rgba(220, 53, 69, 0.1);  /* 🎨 Fondo rojo claro al hover */
-  color: #dc3545;                      /* 📝 Mantener rojo al hover */
-}
-
-/* ➖ LÍNEA DIVISORIA - MÁS VISIBLE */
+/* ➖ DIVISOR */
 .dropdown-divider {
   margin: 0;
   border: none;
-  border-top: 1px solid var(--border-color);
-  opacity: 0.5;                        /* 🌫️ Ligeramente visible */
+  border-top: 1px solid rgba(211, 211, 206, 0.15);
 }
 
-/* 🎬 ANIMACIÓN DEL DROPDOWN MEJORADA */
+/* 🚪 LOGOUT EN ROJO */
+.logout-item {
+  color: #ff6b6b !important;
+  font-weight: 600;
+}
+
+.logout-item:hover {
+  background: rgba(255, 107, 107, 0.1) !important;
+  color: #ff8a8a !important;
+}
+
+/* 🎬 ANIMACIÓN */
 @keyframes dropdownFadeIn {
-  0% { 
-    opacity: 0; 
-    transform: translateY(-10px) scale(0.95); 
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
   }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

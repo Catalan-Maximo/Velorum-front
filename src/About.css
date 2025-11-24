@@ -331,3 +331,17 @@
   .contact-text { font-size:14px; }
   .contact-main-btn, .contact-secondary-btn { font-size:13px; padding:12px 20px; }
 }
+
+.value-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem; /* más grande */
+  font-weight: 600;
+}
+
+.value-icon svg {
+  width: 1.35em;
+  height: 1.35em;
+  flex-shrink: 0;
+}
