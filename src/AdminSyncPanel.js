@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { apiRequest } from './services';
+import { useProducts } from './ProductsContext';
 import './AdminSyncPanel.css';
 
 function AdminSyncPanel() {
+    const { refreshProducts } = useProducts();
     const [loading, setLoading] = useState(false);
     const [resultado, setResultado] = useState(null);
     const [error, setError] = useState(null);
@@ -13,6 +15,7 @@ function AdminSyncPanel() {
 
     useEffect(() => {
         cargarEstadisticas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const cargarEstadisticas = async () => {
@@ -61,6 +64,11 @@ function AdminSyncPanel() {
             });
 
             setResultado(data);
+            
+            // Refrescar productos en el context
+            console.log('🔄 Refrescando productos en context...');
+            await refreshProducts();
+            
             // Esperar un poco y recargar estadísticas
             setTimeout(() => {
                 cargarEstadisticas();

@@ -14,7 +14,7 @@ const Checkout = () => {
     const [error, setError] = useState('');
     const [transferModalOpen, setTransferModalOpen] = useState(false);
     const [createdOrderId, setCreatedOrderId] = useState(null);
-    const [currentStep, setCurrentStep] = useState(1); // 1: Datos, 2: Envío, 3: Pago, 4: Confirmación
+    const [currentStep, setCurrentStep] = useState(1); // 1: Datos, 2: Envío (luego redirige a MP)
 
     // Estados para el formulario
     const [customerData, setCustomerData] = useState({
@@ -36,43 +36,35 @@ const Checkout = () => {
         notas_envio: ''
     });
 
-    const [paymentData, setPaymentData] = useState({
-        metodo_pago: 'tarjeta_credito',
-        numero_tarjeta: '',
-        nombre_titular: '',
-        mes_expiracion: '',
-        ano_expiracion: '',
-        cvv: ''
-    });
-
     const [costoEnvio, setCostoEnvio] = useState(800); // base
 
-    // Tabla base por provincia (valores estimativos)
+    // Tabla base por provincia (envío desde Lomas del Mirador, Buenos Aires)
+    // Basado en tarifas de Correo Argentino para paquetes pequeños (hasta 1kg)
     const PROVINCIA_BASE = useMemo(() => ({
-        'CABA': 800,
-        'Buenos Aires': 1500,
-        'Córdoba': 2100,
-        'Santa Fe': 2200,
-        'Mendoza': 2500,
-        'Tucumán': 2600,
-        'Entre Ríos': 1900,
-        'Salta': 2700,
-        'Chaco': 2600,
-        'Corrientes': 2300,
-        'Misiones': 2500,
-        'San Juan': 2400,
-        'Jujuy': 3000,
-        'San Luis': 2300,
-        'Catamarca': 2500,
-        'La Rioja': 2500,
-        'La Pampa': 1800,
-        'Santiago del Estero': 2400,
-        'Formosa': 2800,
-        'Chubut': 3200,
-        'Río Negro': 3000,
-        'Neuquén': 3000,
-        'Santa Cruz': 3800,
-        'Tierra del Fuego': 4200,
+        'CABA': 4500,                      // Envío metropolitano
+        'Buenos Aires': 4000,              // GBA y provincia
+        'Córdoba': 5500,
+        'Santa Fe': 5200,
+        'Mendoza': 6000,                   // Según ejemplo: ~$5.552 base
+        'Tucumán': 6500,
+        'Entre Ríos': 4800,
+        'Salta': 7000,
+        'Chaco': 6500,
+        'Corrientes': 6000,
+        'Misiones': 6200,
+        'San Juan': 6200,
+        'Jujuy': 7500,
+        'San Luis': 5800,
+        'Catamarca': 6500,
+        'La Rioja': 6500,
+        'La Pampa': 5500,
+        'Santiago del Estero': 6500,
+        'Formosa': 7000,
+        'Chubut': 8000,
+        'Río Negro': 7500,
+        'Neuquén': 7200,
+        'Santa Cruz': 9500,
+        'Tierra del Fuego': 11000,
     }), []);
 
     // Factor adicional por distancia aproximada según primer dígito del CP (muy simplificado)
@@ -176,12 +168,6 @@ const Checkout = () => {
                shippingData.codigo_postal;
     };
 
-    const validateStep3 = () => {
-        if (paymentData.metodo_pago === 'transferencia') return true;
-        return paymentData.numero_tarjeta && paymentData.nombre_titular && 
-               paymentData.mes_expiracion && paymentData.ano_expiracion && paymentData.cvv;
-    };
-
     // Navegar entre pasos
     const nextStep = () => {
         if (currentStep === 1 && !validateStep1()) {
@@ -192,12 +178,15 @@ const Checkout = () => {
             setError('Por favor completa todos los campos de envío');
             return;
         }
-        if (currentStep === 3 && !validateStep3()) {
-            setError('Por favor completa todos los campos de pago');
+        
+        setError('');
+        
+        // Si está en paso 2, ir directo a pagar (MP)
+        if (currentStep === 2) {
+            processOrderAndRedirectToMP();
             return;
         }
         
-        setError('');
         setCurrentStep(currentStep + 1);
     };
 
@@ -206,120 +195,79 @@ const Checkout = () => {
         setError('');
     };
 
-    // Procesar orden
-    const processOrder = async () => {
+    // Procesar orden y redirigir a Mercado Pago
+    const processOrderAndRedirectToMP = async () => {
         setLoading(true);
         setError('');
 
         try {
-            // Preparar detalles del pedido
-            const orderDetails = cartItems.map(item => ({
-                watch_id: item.watch_id || item.id_backend || item.id,
-                cantidad: item.quantity,
-                precio_unitario: item.price,
-                subtotal: item.price * item.quantity
-            }));
-
-            // Validación cliente: todos los watch_id deben ser números válidos
-            const invalidItem = orderDetails.find(d => !d.watch_id || Number.isNaN(Number(d.watch_id)));
-            if (invalidItem) {
-                setError('Hay un producto inválido en el carrito. Por favor elimina y vuelve a agregar el producto antes de confirmar el pedido.');
-                setLoading(false);
-                return;
-            }
-
-            // Construir dirección completa
-            const direccionCompleta = `${shippingData.calle} ${shippingData.numero}${
-                shippingData.piso ? `, Piso ${shippingData.piso}` : ''
-            }${
-                shippingData.departamento ? `, Depto ${shippingData.departamento}` : ''
-            }, ${shippingData.ciudad}, ${shippingData.provincia}`;
-
-            // Solo enviar campos permitidos por OrderSerializer
-            const orderData = {
-                nombre: customerData.nombre,
-                apellido: customerData.apellido,
-                email: customerData.email,
-                telefono_contacto: customerData.telefono_contacto,
-                direccion_completa: direccionCompleta,
-                codigo_postal: shippingData.codigo_postal,
-                zona_envio: shippingData.zona_envio,
-                metodo_pago: paymentData.metodo_pago,
-                estado: 'pendiente',
-                estado_pago: 'pendiente',
+            // Preparar datos para el backend
+            const requestData = {
+                customer_data: {
+                    nombre: customerData.nombre,
+                    apellido: customerData.apellido,
+                    email: customerData.email,
+                    telefono_contacto: customerData.telefono_contacto
+                },
+                shipping_data: {
+                    calle: shippingData.calle,
+                    numero: shippingData.numero,
+                    piso: shippingData.piso,
+                    departamento: shippingData.departamento,
+                    ciudad: shippingData.ciudad,
+                    provincia: shippingData.provincia,
+                    codigo_postal: shippingData.codigo_postal,
+                    zona_envio: shippingData.zona_envio,
+                    notas_envio: shippingData.notas_envio
+                },
+                cart_items: cartItems.map(item => ({
+                    id: item.id,
+                    watch_id: item.watch_id || item.id_backend || item.id,
+                    id_backend: item.id_backend || item.id,
+                    quantity: item.quantity,
+                    price: item.price,
+                    name: item.name || item.marca || 'Producto'
+                })),
                 total: getTotalPrice(),
-                costo_envio: costoEnvio,
-                total_con_envio: getTotalPrice() + costoEnvio,
-                notas: shippingData.notas_envio || '',
-                detalles: orderDetails
+                costo_envio: costoEnvio
             };
 
-            // Validación servidor: comentada temporalmente para debug
-            // El backend ya valida la existencia de los relojes
-            console.log('DEBUG orderData completo:', JSON.stringify(orderData, null, 2));
-            console.log('DEBUG orderDetails:', orderDetails);
-            console.log('DEBUG API_BASE_URL:', API_BASE_URL);
-            
-            // fetchWithAuth ya agrega 'Content-Type' y 'Authorization' automáticamente
-            const response = await fetchWithAuth(`${API_BASE_URL}/main/model/orders/`, {
+            console.log('Enviando datos a MP:', requestData);
+
+            // Llamar al endpoint que crea la orden y preferencia de MP
+            const response = await fetchWithAuth(`${API_BASE_URL}/market/mp/create-preference/`, {
                 method: 'POST',
-                body: JSON.stringify(orderData)
+                body: JSON.stringify(requestData)
             });
 
-            console.log('DEBUG response status:', response.status);
-            console.log('DEBUG response ok:', response.ok);
+            const result = await response.json();
+            console.log('Respuesta de MP:', result);
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
 
             if (!response.ok) {
-                // Logging extendido para depuración en local
-                const status = response.status;
-                let text = '';
-                try { text = await response.text(); } catch(e) { text = `<no text: ${e.message}>`; }
-                let parsed = null;
-                try { parsed = JSON.parse(text); } catch(e) { parsed = null; }
-
-                console.error('❌ Order POST FAILED');
-                console.error('Status:', status);
-                console.error('Response text:', text);
-                console.error('Parsed:', parsed);
-                console.error('Full response:', response);
-
-                let backendMsg = `Error al procesar el pedido (HTTP ${status})`;
-                if (parsed) {
-                    backendMsg = parsed.detalles || parsed.detail || parsed.error || JSON.stringify(parsed);
-                } else if (text) {
-                    backendMsg = text.substring(0, 500); // Limitar texto largo
-                }
-
-                setError(backendMsg);
-                setLoading(false);
-                return; // No lanzar error, solo mostrar mensaje
+                console.error('Error del servidor:', result);
+                const errorMsg = typeof result.error === 'string' 
+                    ? result.error 
+                    : (typeof result.error === 'object' 
+                        ? JSON.stringify(result.error) 
+                        : JSON.stringify(result));
+                throw new Error(errorMsg || 'Error al crear la preferencia de pago');
             }
 
-            console.log('✅ Order POST successful');
-            const result = await response.json();
-            console.log('✅ Order result:', result);
-            
-            // Limpiar carrito
-            clearCart();
-
-            // Si es transferencia: abrir modal de confirmación en vez de redirigir inmediatamente.
-            if (orderData.metodo_pago === 'transferencia') {
-                setCreatedOrderId(result.id);
-                setTransferModalOpen(true);
+            if (result.success && result.init_point) {
+                // Limpiar carrito antes de redirigir
+                clearCart();
+                
+                // Redirigir a Mercado Pago
+                window.location.href = result.init_point;
             } else {
-                // Para otros métodos, redirigir a Mis Pedidos con mensaje
-                navigate('/orders', {
-                    state: {
-                        message: 'Pedido creado exitosamente',
-                        orderId: result.id
-                    }
-                });
+                throw new Error('No se recibió el link de pago');
             }
 
         } catch (error) {
-            console.error('Error processing order:', error);
+            console.error('Error procesando pago:', error);
             setError(error.message || 'Error al procesar el pedido. Por favor intenta nuevamente.');
-        } finally {
             setLoading(false);
         }
     };
@@ -520,176 +468,6 @@ const Checkout = () => {
                     </div>
                 );
 
-            case 3:
-                return (
-                    <div className="checkout-step">
-                        <h3>3. Método de Pago</h3>
-                        <div className="payment-methods">
-                            <div className="payment-method">
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="metodo_pago"
-                                        value="tarjeta_credito"
-                                        checked={paymentData.metodo_pago === 'tarjeta_credito'}
-                                        onChange={(e) => setPaymentData({...paymentData, metodo_pago: e.target.value})}
-                                    />
-                                    💳 Tarjeta de Crédito
-                                </label>
-                            </div>
-                            <div className="payment-method">
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="metodo_pago"
-                                        value="tarjeta_debito"
-                                        checked={paymentData.metodo_pago === 'tarjeta_debito'}
-                                        onChange={(e) => setPaymentData({...paymentData, metodo_pago: e.target.value})}
-                                    />
-                                    🏦 Tarjeta de Débito
-                                </label>
-                            </div>
-                            <div className="payment-method">
-                                <label>
-                                    <input
-                                        type="radio"
-                                        name="metodo_pago"
-                                        value="transferencia"
-                                        checked={paymentData.metodo_pago === 'transferencia'}
-                                        onChange={(e) => setPaymentData({...paymentData, metodo_pago: e.target.value})}
-                                    />
-                                    🏛️ Transferencia Bancaria
-                                </label>
-                            </div>
-                        </div>
-
-                        {(paymentData.metodo_pago === 'tarjeta_credito' || paymentData.metodo_pago === 'tarjeta_debito') && (
-                            <div className="card-details">
-                                <div className="form-grid">
-                                    <div className="form-group full-width">
-                                        <label>Número de Tarjeta *</label>
-                                        <input
-                                            type="text"
-                                            value={paymentData.numero_tarjeta}
-                                            onChange={(e) => setPaymentData({...paymentData, numero_tarjeta: e.target.value})}
-                                            placeholder="1234 5678 9012 3456"
-                                            maxLength="19"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group full-width">
-                                        <label>Nombre del Titular *</label>
-                                        <input
-                                            type="text"
-                                            value={paymentData.nombre_titular}
-                                            onChange={(e) => setPaymentData({...paymentData, nombre_titular: e.target.value})}
-                                            placeholder="Como aparece en la tarjeta"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Mes de Expiración *</label>
-                                        <select
-                                            value={paymentData.mes_expiracion}
-                                            onChange={(e) => setPaymentData({...paymentData, mes_expiracion: e.target.value})}
-                                            required
-                                        >
-                                            <option value="">Mes</option>
-                                            {Array.from({length: 12}, (_, i) => i + 1).map(month => (
-                                                <option key={month} value={month.toString().padStart(2, '0')}>
-                                                    {month.toString().padStart(2, '0')}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Año de Expiración *</label>
-                                        <select
-                                            value={paymentData.ano_expiracion}
-                                            onChange={(e) => setPaymentData({...paymentData, ano_expiracion: e.target.value})}
-                                            required
-                                        >
-                                            <option value="">Año</option>
-                                            {Array.from({length: 10}, (_, i) => new Date().getFullYear() + i).map(year => (
-                                                <option key={year} value={year}>
-                                                    {year}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>CVV *</label>
-                                        <input
-                                            type="text"
-                                            value={paymentData.cvv}
-                                            onChange={(e) => setPaymentData({...paymentData, cvv: e.target.value})}
-                                            placeholder="123"
-                                            maxLength="4"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {paymentData.metodo_pago === 'transferencia' && (
-                            <div className="transfer-info">
-                                <h4>Datos para Transferencia</h4>
-                                <p><strong>Banco:</strong> Banco Nacional</p>
-                                <p><strong>Cuenta:</strong> 1234-5678-9012-3456</p>
-                                <p><strong>CBU:</strong> 1234567890123456789012</p>
-                                <p><strong>Titular:</strong> Velorum S.A.</p>
-                                <p className="transfer-note">
-                                    💡 Luego de realizar la transferencia presiona "Confirmar Pedido" y se abrirá WhatsApp para enviar el comprobante.
-                                    <br/>Si no se abre automáticamente, hacé click aquí:{' '}
-                                    <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hola, envío comprobante de transferencia (aún sin número de pedido).')}`} target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a>
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                );
-
-            case 4:
-                return (
-                    <div className="checkout-step">
-                        <h3>4. Confirmación del Pedido</h3>
-                        <div className="order-summary">
-                            <div className="summary-section">
-                                <h4>Datos Personales</h4>
-                                <p>{customerData.nombre} {customerData.apellido}</p>
-                                <p>{customerData.email}</p>
-                                <p>{customerData.telefono_contacto}</p>
-                            </div>
-                            
-                            <div className="summary-section">
-                                <h4>Dirección de Envío</h4>
-                                <p>
-                                    {shippingData.calle} {shippingData.numero}
-                                    {shippingData.piso && `, Piso ${shippingData.piso}`}
-                                    {shippingData.departamento && `, Depto ${shippingData.departamento}`}
-                                </p>
-                                <p>{shippingData.ciudad}, {shippingData.provincia}</p>
-                                <p>CP: {shippingData.codigo_postal}</p>
-                                <p><strong>Zona:</strong> {shippingData.zona_envio}</p>
-                                <p><strong>Costo de envío:</strong> ${costoEnvio}</p>
-                                {shippingData.notas_envio && <p><strong>Notas:</strong> {shippingData.notas_envio}</p>}
-                            </div>
-                            
-                            <div className="summary-section">
-                                <h4>Método de Pago</h4>
-                                <p>
-                                    {paymentData.metodo_pago === 'tarjeta_credito' && '💳 Tarjeta de Crédito'}
-                                    {paymentData.metodo_pago === 'tarjeta_debito' && '🏦 Tarjeta de Débito'}
-                                    {paymentData.metodo_pago === 'transferencia' && '🏛️ Transferencia Bancaria'}
-                                </p>
-                                {paymentData.numero_tarjeta && (
-                                    <p>**** **** **** {paymentData.numero_tarjeta.slice(-4)}</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                );
-
             default:
                 return null;
         }
@@ -700,7 +478,7 @@ const Checkout = () => {
             <div className="checkout-header">
                 <h2>🛒 Finalizar Compra</h2>
                 <div className="step-indicator">
-                    {[1, 2, 3, 4].map(step => (
+                    {[1, 2].map(step => (
                         <div 
                             key={step} 
                             className={`step ${currentStep >= step ? 'active' : ''}`}
@@ -759,23 +537,13 @@ const Checkout = () => {
                             </button>
                         )}
                         
-                        {currentStep < 4 ? (
-                            <button 
-                                className="btn-primary"
-                                onClick={nextStep}
-                                disabled={loading}
-                            >
-                                Siguiente →
-                            </button>
-                        ) : (
-                            <button 
-                                className="btn-success"
-                                onClick={processOrder}
-                                disabled={loading}
-                            >
-                                {loading ? 'Procesando...' : 'Confirmar Pedido'}
-                            </button>
-                        )}
+                        <button 
+                            className="btn-primary"
+                            onClick={nextStep}
+                            disabled={loading}
+                        >
+                            {currentStep === 1 ? 'Siguiente →' : 'Ir a Pagar →'}
+                        </button>
                     </div>
                 </div>
 

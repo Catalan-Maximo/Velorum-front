@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFavorites } from './FavoritesContext';
 import { useCart } from './CartContext';
+import { useProducts } from './ProductsContext';
 import './Products.css';
-import { API_BASE_URL } from './services';
 
 function Products() {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { addToCart } = useCart();
+  const { products: allProducts, loading, error } = useProducts();
   
-  const [allProducts, setAllProducts] = useState([]);
   const [categoriaFiltro, setCategoriaFiltro] = useState('Todos');
   const [precioMin, setPrecioMin] = useState(0);
   const [precioMax, setPrecioMax] = useState(1000000);
@@ -20,89 +20,20 @@ function Products() {
   const [busqueda, setBusqueda] = useState('');
   const [ordenamiento, setOrdenamiento] = useState('destacados');
   const [paginaActual, setPaginaActual] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [filtersOpen, setFiltersOpen] = useState(true);
   const PRODUCTOS_POR_PAGINA = 12;
 
+  // Calcular rango de precios cuando cambien los productos
   useEffect(() => {
-    // keep cargarProductos isolated in this effect (initial load)
-    const cargarProductos = async () => {
-      try {
-        console.log('🔍 Cargando productos desde:', `${API_BASE_URL}/market/model/products/`);
-        const res = await fetch(`${API_BASE_URL}/market/model/products/`);
-        
-        if (res.ok) {
-          const data = await res.json();
-          const list = Array.isArray(data) ? data : (data.results || []);
-          
-          const mappedProducts = list.map((p, index) => {
-            if (index === 0) {
-              console.log('📦 Primer producto completo:', p);
-              console.log('  - imagenes field:', p.imagenes);
-              console.log('  - es array?', Array.isArray(p.imagenes));
-              console.log('  - length:', p.imagenes?.length);
-            }
-            
-            let imagen = '/logo192.png';
-            if (p.imagenes && Array.isArray(p.imagenes) && p.imagenes.length > 0) {
-              imagen = p.imagenes[0];
-              if (index === 0) console.log('  ✅ Imagen asignada:', imagen);
-            } else {
-              if (index === 0) console.log('  ⚠️ Usando imagen por defecto');
-            }
-            
-            // Determinar género basado en el nombre de la categoría o del producto
-            let genero = 'Unisex';
-            const nombreLower = (p.nombre || '').toLowerCase();
-            const categoriaLower = (p.categoria?.nombre || '').toLowerCase();
-            
-            if (nombreLower.includes('mujer') || nombreLower.includes('woman') || nombreLower.includes('women') ||
-                categoriaLower.includes('mujer') || categoriaLower.includes('woman') || categoriaLower.includes('women')) {
-              genero = 'Mujer';
-            } else if (nombreLower.includes('hombre') || nombreLower.includes('man') || nombreLower.includes('men') ||
-                       categoriaLower.includes('hombre') || categoriaLower.includes('man') || categoriaLower.includes('men')) {
-              genero = 'Hombre';
-            }
-            
-            return {
-              id: p.id,
-              watch_id: p.id,
-              id_backend: p.id,
-              name: p.nombre || 'Producto',
-              price: Number(p.precio) || 0,
-              image: imagen,
-              category: p.categoria?.nombre || 'Relojes',
-              genero: genero,
-              badge: p.en_oferta ? 'Oferta' : 'Nuevo',
-              reviews: 0,
-              description: p.descripcion || '',
-              stock: p.stock_disponible || 0
-            };
-          });
-          
-          console.log('✅ Productos cargados:', mappedProducts.length);
-          setAllProducts(mappedProducts);
-          
-          // Calcular rango de precios
-          if (mappedProducts.length > 0) {
-            const precios = mappedProducts.map(p => p.price);
-            const min = Math.floor(Math.min(...precios));
-            const max = Math.ceil(Math.max(...precios));
-            setPrecioMin(min);
-            setPrecioMax(max);
-            setPrecioMinInput(min);
-            setPrecioMaxInput(max);
-          }
-        }
-      } catch (e) {
-        console.error('❌ Error cargando productos:', e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    cargarProductos();
-  }, []);
+    if (allProducts.length > 0) {
+      const precios = allProducts.map(p => p.price);
+      const min = Math.floor(Math.min(...precios));
+      const max = Math.ceil(Math.max(...precios));
+      setPrecioMin(min);
+      setPrecioMax(max);
+      setPrecioMinInput(min);
+      setPrecioMaxInput(max);
+    }
+  }, [allProducts]);
 
   // Actualiza el fondo del track del slider cuando cambian los valores de precio
   useEffect(() => {
@@ -175,6 +106,17 @@ function Products() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="products-page">
+        <div className="products-header">
+          <h1>Error al cargar productos</h1>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="products-page">
       {/* HEADER */}
@@ -192,17 +134,16 @@ function Products() {
       <div className="products-container">
         {/* FILTROS LATERALES */}
         <aside className="products-filters">
-          <div className="filters-header">
-            <h3>Filtros</h3>
-            {(categoriaFiltro !== 'Todos' || precioMinInput !== precioMin || precioMaxInput !== precioMax || busqueda) && (
-              <button className="clear-filters-btn" onClick={limpiarFiltros}>
-                Limpiar
-              </button>
-            )}
-          </div>
+          <div className="filters-content">
+            <div className="filters-header">
+              <h3>Filtros</h3>
+              {(categoriaFiltro !== 'Todos' || precioMinInput !== precioMin || precioMaxInput !== precioMax || busqueda) && (
+                <button className="clear-filters-btn" onClick={limpiarFiltros}>
+                  Limpiar
+                </button>
+              )}
+            </div>
 
-          {filtersOpen && (
-            <div className="filters-content">
               {/* Búsqueda */}
               <div className="filter-group">
                 <h4>Buscar</h4>
@@ -293,7 +234,6 @@ function Products() {
                 </select>
               </div>
             </div>
-          )}
         </aside>
 
         {/* GRID DE PRODUCTOS */}

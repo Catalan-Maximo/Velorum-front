@@ -30,8 +30,31 @@ function Home({ user, isLoggedIn }) {
       try {
         setLoadingProducts(true);
         const products = await productService.getAll();
-        // Tomar los primeros 4 productos disponibles
-        setFeaturedProducts(products.slice(0, 4));
+        
+        // Filtrar solo productos con stock disponible
+        const productsWithStock = products.filter(p => 
+          p.stock_ilimitado || (p.stock_disponible && p.stock_disponible > 0) || (p.stock && p.stock > 0)
+        );
+        
+        // Seleccionar 1 producto por categoría (máximo 4)
+        const categorias = {};
+        const featured = [];
+        
+        for (const product of productsWithStock) {
+          const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
+          if (!categorias[categoria] && featured.length < 4) {
+            categorias[categoria] = true;
+            featured.push(product);
+          }
+        }
+        
+        // Si hay menos de 4, completar con productos adicionales que tengan stock
+        if (featured.length < 4) {
+          const remaining = productsWithStock.filter(p => !featured.includes(p)).slice(0, 4 - featured.length);
+          featured.push(...remaining);
+        }
+        
+        setFeaturedProducts(featured);
       } catch (error) {
         console.error('Error cargando productos destacados:', error);
         setFeaturedProducts([]);
@@ -142,7 +165,11 @@ function Home({ user, isLoggedIn }) {
                   {categoryName}
                 </div>
                 <div className="product-image-new">
-                  <img src={product.imagen_url || product.image || '/placeholder.png'} alt={product.nombre || product.name} />
+                  <img 
+                    src={(product.imagenes && product.imagenes[0]) || product.imagen_url || product.image || '/logo192.png'} 
+                    alt={product.nombre || product.name}
+                    onError={(e) => { e.currentTarget.src = '/logo192.png'; }}
+                  />
                   <div className="product-overlay">
                     <button className="quick-view-btn" onClick={() => navigate(`/product/${product.id}`)}>
                       Vista rápida
@@ -157,10 +184,6 @@ function Home({ user, isLoggedIn }) {
                   </div>
                 </div>
                 <div className="product-info-new">
-                  <div className="product-rating">
-                    <span className="stars">★★★★★</span>
-                    <span className="rating-text">(0)</span>
-                  </div>
                   <h4>{product.nombre || product.name}</h4>
                   <div className="product-pricing">
                     <p className="product-price">${Number(product.precio || product.price || 0).toLocaleString()}</p>

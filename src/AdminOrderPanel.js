@@ -56,9 +56,9 @@ const AdminOrderPanel = () => {
     };
 
     // Función para obtener información del estado del pago
-    // const getEstadoPagoInfo = (estadoPago) => {
-    //     return estadosPago.find(e => e.value === estadoPago) || { value: estadoPago, label: estadoPago, color: '#6c757d' };
-    // }; // Eliminado: no usado
+    const getEstadoPagoInfo = (estadoPago) => {
+        return estadosPago.find(e => e.value === estadoPago) || { value: estadoPago, label: estadoPago, color: '#6c757d' };
+    };
 
     // Función para obtener pedidos desde la API (useCallback para dependencias estables)
     const obtenerPedidos = useCallback(async () => {
@@ -98,40 +98,13 @@ const AdminOrderPanel = () => {
         }
     }, [navigate]);
 
-    // Función para cambiar el estado de un pedido
-    const cambiarEstado = async (pedidoId, nuevoEstado, mensaje = '') => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/main/model/orders/${pedidoId}/update_status/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    estado: nuevoEstado,
-                    mensaje: mensaje
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}`);
-            }
-
-            // Recargar pedidos después de actualizar
-            obtenerPedidos();
-            
-        } catch (error) {
-            console.error('Error al cambiar estado:', error);
-            setError('Error al cambiar estado: ' + error.message);
-        }
-    };
+    // Función para cambiar el estado de un pedido - Removida: estados controlados por webhook MP
 
     // Función para eliminar pedidos cancelados
     const eliminarPedido = async (pedidoId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/main/model/orders/${pedidoId}/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/${pedidoId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -212,7 +185,7 @@ const AdminOrderPanel = () => {
     const gestionarPago = async (pedidoId, estadoPago, detalles = '') => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/main/model/orders/${pedidoId}/manage_payment/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/${pedidoId}/manage_payment/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -458,17 +431,38 @@ const AdminOrderPanel = () => {
                                         <td>
                                             <div className="state-control">
                                                 <span className={`dot dot-${order.estado}`}></span>
-                                                <select value={order.estado} onChange={(e)=>cambiarEstado(order.id, e.target.value)} aria-label="Estado del pedido" className="inline-select">
-                                                    {estados.map(es=> <option key={es.value} value={es.value}>{es.label}</option>)}
-                                                </select>
+                                                <span 
+                                                    className="estado-badge" 
+                                                    style={{ 
+                                                        backgroundColor: getEstadoInfo(order.estado).color,
+                                                        padding: '4px 12px',
+                                                        borderRadius: '12px',
+                                                        fontSize: '0.85rem',
+                                                        color: 'white',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    {getEstadoInfo(order.estado).label}
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
                                             <div className="state-control">
                                                 <span className={`dot dot-${(order.estado_pago||'pendiente')}`}></span>
-                                                <select value={order.estado_pago || 'pendiente'} onChange={(e)=>gestionarPago(order.id, e.target.value)} aria-label="Estado de pago" className="inline-select">
-                                                    {estadosPago.map(es=> <option key={es.value} value={es.value}>{es.label}</option>)}
-                                                </select>
+                                                <span 
+                                                    className="estado-badge" 
+                                                    style={{ 
+                                                        backgroundColor: getEstadoPagoInfo(order.estado_pago || 'pendiente').color,
+                                                        padding: '4px 12px',
+                                                        borderRadius: '12px',
+                                                        fontSize: '0.85rem',
+                                                        color: 'white',
+                                                        fontWeight: '500'
+                                                    }}
+                                                    title="Actualizado automáticamente por Mercado Pago"
+                                                >
+                                                    {getEstadoPagoInfo(order.estado_pago || 'pendiente').label}
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
@@ -515,17 +509,20 @@ const AdminOrderPanel = () => {
                             <div className="productos-seccion">
                                 <h3>Productos</h3>
                                 <div className="productos-lista">
-                                    {selectedOrder.detalles && selectedOrder.detalles.map(detalle => (
-                                        <div key={detalle.id} className="producto-item">
-                                            <div className="producto-info">
-                                                <h4>{detalle.reloj.marca} {detalle.reloj.modelo}</h4>
-                                                <p>Cantidad: {detalle.cantidad} × ${detalle.precio_unitario}</p>
+                                    {selectedOrder.detalles && selectedOrder.detalles.map(detalle => {
+                                        const producto = detalle.producto_detalle || {};
+                                        return (
+                                            <div key={detalle.id} className="producto-item">
+                                                <div className="producto-info">
+                                                    <h4>{producto.nombre || 'Producto'}</h4>
+                                                    <p>Cantidad: {detalle.cantidad} × ${detalle.subtotal / detalle.cantidad}</p>
+                                                </div>
+                                                <div className="producto-total">
+                                                    ${detalle.subtotal}
+                                                </div>
                                             </div>
-                                            <div className="producto-total">
-                                                ${detalle.subtotal}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
 

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import { FavoritesProvider, useFavorites } from './FavoritesContext';
 import { CartProvider, useCart } from './CartContext';
 import { SearchProvider } from './SearchContext';
+import { ProductsProvider } from './ProductsContext';
 import SearchBar from './SearchBar';
 import Cart from './Cart';
 import FavoritesSidebar from './FavoritesSidebar';
@@ -17,6 +18,9 @@ import Orders from './Orders';
 import AdminPanel from './AdminPanel';
 import AdminOrderPanel from './AdminOrderPanel';
 import Checkout from './Checkout';
+import CheckoutSuccess from './CheckoutSuccess';
+import CheckoutPending from './CheckoutPending';
+import CheckoutFailure from './CheckoutFailure';
 import './App.css';
 
 function AppContent() {
@@ -65,7 +69,6 @@ function AppContent() {
 
   // 📦 Estado para modales / contenido del footer
   const [footerInfo, setFooterInfo] = useState({ type: null });
-  const [footerOpen, setFooterOpen] = useState({ company:true, products:false, support:false });
 
   const openFooterInfo = (type) => setFooterInfo({ type });
   const closeFooterInfo = () => setFooterInfo({ type: null });
@@ -398,10 +401,13 @@ function AppContent() {
         {/* 🛒 PÁGINA DE PEDIDOS */}
         <Route path="/orders" element={<Orders />} />
         
-        {/* � PROCESO DE CHECKOUT */}
+        {/* 🛒 PROCESO DE CHECKOUT */}
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout/success" element={<CheckoutSuccess />} />
+        <Route path="/checkout/pending" element={<CheckoutPending />} />
+        <Route path="/checkout/failure" element={<CheckoutFailure />} />
         
-        {/* �🛠️ PANEL DE ADMINISTRACIÓN - SOLO PARA ADMINS */}
+        {/* 🛠️ PANEL DE ADMINISTRACIÓN - SOLO PARA ADMINS */}
         <Route 
           path="/admin" 
           element={
@@ -557,12 +563,14 @@ function App() {
   return (
     <Router>
       <SearchProvider>
-        <FavoritesProvider>
-          <CartProvider>
-            <ScrollToTop />
-            <AppContent />
-          </CartProvider>
-        </FavoritesProvider>
+        <ProductsProvider>
+          <FavoritesProvider>
+            <CartProvider>
+              <ScrollToTop />
+              <AppContent />
+            </CartProvider>
+          </FavoritesProvider>
+        </ProductsProvider>
       </SearchProvider>
     </Router>
   );

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { apiRequest } from './services';
+import { useProducts } from './ProductsContext';
 import './AdminProductsPanel.css';
 
 function AdminProductsPanel() {
+    const { refreshProducts } = useProducts();
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editando, setEditando] = useState(null);
@@ -10,6 +12,9 @@ function AdminProductsPanel() {
     const [filtro, setFiltro] = useState('todos'); // todos, disponibles, sin-stock
     const [busqueda, setBusqueda] = useState('');
     const [paginaActual, setPaginaActual] = useState(1);
+    const [resetGlobalLoading, setResetGlobalLoading] = useState(false);
+    const [resetIndividualLoading, setResetIndividualLoading] = useState({});
+    const [showResetModal, setShowResetModal] = useState(false);
     const PRODUCTOS_POR_PAGINA = 20;
 
     useEffect(() => {
@@ -56,6 +61,43 @@ function AdminProductsPanel() {
             alert('Stock reseteado correctamente');
         } catch (error) {
             alert('Error al resetear stock: ' + error.message);
+        }
+    };
+
+    const handleResetearTodosPrecios = async () => {
+        setResetGlobalLoading(true);
+        try {
+            const response = await apiRequest('/market/model/products/reset_all_prices/', {
+                method: 'POST'
+            });
+            
+            await cargarProductos();
+            await refreshProducts();
+            
+            setShowResetModal(false);
+            alert(`✅ ${response.actualizados} productos actualizados de ${response.total} totales`);
+        } catch (error) {
+            alert('❌ Error al resetear precios: ' + error.message);
+        } finally {
+            setResetGlobalLoading(false);
+        }
+    };
+
+    const handleResetearPrecioIndividual = async (productoId) => {
+        setResetIndividualLoading(prev => ({ ...prev, [productoId]: true }));
+        try {
+            const response = await apiRequest(`/market/model/products/${productoId}/reset_price/`, {
+                method: 'POST'
+            });
+            
+            await cargarProductos();
+            await refreshProducts();
+            
+            alert(`✅ Precio reseteado: $${response.precio_proveedor} × 2 = $${response.precio_nuevo}`);
+        } catch (error) {
+            alert('❌ Error: ' + error.message);
+        } finally {
+            setResetIndividualLoading(prev => ({ ...prev, [productoId]: false }));
         }
     };
 
@@ -110,6 +152,14 @@ function AdminProductsPanel() {
                 <span className="stat">Total: {productos.length}</span>
                 <span className="stat">Disponibles: {productos.filter(p => p.stock_ilimitado || p.stock_proveedor > 0).length}</span>
                 <span className="stat">Sin stock: {productos.filter(p => !p.stock_ilimitado && p.stock_proveedor === 0).length}</span>
+                
+                <button 
+                    className="btn-reset-all-prices"
+                    onClick={() => setShowResetModal(true)}
+                    title="Resetear todos los precios a precio_proveedor × 2"
+                >
+                    ⟲ Resetear Todos los Precios (×2)
+                </button>
             </div>
 
             <div className="products-table-container">
@@ -195,17 +245,25 @@ function AdminProductsPanel() {
                                                     setNuevoPrecio(producto.precio);
                                                 }}
                                                 className="btn-edit"
+                                                title="Editar precio manualmente"
                                             >
-                                                Editar Precio
+                                                ✏️
                                             </button>
-                                            {producto.stock_vendido > 0 && (
-                                                <button 
-                                                    onClick={() => handleResetearStock(producto.id)}
-                                                    className="btn-reset"
-                                                >
-                                                    Resetear Stock
-                                                </button>
-                                            )}
+                                            <button 
+                                                onClick={() => handleResetearPrecioIndividual(producto.id)}
+                                                className="btn-reset-price"
+                                                disabled={resetIndividualLoading[producto.id] || !producto.precio_proveedor}
+                                                title={producto.precio_proveedor ? `Resetear a $${producto.precio_proveedor} × 2` : 'Sin precio de proveedor'}
+                                            >
+                                                {resetIndividualLoading[producto.id] ? '⏳' : '↻'}
+                                            </button>
+                                            <button 
+                                                onClick={() => handleResetearStock(producto.id)}
+                                                className="btn-reset"
+                                                title="Resetear stock vendido"
+                                            >
+                                                🔄
+                                            </button>
                                         </>
                                     )}
                                 </td>
@@ -263,6 +321,56 @@ function AdminProductsPanel() {
                     >
                         Siguiente →
                     </button>
+                </div>
+            )}
+
+            {/* MODAL DE CONFIRMACIÓN RESET GLOBAL */}
+            {showResetModal && (
+                <div className="modal-overlay" onClick={() => setShowResetModal(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>⚠️ Resetear Todos los Precios</h2>
+                            <button className="btn-close" onClick={() => setShowResetModal(false)}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <p style={{marginBottom: '16px', fontSize: '15px', lineHeight: '1.6'}}>
+                                Estás por <strong>resetear el precio de TODOS los productos</strong> a su valor predeterminado:
+                            </p>
+                            <div style={{
+                                background: '#f8f9fa', 
+                                padding: '12px 16px', 
+                                borderRadius: '8px',
+                                marginBottom: '16px',
+                                borderLeft: '4px solid #0d6efd'
+                            }}>
+                                <code style={{fontSize: '14px', fontWeight: '600'}}>
+                                    Precio Final = Precio Proveedor × 2
+                                </code>
+                            </div>
+                            <p style={{marginBottom: '8px', fontSize: '14px', color: '#dc3545'}}>
+                                ⚠️ Esta acción afectará <strong>{productos.length} productos</strong> y <strong>no se puede deshacer</strong>.
+                            </p>
+                            <p style={{margin: '0', fontSize: '14px', color: '#6c757d'}}>
+                                Los precios editados manualmente volverán al valor automático.
+                            </p>
+                        </div>
+                        <div className="modal-footer" style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                            <button 
+                                className="btn-secondary" 
+                                onClick={() => setShowResetModal(false)}
+                                disabled={resetGlobalLoading}
+                            >
+                                Cancelar
+                            </button>
+                            <button 
+                                className="btn-danger" 
+                                onClick={handleResetearTodosPrecios}
+                                disabled={resetGlobalLoading}
+                            >
+                                {resetGlobalLoading ? 'Reseteando...' : '✓ Confirmar Reset'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
