@@ -104,22 +104,22 @@ function Orders() {
         const mapped = ordersData.map(o => ({
           id: o.id,
           status: o.estado,
-            subtotal: parseFloat(o.total) - parseFloat(o.costo_envio || 0),
-          total: o.total_con_envio || o.total,
-          shipping: o.costo_envio,
+          subtotal: parseFloat(o.total || 0),
+          total: parseFloat(o.total || 0) + parseFloat(o.costo_envio || 0),
+          shipping: parseFloat(o.costo_envio || 0),
           created_at: o.fecha,
-          address: o.direccion_completa,
-          postal_code: o.codigo_postal,
-          zone: o.zona_envio,
-          payment_status: o.estado_pago,
-          payment_method: o.metodo_pago,
+          address: o.direccion_envio || '—',
+          postal_code: o.codigo_postal || '—',
+          zone: o.zona_envio || '—',
+          payment_status: o.estado,
+          payment_method: o.metodo_pago || 'Mercado Pago',
           items: (o.detalles || []).map(d => ({
             product: { 
-      name: d.reloj?.marca ? `${d.reloj.marca} ${d.reloj.modelo}` : 'Producto',
-      image: resolveWatchImage(d.reloj?.marca, d.reloj?.modelo)
+              name: d.producto_detalle ? `${d.producto_detalle.marca || ''} ${d.producto_detalle.modelo || ''}`.trim() || 'Producto' : 'Producto',
+              image: resolveWatchImage(d.producto_detalle?.marca, d.producto_detalle?.modelo)
             },
             quantity: d.cantidad,
-            price: d.precio_unitario
+            price: parseFloat(d.subtotal || 0) / (d.cantidad || 1) // Calcular precio unitario desde subtotal
           }))
         }));
         setOrders(mapped);
