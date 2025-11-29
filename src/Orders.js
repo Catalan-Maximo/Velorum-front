@@ -115,7 +115,7 @@ function Orders() {
           items: (o.detalles || []).map(d => ({
             product: { 
               name: d.producto_detalle ? `${d.producto_detalle.marca || ''} ${d.producto_detalle.modelo || ''}`.trim() || 'Producto' : 'Producto',
-              image: d.producto_detalle?.imagenes?.[0] || '/logo192.png'
+              image: d.producto_detalle?.imagen_principal || d.producto_detalle?.imagenes?.[0] || '/logo192.png'
             },
             quantity: d.cantidad,
             price: parseFloat(d.subtotal || 0) / (d.cantidad || 1)
