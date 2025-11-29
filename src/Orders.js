@@ -110,7 +110,6 @@ function Orders() {
           created_at: o.fecha,
           address: o.direccion_envio || '—',
           postal_code: o.codigo_postal || '—',
-          payment_status: o.estado,
           payment_method: o.metodo_pago || 'Mercado Pago',
           items: (o.detalles || []).map(d => ({
             product: { 
@@ -178,10 +177,8 @@ function Orders() {
   const canUserCancel = (order) => {
     if(!order) return false;
     const s = (order.status||'').toLowerCase();
-    const pay = (order.payment_status||'').toLowerCase();
-    if(['enviado','shipped','entregado','delivered','cancelado','cancelled'].includes(s)) return false;
-    if(['completado','reembolsado','completed','refunded'].includes(pay)) return false;
-    return true; // cualquier otro estado temprano se puede cancelar
+    if(['enviado','shipped','entregado','delivered','cancelado','cancelled','pagado','preparando'].includes(s)) return false;
+    return true; // Solo se puede cancelar si está pendiente o en revisión
   };
 
   const cancelOrder = async (order) => {
@@ -389,8 +386,7 @@ function Orders() {
             <div className="modal-section grid">
               <div className="stat"><span className="lbl">Dirección</span><span className="val" style={{fontSize:'.75rem',lineHeight:'1.2rem'}}>{selectedOrder.address || '—'}</span></div>
               <div className="stat"><span className="lbl">Código Postal</span><span className="val">{selectedOrder.postal_code || '—'}</span></div>
-              <div className="stat"><span className="lbl">Pago</span><span className="val" style={{fontSize:'.8rem'}}>{selectedOrder.payment_status || '—'}</span></div>
-              <div className="stat"><span className="lbl">Método</span><span className="val" style={{fontSize:'.7rem'}}>{selectedOrder.payment_method || '—'}</span></div>
+              <div className="stat"><span className="lbl">Método de Pago</span><span className="val" style={{fontSize:'.7rem'}}>{selectedOrder.payment_method || '—'}</span></div>
             </div>
             <div className="modal-section grid">
               <div className="stat"><span className="lbl">Subtotal</span><span className="val">${selectedOrder.subtotal}</span></div>
