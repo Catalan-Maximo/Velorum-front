@@ -110,16 +110,15 @@ function Orders() {
           created_at: o.fecha,
           address: o.direccion_envio || '—',
           postal_code: o.codigo_postal || '—',
-          zone: o.zona_envio || '—',
           payment_status: o.estado,
           payment_method: o.metodo_pago || 'Mercado Pago',
           items: (o.detalles || []).map(d => ({
             product: { 
               name: d.producto_detalle ? `${d.producto_detalle.marca || ''} ${d.producto_detalle.modelo || ''}`.trim() || 'Producto' : 'Producto',
-              image: resolveWatchImage(d.producto_detalle?.marca, d.producto_detalle?.modelo)
+              image: d.producto_detalle?.imagenes?.[0] || '/logo192.png'
             },
             quantity: d.cantidad,
-            price: parseFloat(d.subtotal || 0) / (d.cantidad || 1) // Calcular precio unitario desde subtotal
+            price: parseFloat(d.subtotal || 0) / (d.cantidad || 1)
           }))
         }));
         setOrders(mapped);
@@ -390,7 +389,6 @@ function Orders() {
             <div className="modal-section grid">
               <div className="stat"><span className="lbl">Dirección</span><span className="val" style={{fontSize:'.75rem',lineHeight:'1.2rem'}}>{selectedOrder.address || '—'}</span></div>
               <div className="stat"><span className="lbl">Código Postal</span><span className="val">{selectedOrder.postal_code || '—'}</span></div>
-              <div className="stat"><span className="lbl">Zona</span><span className="val">{selectedOrder.zone || '—'}</span></div>
               <div className="stat"><span className="lbl">Pago</span><span className="val" style={{fontSize:'.8rem'}}>{selectedOrder.payment_status || '—'}</span></div>
               <div className="stat"><span className="lbl">Método</span><span className="val" style={{fontSize:'.7rem'}}>{selectedOrder.payment_method || '—'}</span></div>
             </div>
