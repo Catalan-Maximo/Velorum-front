@@ -184,7 +184,7 @@ function About() {
                 className="btn-primary contact-main-btn"
                 aria-label="Enviar correo a Velorum"
                 onClick={() => {
-                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=m.catalan@alumno.um.edu.ar&su=Consulta%20Velorum','_blank');
+                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=joakobengolea5@gmail.com&su=Consulta%20Velorum','_blank');
                 }}
               >
                 CONTÁCTANOS

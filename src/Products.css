@@ -69,11 +69,11 @@
 
 /* 📦 CONTENEDOR PRINCIPAL */
 .products-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 60px 5%;
+  padding: 60px 2% 60px 1%;
   display: flex;
-  gap: 30px;
+  gap: 20px;
   align-items: flex-start; /* evita que los sidebars se estiren a la altura del grid */
 }
 
@@ -418,8 +418,8 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
   margin-top: 0;
 }
 

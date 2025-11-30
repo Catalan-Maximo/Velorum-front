@@ -47,6 +47,10 @@ function Products() {
 
   // Filtrar productos
   let productosFiltrados = allProducts.filter(p => {
+    // Filtro por stock - solo mostrar productos con stock disponible
+    const hasStock = p.stock_ilimitado || (p.stock_disponible && p.stock_disponible > 0) || (p.stock && p.stock > 0);
+    if (!hasStock) return false;
+
     // Filtro por categoría
     if (categoriaFiltro !== 'Todos' && p.category !== categoriaFiltro) return false;
 

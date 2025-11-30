@@ -4,6 +4,7 @@ import { userService, adminService } from './services';
 import AdminOrderPanel from './AdminOrderPanel';
 import AdminSyncPanel from './AdminSyncPanel';
 import AdminProductsPanel from './AdminProductsPanel';
+import AdminDiscountPanel from './AdminDiscountPanel';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
@@ -269,12 +270,19 @@ const AdminPanel = () => {
                 >
                     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik00IDIwdi0yaDIuNzVsLS40LS4zNXEtMS4yMjUtMS4yMjUtMS43ODctMi42NjJUNCAxMi4wNXEwLTIuNzc1IDEuNjYzLTQuOTM3VDEwIDQuMjV2Mi4xUTguMiA3IDcuMSA4LjU2M1Q2IDEyLjA1cTAgMS4xMjUuNDI1IDIuMTg4VDcuNzUgMTYuMmwuMjUuMjVWMTRoMnY2em0xMC0uMjV2LTIuMXExLjgtLjY1IDIuOS0yLjIxMlQxOCAxMS45NXEwLTEuMTI1LS40MjUtMi4xODdUMTYuMjUgNy44TDE2IDcuNTVWMTBoLTJWNGg2djJoLTIuNzVsLjQuMzVxMS4yMjUgMS4yMjUgMS43ODggMi42NjNUMjAgMTEuOTVxMCAyLjc3NS0xLjY2MiA0LjkzOFQxNCAxOS43NSIvPjwvc3ZnPg==" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Sincronización
                 </button>
+                <button 
+                    className={`tab-btn ${activeTab === 'discounts' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('discounts')}
+                >
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0yMS40MSAxMS41OGwtOS0yaC0uNGwtMi0ydjFIOHYtMkg2djFINHYyaDJ2MWwtMi4zMS0uNTFBMSAxIDAgMCAwIDIuNSAxM2w5LjQ0IDIuMTJsLS41OC0xLjczTDIuOTIgMTJsMy45OC44OWwyLS43NGwtMi4wNy0uNDZMMTkuOTIgMTRsLTcuMDgtMS41OGwyLjA4Ljc0TDIxLjQxIDJsLjU5LjU5eiIvPjwvc3ZnPg==" alt="" style={{width: '20px', height: '20px', marginRight: '8px', verticalAlign: 'middle'}} /> Descuentos
+                </button>
             </div>
             
             {/* RENDER CONTENT BASED ON ACTIVE TAB */}
             {activeTab === 'orders' && <AdminOrderPanel />}
             {activeTab === 'products' && <AdminProductsPanel />}
             {activeTab === 'sync' && <AdminSyncPanel />}
+            {activeTab === 'discounts' && <AdminDiscountPanel />}
             
             {/* USERS TAB CONTENT (existing code) */}
             {activeTab === 'users' && (

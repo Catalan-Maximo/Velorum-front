@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ProductDetail.css';
 import { useFavorites } from './FavoritesContext';
 import { useCart } from './CartContext';
-import { apiRequest } from './services';
+import { productService } from './services';
 
 function ProductDetail() {
   const { id } = useParams();
@@ -23,7 +23,7 @@ function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await apiRequest(`/market/model/products/${id}/`);
+        const data = await productService.getById(id);
         setProduct(data);
       } catch (error) {
         console.error('Error al cargar el producto:', error);
@@ -39,11 +39,19 @@ function ProductDetail() {
   const handleAddToCart = () => {
     if (!product) return;
     
+    // Normalizar producto antes de agregar al carrito
+    const normalizedProduct = {
+      ...product,
+      name: product.nombre || product.name || 'Producto',
+      price: Number(product.precio || product.price || 0),
+      image: (product.imagenes && product.imagenes.length > 0) ? product.imagenes[0] : (product.image || '/logo192.png')
+    };
+    
     const alreadyQty = getItemQuantity(product.id);
     if (isInCart(product.id)) {
       updateQuantity(product.id, alreadyQty + quantity);
     } else {
-      addToCart(product, quantity);
+      addToCart(normalizedProduct, quantity);
     }
     setIsCartOpen(true);
   };

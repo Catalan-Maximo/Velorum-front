@@ -31,16 +31,25 @@ function Home({ user, isLoggedIn }) {
         setLoadingProducts(true);
         const products = await productService.getAll();
         
-        // Filtrar solo productos con stock disponible
+        // Filtrar productos con stock disponible
         const productsWithStock = products.filter(p => 
           p.stock_ilimitado || (p.stock_disponible && p.stock_disponible > 0) || (p.stock && p.stock > 0)
         );
+        
+        // Intentar filtrar productos en el rango de $50,000 a $100,000
+        let productsInRange = productsWithStock.filter(p => {
+          const price = Number(p.precio || p.price || 0);
+          return price >= 50000 && price <= 100000;
+        });
+        
+        // Si no hay productos en ese rango, usar todos los productos con stock
+        const finalProducts = productsInRange.length > 0 ? productsInRange : productsWithStock;
         
         // Seleccionar 1 producto por categoría (máximo 4)
         const categorias = {};
         const featured = [];
         
-        for (const product of productsWithStock) {
+        for (const product of finalProducts) {
           const categoria = product.categoria?.nombre || product.categoria || 'Sin categoría';
           if (!categorias[categoria] && featured.length < 4) {
             categorias[categoria] = true;
@@ -50,7 +59,7 @@ function Home({ user, isLoggedIn }) {
         
         // Si hay menos de 4, completar con productos adicionales que tengan stock
         if (featured.length < 4) {
-          const remaining = productsWithStock.filter(p => !featured.includes(p)).slice(0, 4 - featured.length);
+          const remaining = finalProducts.filter(p => !featured.includes(p)).slice(0, 4 - featured.length);
           featured.push(...remaining);
         }
         
@@ -164,7 +173,7 @@ function Home({ user, isLoggedIn }) {
                 <div className={`product-badge ${String(categoryName).toLowerCase()}`}>
                   {categoryName}
                 </div>
-                <div className="product-image-new">
+                <div className="product-image-new" onClick={() => navigate(`/product/${product.id}`)} style={{ cursor: 'pointer' }}>
                   <img 
                     src={(product.imagenes && product.imagenes[0]) || product.imagen_url || product.image || '/logo192.png'} 
                     alt={product.nombre || product.name}
@@ -198,7 +207,14 @@ function Home({ user, isLoggedIn }) {
                       if (isInCart && isInCart(product.id)) {
                         setIsCartOpen(true);
                       } else {
-                        addToCart(product);
+                        // Normalizar producto antes de agregar al carrito
+                        const normalizedProduct = {
+                          ...product,
+                          name: product.nombre || product.name,
+                          price: Number(product.precio || product.price || 0),
+                          image: (product.imagenes && product.imagenes[0]) || product.imagen_url || product.image
+                        };
+                        addToCart(normalizedProduct);
                         setIsCartOpen(true);
                       }
                     }}

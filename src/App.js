@@ -99,7 +99,7 @@ function AppContent() {
             <p>Tenés hasta <strong>30 días corridos</strong> desde la recepción para solicitar devolución o cambio.</p>
             <ol style={{lineHeight:'1.6'}}>
               <li>El producto debe estar sin uso, con films, etiquetas y embalaje original.</li>
-              <li>Escribinos a <a href="mailto:m.catalan@alumno.um.edu.ar">m.catalan@alumno.um.edu.ar</a> con asunto: DEVOLUCIÓN + Nº de pedido.</li>
+              <li>Escribinos a <a href="mailto:joakobengolea5@gmail.com">joakobengolea5@gmail.com</a> con asunto: DEVOLUCIÓN + Nº de pedido.</li>
               <li>Te enviamos etiqueta / coordinamos retiro. Una vez recibido y controlado emitimos reintegro (hasta 7 días hábiles).</li>
             </ol>
             <p style={{fontSize:'0.85rem',opacity:.8}}>Productos personalizados o con signos de manipulación indebida quedan excluidos.</p>
@@ -109,7 +109,7 @@ function AppContent() {
         return (
           <div>
             <h2>Carreras</h2>
-            <p>Próximamente publicaremos oportunidades para sumarte al equipo Velorum (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:m.catalan@alumno.um.edu.ar?subject=CV%20Velorum">m.catalan@alumno.um.edu.ar</a>.</p>
+            <p>Próximamente publicaremos oportunidades para sumarte al equipo Velorum (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:joakobengolea5@gmail.com?subject=CV%20Velorum">joakobengolea5@gmail.com</a>.</p>
           </div>
         );
       default:
@@ -207,6 +207,13 @@ function AppContent() {
           )}
           {/* 📍 SECCIÓN IZQUIERDA - Enlaces de navegación */}
           <div className="navbar-left">
+            <button 
+              className="nav-item"
+              onClick={() => navigate('/')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              INICIO
+            </button>
             <button 
               className="nav-item"
               onClick={() => navigate('/about')}

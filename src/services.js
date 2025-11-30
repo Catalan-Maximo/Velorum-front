@@ -278,14 +278,18 @@ export const userService = {
 export const productService = {
   getAll: async () => {
     const response = await fetch(`${API_BASE_URL}/market/model/products/`, {
-      headers: getAuthHeaders()
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
     return response.json();
   },
 
   getById: async (productId) => {
     const response = await fetch(`${API_BASE_URL}/market/model/products/${productId}/`, {
-      headers: getAuthHeaders()
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
     if (response.ok) {
       return response.json();
