@@ -21,16 +21,18 @@
     margin-bottom: 10px;
 }
 
-.products-filters {
+.admin-products-filters {
     display: flex;
     flex-direction: row;
     gap: 15px;
     margin-bottom: 20px;
     align-items: center;
     flex-wrap: nowrap;
+    flex: 1; /* Allow it to expand */
+    max-width: 500px; /* Increased width for admin panel */
 }
 
-.products-filters .stat {
+.admin-products-filters .stat {
     background: #f0f0f0;
     padding: 8px 16px;
     border-radius: 20px;
@@ -92,7 +94,7 @@
 
 .products-table th {
     padding: 15px;
-    text-align: left;
+    text-align: center;
     font-weight: 600;
     color: #666;
     font-size: 13px;
@@ -162,53 +164,72 @@
 .actions {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: center;
 }
 
 .actions button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
+    padding: 8px 10px;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    background: #fff;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
 }
 
-.btn-edit {
-    background: #0d4ca3;
-    color: white;
+.actions button:hover {
+    background: #f6f8fa;
+    border-color: #d0d4d8;
 }
 
-.btn-edit:hover {
-    background: #0a3a7a;
+.actions button:active {
+    background: #eaeef2;
 }
 
-.btn-reset {
-    background: #ffc107;
+.actions button svg {
+    pointer-events: none;
+}
+
+.btn-edit,
+.btn-reset,
+.btn-reset-price {
+    background: #fff;
     color: #333;
 }
 
-.btn-reset:hover {
-    background: #e0a800;
+.btn-edit:hover,
+.btn-reset:hover,
+.btn-reset-price:hover {
+    background: #f6f8fa;
+    border-color: #d0d4d8;
 }
 
 .btn-save {
-    background: #28a745;
-    color: white;
+    background: #fff;
+    color: #333;
 }
 
 .btn-save:hover {
-    background: #218838;
+    background: #f6f8fa;
+    border-color: #d0d4d8;
 }
 
 .btn-cancel {
-    background: #6c757d;
-    color: white;
+    background: #fff;
+    color: #666;
 }
 
 .btn-cancel:hover {
-    background: #5a6268;
+    background: #f6f8fa;
+    border-color: #d0d4d8;
 }
 
 .no-products {
@@ -243,19 +264,12 @@
 }
 
 .btn-reset-price {
-    background: #17a2b8;
-    color: white;
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
+    /* Los estilos base ya están en .actions button */
 }
 
 .btn-reset-price:hover:not(:disabled) {
-    background: #138496;
-    transform: scale(1.1);
+    background: #f6f8fa;
+    border-color: #d0d4d8;
 }
 
 .btn-reset-price:disabled {

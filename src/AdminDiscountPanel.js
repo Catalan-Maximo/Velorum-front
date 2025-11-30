@@ -171,110 +171,131 @@ const AdminDiscountPanel = () => {
 
             {showCreateForm && (
                 <div className="form-container">
-                    <h4>{editingCodigo ? 'Editar Código' : 'Crear Nuevo Código'}</h4>
-                    <form onSubmit={handleSubmit} className="admin-form">
-                        <div className="form-grid">
-                            <div className="form-group">
-                                <label>Código *</label>
-                                <input
-                                    type="text"
-                                    value={formData.codigo}
-                                    onChange={(e) => setFormData({...formData, codigo: e.target.value.toUpperCase()})}
-                                    required
-                                    placeholder="ej: MANOLITO"
-                                />
+                    <div className="form-header">
+                        <h4>{editingCodigo ? 'Editar Código' : 'Crear Nuevo Código'}</h4>
+                        <button type="button" className="btn-close" onClick={handleCancel}>✕</button>
+                    </div>
+                    
+                    <form onSubmit={handleSubmit} className="admin-form discount-form">
+                        {/* Información Básica */}
+                        <div className="form-section">
+                            <div className="section-title">Información Básica</div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Código *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.codigo}
+                                        onChange={(e) => setFormData({...formData, codigo: e.target.value.toUpperCase()})}
+                                        required
+                                        placeholder="MANOLITO"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Descuento *</label>
+                                    <div className="input-with-suffix">
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            max="100"
+                                            value={formData.porcentaje_descuento}
+                                            onChange={(e) => setFormData({...formData, porcentaje_descuento: e.target.value})}
+                                            required
+                                            placeholder="10"
+                                        />
+                                        <span className="input-suffix">%</span>
+                                    </div>
+                                </div>
                             </div>
-
                             <div className="form-group">
-                                <label>Porcentaje de Descuento *</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    max="100"
-                                    value={formData.porcentaje_descuento}
-                                    onChange={(e) => setFormData({...formData, porcentaje_descuento: e.target.value})}
-                                    required
-                                    placeholder="ej: 10"
-                                />
-                            </div>
-
-                            <div className="form-group full-width">
                                 <label>Descripción</label>
                                 <input
                                     type="text"
                                     value={formData.descripcion}
                                     onChange={(e) => setFormData({...formData, descripcion: e.target.value})}
-                                    placeholder="ej: 10% de descuento de Manolito"
+                                    placeholder="10% de descuento de Manolito"
                                 />
                             </div>
-
-                            <div className="form-group">
-                                <label>Fecha Inicio</label>
-                                <input
-                                    type="date"
-                                    value={formData.fecha_inicio}
-                                    onChange={(e) => setFormData({...formData, fecha_inicio: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Fecha Expiración</label>
-                                <input
-                                    type="date"
-                                    value={formData.fecha_expiracion}
-                                    onChange={(e) => setFormData({...formData, fecha_expiracion: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Usos Máximos (vacío = ilimitado)</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    value={formData.usos_maximos}
-                                    onChange={(e) => setFormData({...formData, usos_maximos: e.target.value})}
-                                    placeholder="Dejar vacío para ilimitado"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Usos por Usuario</label>
-                                <input
-                                    type="number"
-                                    min="1"
-                                    value={formData.usos_por_usuario}
-                                    onChange={(e) => setFormData({...formData, usos_por_usuario: e.target.value})}
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Monto Mínimo de Compra</label>
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    value={formData.monto_minimo}
-                                    onChange={(e) => setFormData({...formData, monto_minimo: e.target.value})}
-                                    placeholder="ej: 50000"
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>
+                            <div className="form-group checkbox-group">
+                                <label className="checkbox-label">
                                     <input
                                         type="checkbox"
                                         checked={formData.activo}
                                         onChange={(e) => setFormData({...formData, activo: e.target.checked})}
                                     />
-                                    {' '}Activo
+                                    <span>Activar código inmediatamente</span>
                                 </label>
+                            </div>
+                        </div>
+
+                        {/* Validez */}
+                        <div className="form-section">
+                            <div className="section-title">Validez</div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Fecha Inicio</label>
+                                    <input
+                                        type="date"
+                                        value={formData.fecha_inicio}
+                                        onChange={(e) => setFormData({...formData, fecha_inicio: e.target.value})}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Fecha Expiración</label>
+                                    <input
+                                        type="date"
+                                        value={formData.fecha_expiracion}
+                                        onChange={(e) => setFormData({...formData, fecha_expiracion: e.target.value})}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Límites de Uso */}
+                        <div className="form-section">
+                            <div className="section-title">Límites de Uso</div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Usos Máximos</label>
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        value={formData.usos_maximos}
+                                        onChange={(e) => setFormData({...formData, usos_maximos: e.target.value})}
+                                        placeholder="Ilimitado"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Usos por Usuario</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        value={formData.usos_por_usuario}
+                                        onChange={(e) => setFormData({...formData, usos_por_usuario: e.target.value})}
+                                        placeholder="1"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Compra Mínima</label>
+                                    <div className="input-with-prefix">
+                                        <span className="input-prefix">$</span>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            value={formData.monto_minimo}
+                                            onChange={(e) => setFormData({...formData, monto_minimo: e.target.value})}
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div className="form-actions">
                             <button type="submit" className="btn-primary">
-                                {editingCodigo ? 'Actualizar' : 'Crear'}
+                                {editingCodigo ? 'Actualizar Código' : 'Crear Código'}
                             </button>
                             <button type="button" className="btn-secondary" onClick={handleCancel}>
                                 Cancelar

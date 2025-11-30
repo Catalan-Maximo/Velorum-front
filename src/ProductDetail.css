@@ -448,8 +448,8 @@
 /* NUEVO BOTÓN DE FAVORITOS - SOLO ICONO */
 .wishlist-btn-icon {
   background: #ffffff;
-  color: #b28b24;
-  border: 1px solid #e4e7eb;
+  color: #dc3545; /* Changed to red */
+  border: 1px solid #dc3545; /* Red border */
   padding: 14px;
   border-radius: 14px;
   font-size: 20px;
@@ -465,16 +465,16 @@
 }
 
 .wishlist-btn-icon:hover {
-  background: linear-gradient(135deg,#e3ce8a,#c9a646,#b28b24);
-  color: #1a1f29;
-  border-color: #d1b25b;
-  box-shadow: 0 10px 28px -4px rgba(178,139,36,0.35);
+  background: linear-gradient(135deg,#dc3545,#a71d2a); /* Red gradient */
+  color: #ffffff; /* White text on hover */
+  border-color: #a71d2a; /* Darker red border */
+  box-shadow: 0 10px 28px -4px rgba(220,53,69,0.35);
 }
 
 .wishlist-btn-icon.favorite-active {
-  background: linear-gradient(135deg,#e3ce8a,#c9a646,#b28b24);
-  color: #1a1f29;
-  border-color: #c9a646;
+  background: linear-gradient(135deg,#dc3545,#a71d2a); /* Red gradient */
+  color: #ffffff; /* White text */
+  border-color: #a71d2a; /* Darker red border */
 }
 
 .wishlist-btn-icon.favorite-active:hover {

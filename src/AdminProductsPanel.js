@@ -124,7 +124,7 @@ function AdminProductsPanel() {
 
     return (
         <div className="admin-products-panel">
-            <div className="products-filters">
+            <div className="admin-products-filters">
                 <input
                     type="text"
                     placeholder="Buscar productos..."
@@ -152,14 +152,6 @@ function AdminProductsPanel() {
                 <span className="stat">Total: {productos.length}</span>
                 <span className="stat">Disponibles: {productos.filter(p => p.stock_ilimitado || p.stock_proveedor > 0).length}</span>
                 <span className="stat">Sin stock: {productos.filter(p => !p.stock_ilimitado && p.stock_proveedor === 0).length}</span>
-                
-                <button 
-                    className="btn-reset-all-prices"
-                    onClick={() => setShowResetModal(true)}
-                    title="Resetear todos los precios a precio_proveedor × 2"
-                >
-                    ⟲ Resetear Todos los Precios (×2)
-                </button>
             </div>
 
             <div className="products-table-container">
@@ -214,7 +206,7 @@ function AdminProductsPanel() {
                                     <span className={`stock-badge ${(producto.stock_ilimitado || producto.stock_proveedor > 0) ? 'disponible' : 'agotado'}`}>
                                         {(producto.stock_ilimitado || producto.stock_proveedor > 0) ? 
                                             <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Im05LjU1IDE4bC01LjctNS43bDEuNDI1LTEuNDI1TDkuNTUgMTUuMTVsOS4xNzUtOS4xNzVMMjAuMTUgNy40eiIvPjwvc3ZnPg==" alt="Disponible" style={{width: '20px', height: '20px'}} /> : 
-                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0xMiAyMGE4IDggMCAwIDEtOC04SDJjMCA1LjUyMyA0LjQ3NyAxMCAxMCAxMHptMC0xNmE4IDggMCAwIDEgOCA4aDJjMC01LjUyMy00LjQ3Ny0xMC0xMC0xMHptLTggOGE3Ljk3IDcuOTcgMCAwIDEgMi4zNDMtNS42NTdMNC45MyA0LjkzQTkuOTcgOS45NyAwIDAgMCAyIDExLjk5OXptMi4zNDMtNS42NTdBNy45NyA3Ljk3IDAgMCAxIDEyIDRWMmE5Ljk3IDkuOTcgMCAwIDAtNy4wNzEgMi45Mjl6bS0xLjQxNCAwbDEyLjcyOCAxMi43MjhsMS40MTQtMS40MTRMNi4zNDMgNC45Mjl6TTIwIDEyYTcuOTcgNy45NyAwIDAgMS0yLjM0MyA1LjY1N2wxLjQxNCAxLjQxNEE5Ljk3IDkuOTcgMCAwIDAgMjIgMTJ6bS0yLjM0MyA1LjY1N0E3Ljk3IDcuOTcgMCAwIDEgMTIgMjB2MmE5Ljk3IDkuOTcgMCAwIDAgNy4wNzEtMi45Mjl6Ii8+PC9zdmc+" alt="No disponible" style={{width: '20px', height: '20px'}} />
+                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiMwMDAwMDAiIGQ9Ik0xMiAyMGE4IDggMCAwIDEtOC04SDJjMCA1LjUyMyA0LjQ3NyAxMCAxMCAxMHptMC0xNmE4IDggMCAwIDEgOCA4aDJjMC01LjUyMy00LjQ3Ny0xMC0xMC0xMHptLTggOGE3Ljk3IDcuOTcgMCAwIDEgMi4zNDMtNS42NTdMNC45MyA0LjkzQTkuOTcgOS45NyAwIDAgMCAyIDExLjk5OXptMi4zNDMtNS42NTdBNy45NyA3Ljk3IDAgMCAxIDEyIDRWMmE5Ljk3IDkuOTcgMCAwIDAgNy4wNzEtMi45Mjl6Ii8+PC9zdmc+" alt="No disponible" style={{width: '20px', height: '20px'}} />
                                         }
                                     </span>
                                 </td>
@@ -247,7 +239,10 @@ function AdminProductsPanel() {
                                                 className="btn-edit"
                                                 title="Editar precio manualmente"
                                             >
-                                                ✏️
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
                                             </button>
                                             <button 
                                                 onClick={() => handleResetearPrecioIndividual(producto.id)}
@@ -255,14 +250,26 @@ function AdminProductsPanel() {
                                                 disabled={resetIndividualLoading[producto.id] || !producto.precio_proveedor}
                                                 title={producto.precio_proveedor ? `Resetear a $${producto.precio_proveedor} × 2` : 'Sin precio de proveedor'}
                                             >
-                                                {resetIndividualLoading[producto.id] ? '⏳' : '↻'}
+                                                {resetIndividualLoading[producto.id] ? (
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+                                                    </svg>
+                                                ) : (
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                                                    </svg>
+                                                )}
                                             </button>
                                             <button 
                                                 onClick={() => handleResetearStock(producto.id)}
                                                 className="btn-reset"
                                                 title="Resetear stock vendido"
                                             >
-                                                🔄
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                    <path d="M8 12h8"/>
+                                                    <path d="M12 8v8"/>
+                                                </svg>
                                             </button>
                                         </>
                                     )}

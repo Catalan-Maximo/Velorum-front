@@ -80,7 +80,7 @@
 /* 🔍 SECCIÓN DE FILTROS - DISEÑO PROFESIONAL */
 .products-filters {
   width: 100%;
-  max-width: 300px;
+  max-width: 200px; /* Restored original width */
   background: #ffffff;
   border-radius: 12px;
   padding: 14px 16px; /* reducción de padding para compactar */
@@ -975,4 +975,14 @@
 /* Adjusted position of the 'Ordenar por' section */
 .filter-group:last-child {
   margin-top: 30px; /* Added margin to push it slightly lower */
+}
+
+/* Adjusted styles for user-facing filters container */
+.products-filters.user {
+  max-width: 200px; /* Specific width for user-facing section */
+}
+
+/* Adjusted styles for admin panel filters container */
+.products-filters.admin {
+  max-width: 500px; /* Specific width for admin panel */
 }

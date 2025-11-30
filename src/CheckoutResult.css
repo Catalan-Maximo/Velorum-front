@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f0f0f0; /* Same color as admin panel */
 }
 
 .result-card {
@@ -40,7 +40,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Green gradient */
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -62,7 +62,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #f6ad55 0%, #dd6b20 100%); /* Orange gradient */
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -89,7 +89,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, #dc3545 0%, #a71d2a 100%); /* Red gradient */
     margin: 0 auto;
     display: flex;
     align-items: center;

@@ -591,7 +591,7 @@ ul {
 .user-dropdown-header strong {
   display: block;
   font-size: 16px;
-  color: var(--text-primary);          /* 📝 Texto principal bien visible */
+  color: #000 !important;          /* Black for header text */
   font-weight: 600;                     /* 📝 Más peso para mejor legibilidad */
   text-align: center;                   /* 📍 Centrar el nombre */
 }
@@ -605,7 +605,7 @@ ul {
   text-align: left;
   cursor: pointer;
   font-size: 14px;
-  color: var(--text-primary);          /* 📝 Texto principal bien visible */
+  color: #000 !important;          /* Black for dropdown items */
   font-family: 'Poppins', sans-serif;
   transition: all 0.2s ease;           /* 🔄 Transición suave */
   font-weight: 500;                     /* 📝 Más peso para mejor legibilidad */
@@ -613,18 +613,18 @@ ul {
 
 .dropdown-item:hover {
   background: #f5f5f5;     /* 🎨 Fondo gris claro al hover */
-  color: var(--text-accent);          /* 📝 Texto más oscuro al hover */
+  color: #333 !important; /* Dark gray on hover */
 }
 
 /* 🚪 ELEMENTO DE CERRAR SESIÓN - ROJO VISIBLE */
 .logout-item {
-  color: #dc3545;                      /* 📝 Rojo más fuerte */
+  color: #000 !important;                      /* 📝 Rojo más fuerte */
   font-weight: 600;                    /* 📝 Más peso para énfasis */
 }
 
 .logout-item:hover {
   background: rgba(220, 53, 69, 0.1);  /* 🎨 Fondo rojo claro al hover */
-  color: #dc3545;                      /* 📝 Mantener rojo al hover */
+  color: #333 !important; /* Dark gray on hover */
 }
 
 /* ➖ LÍNEA DIVISORIA - MÁS VISIBLE */
