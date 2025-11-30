@@ -9,7 +9,8 @@ const WHATSAPP_NUMBER = '5491122334455'; // Reemplazar por número real (sin +, 
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const { cartItems, getTotalPrice, clearCart } = useCart();
+    const { cartItems, getTotalPrice, clearCart, getUnlockedPromotions } = useCart();
+    const promotions = getUnlockedPromotions();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [transferModalOpen, setTransferModalOpen] = useState(false);
@@ -233,9 +234,14 @@ const Checkout = () => {
                     name: item.name || item.marca || 'Producto'
                 })),
                 total: getTotalPrice(),
-                costo_envio: costoEnvio,
+                costo_envio: promotions.hasFreeShipping ? 0 : costoEnvio,
                 codigo_descuento: descuentoAplicado ? descuentoAplicado.codigo : null,
-                descuento_porcentaje: descuentoAplicado ? descuentoAplicado.porcentaje : 0
+                descuento_porcentaje: descuentoAplicado ? descuentoAplicado.porcentaje : 0,
+                // Agregar información de promociones desbloqueadas
+                promo_discount: promotions.hasDiscount ? 10 : 0,
+                promo_free_shipping: promotions.hasFreeShipping,
+                promo_gift_box: promotions.hasGiftBox,
+                notas_promocion: promotions.hasGiftBox ? '⚠️ INCLUIR CAJA PARA RELOJ - Promoción desbloqueada' : null
             };
 
             console.log('Enviando datos a MP:', requestData);
@@ -279,18 +285,42 @@ const Checkout = () => {
     };
 
     const getTotalWithShipping = () => {
-        let total = getTotalPrice() + costoEnvio;
+        let subtotal = getTotalPrice();
+        
+        // Aplicar descuento por código primero (solo sobre productos)
         if (descuentoAplicado) {
-            const descuento = (total * descuentoAplicado.porcentaje) / 100;
-            total -= descuento;
+            const descuentoCodigo = (subtotal * descuentoAplicado.porcentaje) / 100;
+            subtotal -= descuentoCodigo;
         }
+        
+        // Aplicar descuento por promoción desbloqueada (10%) después
+        if (promotions.hasDiscount) {
+            subtotal = subtotal * 0.9; // 10% de descuento
+        }
+        
+        // Aplicar envío gratis si está desbloqueado
+        const shipping = promotions.hasFreeShipping ? 0 : costoEnvio;
+        let total = subtotal + shipping;
+        
         return total;
     };
 
     const getDescuentoMonto = () => {
-        if (!descuentoAplicado) return 0;
-        const subtotal = getTotalPrice() + costoEnvio;
-        return (subtotal * descuentoAplicado.porcentaje) / 100;
+        let descuentoTotal = 0;
+        
+        // Descuento por promoción (10%)
+        if (promotions.hasDiscount) {
+            descuentoTotal += getTotalPrice() * 0.1;
+        }
+        
+        // Descuento por código
+        if (descuentoAplicado) {
+            const subtotal = getTotalPrice() * (promotions.hasDiscount ? 0.9 : 1) + 
+                            (promotions.hasFreeShipping ? 0 : costoEnvio);
+            descuentoTotal += (subtotal * descuentoAplicado.porcentaje) / 100;
+        }
+        
+        return descuentoTotal;
     };
 
     const validarCodigoDescuento = async () => {
@@ -624,9 +654,32 @@ const Checkout = () => {
                             <span>Subtotal:</span>
                             <span>${getTotalPrice().toFixed(2)}</span>
                         </div>
+                        
+                        {/* Mostrar descuento por promoción */}
+                        {promotions.hasDiscount && (
+                            <div className="price-line" style={{ color: '#10b981' }}>
+                                <span>Descuento 10%:</span>
+                                <span>-${(getTotalPrice() * 0.1).toFixed(2)}</span>
+                            </div>
+                        )}
+                        
+                        {/* Mostrar caja de reloj */}
+                        {promotions.hasGiftBox && (
+                            <div className="price-line" style={{ color: '#10b981' }}>
+                                <span>Caja para Reloj:</span>
+                                <span>GRATIS</span>
+                            </div>
+                        )}
+                        
                         <div className="price-line">
                             <span>Envío:</span>
-                            <span>${costoEnvio.toFixed(2)}</span>
+                            <span>
+                                {promotions.hasFreeShipping ? (
+                                    <span style={{ color: '#10b981', fontWeight: '600' }}>GRATIS</span>
+                                ) : (
+                                    `$${costoEnvio.toFixed(2)}`
+                                )}
+                            </span>
                         </div>
                         
                         {/* Código de descuento */}
@@ -705,8 +758,8 @@ const Checkout = () => {
 
                         {descuentoAplicado && (
                             <div className="price-line" style={{ color: '#10b981' }}>
-                                <span>Descuento ({descuentoAplicado.porcentaje}%):</span>
-                                <span>-${getDescuentoMonto().toFixed(2)}</span>
+                                <span>Código {descuentoAplicado.codigo} ({descuentoAplicado.porcentaje}%):</span>
+                                <span>-${(getTotalPrice() * descuentoAplicado.porcentaje / 100).toFixed(2)}</span>
                             </div>
                         )}
                         

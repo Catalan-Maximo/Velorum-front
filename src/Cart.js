@@ -1,5 +1,5 @@
 // 🛒 **CART.JS** - COMPONENTE DEL CARRITO DE COMPRAS
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
@@ -18,12 +18,61 @@ function Cart() {
 
   const navigate = useNavigate();
 
+  // CONFIGURACIÓN DE NIVELES DE PROMOCIONES
+  const PROMO_LEVELS = [
+    { 
+      threshold: 50000, 
+      reward: 'Envío Gratis', 
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h5l3 3v5h-2m-4 0H2"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
+      type: 'shipping' 
+    },
+    { 
+      threshold: 100000, 
+      reward: '10% Descuento', 
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2"/><circle cx="16" cy="16" r="6"/><path d="M12 16h8"/></svg>,
+      type: 'discount', 
+      value: 10 
+    },
+    { 
+      threshold: 150000, 
+      reward: 'Caja para Reloj', 
+      icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>,
+      type: 'gift' 
+    }
+  ];
+
   // 🔐 VERIFICAR SI EL USUARIO ESTÁ LOGUEADO PARA MOSTRAR EL CARRITO
   const isUserLoggedIn = () => {
     const token = localStorage.getItem('token');
     const userInfo = localStorage.getItem('userInfo');
     return !!(token && userInfo);
   };
+
+  // 📊 CALCULAR ESTADO DE PROMOCIONES
+  const promoStatus = useMemo(() => {
+    const total = getTotalPrice();
+    const unlockedRewards = [];
+    let nextLevel = null;
+    let progress = 0;
+    const maxThreshold = PROMO_LEVELS[PROMO_LEVELS.length - 1].threshold;
+
+    for (let i = 0; i < PROMO_LEVELS.length; i++) {
+      const level = PROMO_LEVELS[i];
+      if (total >= level.threshold) {
+        unlockedRewards.push(level);
+      } else {
+        nextLevel = level;
+        break;
+      }
+    }
+
+    // Calcular progreso basado en el total de la barra completa
+    if (total > 0) {
+      progress = (total / maxThreshold) * 100;
+    }
+
+    return { unlockedRewards, nextLevel, progress, total };
+  }, [cartItems]);
 
   // Mantener montado para permitir animaciones de cierre/apertura
   const shouldRenderContent = isUserLoggedIn();
@@ -83,6 +132,46 @@ function Cart() {
             </button>
           </div>
         </div>
+        
+        {/* 🎁 BARRA DE PROMOCIONES PROGRESIVAS */}
+        {cartItems.length > 0 && (
+          <div className="promo-progress-container">
+            <div className="promo-header">
+              <span className="promo-title">Beneficios Desbloqueables</span>
+              {promoStatus.nextLevel && (
+                <span className="promo-remaining">
+                  Faltan ${(promoStatus.nextLevel.threshold - promoStatus.total).toFixed(0)} para {promoStatus.nextLevel.reward}
+                </span>
+              )}
+              {!promoStatus.nextLevel && promoStatus.total > 0 && (
+                <span className="promo-completed">¡Todos los beneficios desbloqueados!</span>
+              )}
+            </div>
+            
+            <div className="promo-bar-wrapper">
+              <div className="promo-bar-track">
+                <div 
+                  className="promo-bar-fill" 
+                  style={{ width: `${Math.min(promoStatus.progress, 100)}%` }}
+                />
+                {PROMO_LEVELS.map((level, index) => {
+                  const position = (level.threshold / PROMO_LEVELS[PROMO_LEVELS.length - 1].threshold) * 100;
+                  const isUnlocked = promoStatus.total >= level.threshold;
+                  return (
+                    <div 
+                      key={index}
+                      className={`promo-milestone ${isUnlocked ? 'unlocked' : ''}`}
+                      style={{ left: `${position}%` }}
+                      title={`${level.reward} - $${level.threshold}`}
+                    >
+                      <span className="milestone-icon">{level.icon}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
   <div className="cart-content">
           {cartItems.length === 0 ? (
             <div className="cart-empty modern-empty">
@@ -131,11 +220,72 @@ function Cart() {
                     </div>
                   </div>
                 )})}
+                
+                {/* Agregar caja de reloj como item cuando se desbloquea */}
+                {promoStatus.unlockedRewards.find(r => r.type === 'gift') && (
+                  <div className="cart-item modern promo-gift-item">
+                    <div className="cart-item-image gift-box">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 12v10H4V12"/>
+                        <path d="M22 7H2v5h20V7z"/>
+                        <path d="M12 22V7"/>
+                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                      </svg>
+                    </div>
+                    <div className="cart-item-info">
+                      <h4>Caja para Reloj</h4>
+                      <p className="cart-item-category">Regalo desbloqueado</p>
+                      <p className="cart-item-price promo-free">GRATIS</p>
+                    </div>
+                    <div className="cart-item-actions">
+                      <div className="promo-badge-lock">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                          <path d="M2 17l10 5 10-5"/>
+                          <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="cart-summary modern">
                 <div className="summary-totals">
                   <div className="row"><span className="lbl">Artículos</span><span className="val">{getTotalItems()}</span></div>
-                  <div className="row total"><span className="lbl">Total</span><span className="val">${getTotalPrice().toFixed(2)}</span></div>
+                  <div className="row"><span className="lbl">Subtotal</span><span className="val">${getTotalPrice().toFixed(2)}</span></div>
+                  
+                  {/* Mostrar descuento si está desbloqueado */}
+                  {promoStatus.unlockedRewards.find(r => r.type === 'discount') && (
+                    <div className="row discount">
+                      <span className="lbl">Descuento 10%</span>
+                      <span className="val">-${(getTotalPrice() * 0.10).toFixed(2)}</span>
+                    </div>
+                  )}
+                  
+                  {/* Mostrar envío */}
+                  {promoStatus.unlockedRewards.find(r => r.type === 'shipping') ? (
+                    <div className="row shipping-free">
+                      <span className="lbl">Envío</span>
+                      <span className="val free">GRATIS</span>
+                    </div>
+                  ) : (
+                    <div className="row"><span className="lbl">Envío</span><span className="val">A calcular</span></div>
+                  )}
+                  
+                  <div className="row total">
+                    <span className="lbl">Total</span>
+                    <span className="val">
+                      ${(() => {
+                        let finalTotal = getTotalPrice();
+                        const discountReward = promoStatus.unlockedRewards.find(r => r.type === 'discount');
+                        if (discountReward) {
+                          finalTotal = finalTotal * (1 - discountReward.value / 100);
+                        }
+                        return finalTotal.toFixed(2);
+                      })()}
+                    </span>
+                  </div>
                 </div>
                 <div className="summary-actions">
                   <button className="summary-btn ghost" onClick={handleContinueShopping}>Seguir Comprando</button>

@@ -147,6 +147,18 @@ export const CartProvider = ({ children }) => {
     setIsCartOpen(!isCartOpen);
   };
 
+  // 🎁 FUNCIÓN PARA CALCULAR PROMOCIONES DESBLOQUEADAS
+  const getUnlockedPromotions = () => {
+    const total = getTotalPrice();
+    const promotions = {
+      hasDiscount: total >= 100000,
+      hasFreeShipping: total >= 50000,
+      hasGiftBox: total >= 150000,
+      discountPercentage: total >= 100000 ? 10 : 0
+    };
+    return promotions;
+  };
+
   const value = {
     cartItems,
     isCartOpen,
@@ -159,7 +171,8 @@ export const CartProvider = ({ children }) => {
     isInCart,
     getItemQuantity,
     toggleCart,
-    setIsCartOpen
+    setIsCartOpen,
+    getUnlockedPromotions
   };
 
   return (
