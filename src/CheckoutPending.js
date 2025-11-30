@@ -1,9 +1,70 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './CheckoutResult.css';
 
 function CheckoutPending() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [isValid, setIsValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const validateCheckoutAccess = async () => {
+            const token = searchParams.get('token');
+            const orderId = searchParams.get('order');
+
+            // Si no hay token u order_id, redirigir
+            if (!token || !orderId) {
+                console.log('❌ No token or order ID provided');
+                navigate('/');
+                return;
+            }
+
+            try {
+                // Llamar al endpoint de validación
+                const response = await fetch(`http://localhost:8000/api/market/validate-checkout/?token=${token}&order=${orderId}`);
+                const data = await response.json();
+
+                if (data.valid) {
+                    setIsValid(true);
+                } else {
+                    console.log('❌ Invalid token:', data.error);
+                    navigate('/');
+                }
+            } catch (error) {
+                console.error('❌ Error validating checkout:', error);
+                navigate('/');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        validateCheckoutAccess();
+    }, [searchParams, navigate]);
+
+    // Mostrar loading mientras valida
+    if (isLoading) {
+        return (
+            <div className="checkout-result-container">
+                <div className="result-card">
+                    <div className="result-icon">
+                        <div className="pending-circle">
+                            <div className="clock-icon">⏳</div>
+                        </div>
+                    </div>
+                    <h1>Validando Pago...</h1>
+                    <p className="result-message">
+                        Estamos verificando tu pago. Por favor, esperá un momento.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
+    // Si no es válido, no debería llegar aquí (ya redirigió)
+    if (!isValid) {
+        return null;
+    }
 
     return (
         <div className="checkout-result-container">
