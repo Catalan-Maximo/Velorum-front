@@ -832,8 +832,7 @@ ul {
   }
   
   /* 👤 Agregar icono de usuario con CSS (si no hay SVG) */
-  .user-text-btn::before {
-    content: "👤";                      /* 📏 Icono de usuario */
+  .user-text-btn::before {                      /* 📏 Icono de usuario */
     font-size: 16px;
     line-height: 1;
   }

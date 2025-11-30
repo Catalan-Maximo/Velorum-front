@@ -1427,3 +1427,42 @@ body::after {
   .products-carousel .product-card-new { flex:0 0 88%; }
   .hero-description { font-size:17.5px; }
 }
+
+/* 📱 OCULTAR IMAGEN DEL RELOJ EN MÓVIL */
+@media (max-width: 768px) {
+  .hero-watch-image {
+    display: none;
+  }
+  
+  .watch-showcase {
+    display: none;
+  }
+  
+  .hero-visual {
+    display: none;
+  }
+  
+  /* Centrar el texto del hero en móvil */
+  .hero-text {
+    text-align: center;
+    padding-right: 0;
+    max-width: 100%;
+  }
+  
+  /* Hero container en una columna */
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  /* Centrar botones */
+  .action-buttons {
+    justify-content: center;
+  }
+  
+  /* Mantener el mismo overlay/filtro del video que en PC */
+  .hero-minimal::after {
+    background: #09101A;
+    opacity: 0.9;
+  }
+}
