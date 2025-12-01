@@ -10,6 +10,17 @@ function CheckoutSuccess() {
     const [orderData, setOrderData] = useState(null);
 
     useEffect(() => {
+        console.log('🔍 URL COMPLETA:', window.location.href);
+        console.log('🔍 SEARCH PARAMS:', window.location.search);
+        console.log('🔍 HASH:', window.location.hash);
+        
+        const searchParams = new URLSearchParams(window.location.search);
+        
+        // Ver TODOS los parámetros que llegaron
+        for (let [key, value] of searchParams.entries()) {
+            console.log(`   ${key}: ${value}`);
+        }
+        
         const validateCheckoutAccess = async () => {
             // Obtener parámetros que Mercado Pago agrega automáticamente
             const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
