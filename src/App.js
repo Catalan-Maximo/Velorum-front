@@ -253,6 +253,12 @@ function AppContent() {
                   className="user-text-btn"
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                 >
+                  <img 
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik04IDdhNCA0IDAgMSAwIDggMGE0IDQgMCAwIDAtOCAwTTYgMjF2LTJhNCA0IDAgMCAxIDQtNGg0YTQgNCAwIDAgMSA0IDR2MiIvPjwvc3ZnPg=="
+                    alt="User"
+                    width="20"
+                    height="20"
+                  />
                   <span className="user-name">
                     {user?.first_name || user?.username || 'Usuario'}
                   </span>
@@ -307,8 +313,7 @@ function AppContent() {
               >
                 {isMobile ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5z" />
-                    <path d="M3.9 20.4c1.8-3.1 5.1-5.1 8.6-5.1s6.8 2 8.6 5.1" />
+                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" />
                   </svg>
                 ) : 'Iniciar sesión'}
               </button>
@@ -352,9 +357,6 @@ function AppContent() {
       {isMobile && mobileMenuOpen && (
         <div className="mobile-menu-overlay" role="dialog" aria-modal="true">
           <div className="mobile-menu-panel">
-            <div className="mobile-search">
-              <SearchBar />
-            </div>
             <nav className="mobile-menu-nav">
               <button className="mobile-link" onClick={() => navigateAndClose('/')}>INICIO</button>
               <button className="mobile-link" onClick={() => navigateAndClose('/about')}>ACERCA DE</button>

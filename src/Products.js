@@ -20,6 +20,7 @@ function Products() {
   const [busqueda, setBusqueda] = useState('');
   const [ordenamiento, setOrdenamiento] = useState('destacados');
   const [paginaActual, setPaginaActual] = useState(1);
+  const [filtrosAbiertos, setFiltrosAbiertos] = useState(false);
   const PRODUCTOS_POR_PAGINA = 12;
 
   // Calcular rango de precios cuando cambien los productos
@@ -136,8 +137,22 @@ function Products() {
 
       {/* CONTENEDOR PRINCIPAL */}
       <div className="products-container">
+        {/* BOTÓN DESPLEGABLE DE FILTROS (solo móvil) */}
+        <button className="filters-toggle-btn" onClick={() => setFiltrosAbiertos(!filtrosAbiertos)}>
+          <span>Filtros</span>
+          <svg 
+            className={`filters-toggle-icon ${filtrosAbiertos ? 'open' : ''}`}
+            width="16" 
+            height="16" 
+            viewBox="0 0 16 16" 
+            fill="none"
+          >
+            <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
         {/* FILTROS LATERALES */}
-        <aside className="products-filters">
+        <aside className={`products-filters ${filtrosAbiertos ? 'open' : ''}`}>
           <div className="filters-content">
             <div className="filters-header">
               <h3>Filtros</h3>
