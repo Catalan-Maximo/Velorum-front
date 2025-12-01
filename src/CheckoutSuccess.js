@@ -125,9 +125,6 @@ function CheckoutSuccess() {
                 
                 <div className="result-info">
                     <p>
-                        📧 Recibirás un correo electrónico con los detalles de tu pedido.
-                    </p>
-                    <p>
                         📦 Puedes seguir el estado de tu pedido en la sección "Mis Pedidos".
                     </p>
                 </div>
