@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { API_BASE_URL } from './services';
 import './CheckoutResult.css';
 
 function CheckoutSuccess() {
@@ -37,7 +38,7 @@ function CheckoutSuccess() {
             try {
                 // Pasar todos los parámetros de MP al backend
                 const queryString = window.location.search;
-                const response = await fetch(`http://localhost:8000/api/market/validate-checkout/${queryString}`);
+                const response = await fetch(`${API_BASE_URL}/market/validate-checkout/${queryString}`);
                 const data = await response.json();
 
                 if (data.valid) {
