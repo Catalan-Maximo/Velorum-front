@@ -86,9 +86,6 @@ function CheckoutPending() {
                 
                 <div className="result-info">
                     <p>
-                        📧 Recibirás un correo electrónico cuando se confirme tu pago.
-                    </p>
-                    <p>
                         ⏰ Este proceso puede demorar entre 24 y 48 horas hábiles.
                     </p>
                     <p>
