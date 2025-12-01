@@ -10,25 +10,28 @@ function CheckoutFailure() {
 
     useEffect(() => {
         const validateCheckoutAccess = async () => {
-            const token = searchParams.get('token');
-            const orderId = searchParams.get('order');
+            // Obtener parámetros que Mercado Pago agrega automáticamente
+            const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
+            const externalRef = searchParams.get('external_reference');
+            const preferenceId = searchParams.get('preference_id');
 
-            // Si no hay token u order_id, redirigir
-            if (!token || !orderId) {
-                console.log('❌ No token or order ID provided');
+            // Si no hay parámetros de MP, es acceso directo no autorizado
+            if (!paymentId && !preferenceId) {
+                console.log('❌ No MP parameters - unauthorized access');
                 navigate('/');
                 return;
             }
 
             try {
-                // Llamar al endpoint de validación
-                const response = await fetch(`http://localhost:8000/api/market/validate-checkout/?token=${token}&order=${orderId}`);
+                // Pasar todos los parámetros de MP al backend
+                const queryString = window.location.search;
+                const response = await fetch(`http://localhost:8000/api/market/validate-checkout/${queryString}`);
                 const data = await response.json();
 
                 if (data.valid) {
                     setIsValid(true);
                 } else {
-                    console.log('❌ Invalid token:', data.error);
+                    console.log('❌ Invalid access:', data.error);
                     navigate('/');
                 }
             } catch (error) {
