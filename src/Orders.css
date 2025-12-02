@@ -11,7 +11,13 @@
 }
 
 .orders-panel { font-family:'Poppins',sans-serif; background:#ffffff; color:var(--text); }
-.orders-container { max-width:1400px; margin:0 auto; padding:40px 20px; min-height:100vh; }
+.orders-container { 
+	max-width:1400px; 
+	margin:0 auto; 
+	padding:40px 20px; 
+	min-height:100vh; 
+	margin-top: 60px; /* Adjust orders page to start below navbar */
+}
 .flash-msg { position:fixed; top:20px; right:20px; background:#111; color:#fff; padding:14px 20px; border-radius:14px; font-size:.75rem; font-weight:600; letter-spacing:.5px; box-shadow:0 10px 30px -12px rgba(0,0,0,.4); z-index:1500; animation:fadeIn .3s ease; }
 .flash-msg.success { background:#0f6a2e; }
 .flash-msg.error { background:#b40000; }

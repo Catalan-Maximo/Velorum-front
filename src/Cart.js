@@ -125,18 +125,20 @@ function Cart() {
         {/* 🎁 BARRA DE PROMOCIONES PROGRESIVAS */}
         {cartItems.length > 0 && (
           <div className="promo-progress-container">
-            <div className="promo-header">
+            <div className="promo-header" style={{ marginBottom: '30px' }}>
               <span className="promo-title">Beneficios Desbloqueables</span>
               {promoStatus.nextLevel && (
-                <span className="promo-remaining">
+                <span className="promo-remaining" style={{ fontSize: '0.53rem' }}>
                   Faltan ${(promoStatus.nextLevel.threshold - promoStatus.total).toFixed(0)} para {promoStatus.nextLevel.reward}
                 </span>
               )}
               {!promoStatus.nextLevel && promoStatus.total > 0 && (
-                <span className="promo-completed">¡Todos los beneficios desbloqueados!</span>
+                <span className="promo-completed" style={{ fontSize: '0.53rem' }}>
+                  ¡Todos los beneficios desbloqueados!
+                </span>
               )}
             </div>
-            
+
             <div className="promo-bar-wrapper">
               <div className="promo-bar-track">
                 <div 

@@ -184,16 +184,10 @@ function About() {
                 className="btn-primary contact-main-btn"
                 aria-label="Enviar correo a Velorum"
                 onClick={() => {
-                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=joakobengolea5@gmail.com&su=Consulta%20Velorum','_blank');
+                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=velorum.oficial@gmail.com&su=Consulta%20Velorum','_blank');
                 }}
               >
                 CONTÁCTANOS
-              </button>
-              <button
-                className="btn-secondary contact-secondary-btn"
-                onClick={() => navigate('/products')}
-              >
-                Ver Colección
               </button>
             </div>
           </div>

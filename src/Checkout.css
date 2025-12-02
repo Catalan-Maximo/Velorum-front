@@ -52,8 +52,8 @@
 .btn-primary,.btn-secondary,.btn-success { padding:16px 30px 17px; border:none; border-radius:18px; font-size:14px; font-weight:600; cursor:pointer; transition:.35s; font-family:inherit; letter-spacing:.5px; position:relative; overflow:hidden; min-width:140px; }
 .btn-primary { background:linear-gradient(135deg,#0f172a,#334155); color:#fff; box-shadow:0 10px 32px -8px rgba(15,23,42,.45); }
 .btn-primary:hover:not(:disabled) { filter:brightness(1.07); transform:translateY(-3px); }
-.btn-secondary { background:#fff; color:#0f172a; border:1px solid #c9a646; box-shadow:0 4px 18px -8px rgba(201,166,70,.4); }
-.btn-secondary:hover:not(:disabled) { background:linear-gradient(135deg,#e3ce8a,#c9a646); color:#1a1200; }
+.btn-secondary { background:#fff; color:#0f172a; border:1px solid #c9a646; }
+.btn-secondary:hover:not(:disabled) { background:#fff; color:#0f172a; }
 .btn-success { background:linear-gradient(135deg,#e3ce8a,#c9a646 55%,#b28b24); color:#1a1200; box-shadow:0 10px 34px -10px rgba(201,166,70,.55); }
 .btn-success:hover:not(:disabled) { filter:brightness(1.07); transform:translateY(-3px); }
 .btn-primary:disabled,.btn-secondary:disabled,.btn-success:disabled { opacity:.55; cursor:not-allowed; transform:none; }

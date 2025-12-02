@@ -788,6 +788,21 @@ ul {
     font-size: 10px !important;
   }
   
+  /* 👤 ICONO DEL USUARIO EN MÓVIL - REDUCIDO */
+  .user-text-btn img {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .user-text-btn .user-name {
+    font-size: 12px !important;
+  }
+  
+  .user-text-btn .dropdown-arrow {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
   /* 🍔 Menú hamburguesa visible en móvil - SOLO LAS RAYITAS */
   .navbar-burger { 
     display: flex; 
