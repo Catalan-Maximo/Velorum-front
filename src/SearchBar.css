@@ -7,6 +7,8 @@
   max-width: clamp(180px, 25vw, 400px);  /* 📏 Ancho fluido: entre 180px y 400px, ajustado al viewport */
   min-width: 150px;                      /* 📏 Ancho mínimo absoluto */
   flex: 1 1 auto;                        /* 📏 Flexible y adaptable */
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* 📝 CONTENEDOR DEL INPUT */

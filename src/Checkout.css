@@ -1,6 +1,15 @@
 /* === Modern Checkout Redesign (Golden / Dark Aesthetic) === */
 
-.checkout-container { max-width:1500px; margin:0 auto; padding:70px 3% 120px; font-family:'Montserrat',sans-serif; position:relative; }
+.checkout-container { 
+  max-width: 1500px; 
+  width: 100%;
+  margin: 0 auto; 
+  padding: 70px 3% 120px; 
+  font-family: 'Montserrat', sans-serif; 
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
 .checkout-container:before { content:""; position:absolute; inset:0; background:linear-gradient(135deg,#ffffff 0%,#f7f9fb 55%,#eef2f6 100%); z-index:-1; }
 
 .checkout-header { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:30px; margin-bottom:50px; }

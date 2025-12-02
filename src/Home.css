@@ -19,6 +19,8 @@ body {
   color: #0f172a;
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
   min-height: 100vh;
   position: relative;
 }
@@ -60,14 +62,22 @@ body::after {
 /* 🎨 HOME CONTAINER MINIMALISTA - MÁS CLARO */
 .home-minimal {
   padding-top: 0;
+  width: 100%;
+  max-width: 100vw;
   background: 
     linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 250, 252, 0.97) 100%);
   position: relative;
   backdrop-filter: blur(3px); /* Reducido aún más para mayor claridad */
+  box-sizing: border-box;
 }
 
 /* Evita que algún contenedor cree scroll horizontal oculto */
-.home-minimal, .hero-minimal, .featured-minimal, .categories-section { overflow-x:hidden; }
+.home-minimal, .hero-minimal, .featured-minimal, .categories-section { 
+  overflow-x: hidden; 
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
 
 /* 🎭 HERO SECTION MINIMALISTA - AJUSTADO */
 .hero-minimal {
