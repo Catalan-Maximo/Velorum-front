@@ -118,36 +118,29 @@ const Checkout = () => {
         return { zona, costo, estimado };
     };
 
-    // Verificar autenticación al cargar
+    // Cargar datos del usuario si está autenticado (NO forzar login aquí)
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const userInfo = localStorage.getItem('userInfo');
 
-        if (!token || !userInfo) {
-            navigate('/login');
-            return;
-        }
-
-        // Evitar redirigir automáticamente a /products en casos donde el carrito
-        // pueda vaciarse temporalmente durante el envío del pedido (race condition).
-        // Solo redirigir si el carrito está vacío y no estamos procesando/mostrando
-        // confirmación de transferencia.
+        // Redirigir solo si el carrito está vacío
         if (cartItems.length === 0 && !loading && !transferModalOpen && !createdOrderId) {
             navigate('/products');
             return;
         }
 
-        // Autocompletar con datos del usuario
-        try {
-            const user = JSON.parse(userInfo);
-            setCustomerData({
-                nombre: user.first_name || '',
-                apellido: user.last_name || '',
-                email: user.email || '',
-                telefono_contacto: user.phone || ''
-            });
-        } catch (error) {
-            console.error('Error parsing user info:', error);
+        // Autocompletar con datos del usuario SI está autenticado
+        if (userInfo) {
+            try {
+                const user = JSON.parse(userInfo);
+                setCustomerData({
+                    nombre: user.first_name || '',
+                    apellido: user.last_name || '',
+                    email: user.email || '',
+                    telefono_contacto: user.phone || ''
+                });
+            } catch (error) {
+                console.error('Error parsing user info:', error);
+            }
         }
     }, [cartItems.length, navigate, loading, transferModalOpen, createdOrderId]);
 
@@ -202,6 +195,19 @@ const Checkout = () => {
 
     // Procesar orden y redirigir a Mercado Pago
     const processOrderAndRedirectToMP = async () => {
+        // 🔐 VERIFICAR AUTENTICACIÓN antes de procesar el pago
+        const token = localStorage.getItem('token');
+        const userInfo = localStorage.getItem('userInfo');
+        
+        if (!token || !userInfo) {
+            // Usuario no autenticado, redirigir al login
+            // El carrito se mantendrá en localStorage y se recuperará después del login
+            console.log('🔒 Usuario no autenticado, redirigiendo al login...');
+            alert('Debes iniciar sesión para completar tu compra. Tu carrito se mantendrá guardado.');
+            navigate('/login');
+            return;
+        }
+
         setLoading(true);
         setError('');
 

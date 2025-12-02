@@ -1,5 +1,5 @@
 // 🛒 **CART.JS** - COMPONENTE DEL CARRITO DE COMPRAS
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useCart } from './CartContext';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
@@ -17,6 +17,7 @@ function Cart() {
   } = useCart();
 
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // CONFIGURACIÓN DE NIVELES DE PROMOCIONES
   const PROMO_LEVELS = [
@@ -40,13 +41,6 @@ function Cart() {
       type: 'gift' 
     }
   ];
-
-  // 🔐 VERIFICAR SI EL USUARIO ESTÁ LOGUEADO PARA MOSTRAR EL CARRITO
-  const isUserLoggedIn = () => {
-    const token = localStorage.getItem('token');
-    const userInfo = localStorage.getItem('userInfo');
-    return !!(token && userInfo);
-  };
 
   // 📊 CALCULAR ESTADO DE PROMOCIONES
   const promoStatus = useMemo(() => {
@@ -74,18 +68,13 @@ function Cart() {
     return { unlockedRewards, nextLevel, progress, total };
   }, [cartItems]);
 
-  // Mantener montado para permitir animaciones de cierre/apertura
-  const shouldRenderContent = isUserLoggedIn();
-
   const handleCheckout = () => {
     // 🔐 VERIFICAR SI EL USUARIO ESTÁ LOGUEADO
     const token = localStorage.getItem('token');
     const userInfo = localStorage.getItem('userInfo');
     
     if (!token || !userInfo) {
-      alert('⚠️ Debes iniciar sesión para finalizar la compra');
-      setIsCartOpen(false);
-      navigate('/login');
+      setShowLoginModal(true);
       return;
     }
     
@@ -100,6 +89,12 @@ function Cart() {
     navigate('/checkout');
   };
 
+  const handleLoginRedirect = () => {
+    setShowLoginModal(false);
+    setIsCartOpen(false);
+    navigate('/login');
+  };
+
   const handleContinueShopping = () => {
     setIsCartOpen(false);
     navigate('/products');
@@ -109,12 +104,6 @@ function Cart() {
     <>
       {isCartOpen && <div className="cart-overlay" onClick={() => setIsCartOpen(false)} />}
       <div className={`cart-sidebar modern ${isCartOpen ? 'open' : ''}`}>        
-        {!shouldRenderContent && (
-          <div style={{padding:'40px'}}>
-            <p style={{margin:0}}>Inicia sesión para ver el carrito.</p>
-          </div>
-        )}
-        {shouldRenderContent && (<>
         <div className="cart-header enhanced">
           <div className="cart-title-block">
             <h2>Mi Carrito</h2>
@@ -295,8 +284,35 @@ function Cart() {
             </>
           )}
   </div>
-  </>) }
       </div>
+
+      {/* 🔐 MODAL DE LOGIN REQUERIDO */}
+      {showLoginModal && (
+        <>
+          <div className="cart-overlay" style={{zIndex: 10001}} onClick={() => setShowLoginModal(false)} />
+          <div className="login-required-modal">
+            <div className="modal-content">
+              <div className="modal-icon">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                  <polyline points="10 17 15 12 10 7"/>
+                  <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+              </div>
+              <h3>Inicia Sesión para Continuar</h3>
+              <p>Para finalizar tu compra necesitas tener una cuenta. Tu carrito se mantendrá guardado.</p>
+              <div className="modal-actions">
+                <button className="modal-btn primary" onClick={handleLoginRedirect}>
+                  Ir a Iniciar Sesión
+                </button>
+                <button className="modal-btn secondary" onClick={() => setShowLoginModal(false)}>
+                  Seguir Comprando
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

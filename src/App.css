@@ -234,8 +234,11 @@ ul {
 .modern-navbar {
   background-color: #09101A; /* Cambiar el color de la navbar */
   border-bottom: 1px solid var(--border-color);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
   padding: 0;
   color: #D99909; /* Cambiar color de la tipografía de la navbar */
@@ -773,6 +776,18 @@ ul {
 @media (max-width: 768px) {
   .navbar-left { display: none; }
   
+  /* 🛒 ICONO DEL CARRITO EN MÓVIL - REDUCIDO */
+  .navbar-cart-mobile svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .navbar-cart-mobile span {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 10px !important;
+  }
+  
   /* 🍔 Menú hamburguesa visible en móvil - SOLO LAS RAYITAS */
   .navbar-burger { 
     display: flex; 
@@ -919,6 +934,7 @@ ul {
 /* ⚠️ ESTILOS DE REACT POR DEFECTO */
 .App {
   text-align: center;
+  padding-top: 78px; /* Compensar altura de la navbar fija */
 }
 
 .App-logo {

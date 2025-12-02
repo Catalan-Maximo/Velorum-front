@@ -15,23 +15,74 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // � FUNCIÓN PARA OBTENER LA CLAVE DE USUARIO
+  // 📊 FUNCIÓN PARA OBTENER LA CLAVE DE USUARIO
   const getUserCartKey = () => {
     const userInfo = localStorage.getItem('userInfo');
     if (userInfo) {
-      const user = JSON.parse(userInfo);
-      return `cart_${user.id || user.username || 'guest'}`;
+      try {
+        const user = JSON.parse(userInfo);
+        return `cart_${user.id || user.username}`;
+      } catch (error) {
+        console.error('Error parsing userInfo:', error);
+      }
     }
     return 'cart_guest'; // Para usuarios no logueados
   };
 
-  // �🔄 CARGAR CARRITO DESDE LOCALSTORAGE AL INICIAR
+  // 🔄 MIGRAR CARRITO DE GUEST A USUARIO AUTENTICADO
+  const migrateGuestCartToUser = () => {
+    const guestCart = localStorage.getItem('cart_guest');
+    if (guestCart) {
+      try {
+        const guestItems = JSON.parse(guestCart);
+        if (guestItems.length > 0) {
+          console.log('🛒 Migrando carrito guest a usuario autenticado:', guestItems);
+          
+          const userCartKey = getUserCartKey();
+          const existingUserCart = localStorage.getItem(userCartKey);
+          
+          if (existingUserCart) {
+            // Combinar carritos: agregar items guest al carrito existente del usuario
+            const existingItems = JSON.parse(existingUserCart);
+            const mergedItems = [...existingItems];
+            
+            guestItems.forEach(guestItem => {
+              const existingIndex = mergedItems.findIndex(item => item.id === guestItem.id);
+              if (existingIndex >= 0) {
+                // Si el producto ya existe, sumar las cantidades
+                mergedItems[existingIndex].quantity += guestItem.quantity;
+              } else {
+                // Si no existe, agregarlo
+                mergedItems.push(guestItem);
+              }
+            });
+            
+            setCartItems(mergedItems);
+            localStorage.setItem(userCartKey, JSON.stringify(mergedItems));
+          } else {
+            // No hay carrito de usuario, usar el guest directamente
+            setCartItems(guestItems);
+            localStorage.setItem(userCartKey, guestCart);
+          }
+          
+          // Limpiar carrito guest después de migrar
+          localStorage.removeItem('cart_guest');
+          console.log('✅ Carrito migrado exitosamente');
+        }
+      } catch (error) {
+        console.error('Error al migrar carrito:', error);
+      }
+    }
+  };
+
+  // 🔄 CARGAR CARRITO DESDE LOCALSTORAGE AL INICIAR
   useEffect(() => {
     const cartKey = getUserCartKey();
     const savedCart = localStorage.getItem(cartKey);
     if (savedCart) {
       try {
         setCartItems(JSON.parse(savedCart));
+        console.log('🛒 Carrito cargado:', cartKey);
       } catch (error) {
         console.error('Error al cargar carrito:', error);
         setCartItems([]);
@@ -41,6 +92,12 @@ export const CartProvider = ({ children }) => {
 
   // 🔄 ESCUCHAR CAMBIOS DE USUARIO (LOGIN/LOGOUT)
   useEffect(() => {
+    const handleUserLoggedIn = () => {
+      console.log('👤 Usuario inició sesión, migrando carrito...');
+      // Migrar carrito de guest a usuario
+      migrateGuestCartToUser();
+    };
+
     const handleStorageChange = () => {
       const cartKey = getUserCartKey();
       const savedCart = localStorage.getItem(cartKey);
@@ -50,24 +107,26 @@ export const CartProvider = ({ children }) => {
         } catch (error) {
           setCartItems([]);
         }
-      } else {
-        setCartItems([]); // Limpiar carrito si no hay datos para este usuario
       }
     };
 
     const handleUserLoggedOut = () => {
-      // 🧹 LIMPIAR CARRITO COMPLETAMENTE AL CERRAR SESIÓN
+      console.log('👋 Usuario cerró sesión, limpiando carrito...');
+      // Al cerrar sesión, volver al carrito guest vacío
       setCartItems([]);
       setIsCartOpen(false);
+      localStorage.removeItem('cart_guest'); // Limpiar carrito guest también
     };
 
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('userChanged', handleStorageChange);
+    window.addEventListener('userLoggedIn', handleUserLoggedIn);
     window.addEventListener('userLoggedOut', handleUserLoggedOut);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('userChanged', handleStorageChange);
+      window.removeEventListener('userLoggedIn', handleUserLoggedIn);
       window.removeEventListener('userLoggedOut', handleUserLoggedOut);
     };
   }, []);
