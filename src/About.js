@@ -12,7 +12,7 @@ function About() {
         <div className="hero-content">
           <h1 className="hero-title">Acerca de Velorum</h1>
           <p className="hero-subtitle">
-            Curamos y vendemos relojes de alta calidad seleccionados por su rendimiento y estilo
+            Vendemos relojes de alta calidad seleccionados por su rendimiento y estilo
           </p>
         </div>
       </section>
