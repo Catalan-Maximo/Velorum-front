@@ -159,14 +159,6 @@ function ProductDetail() {
           <div className="product-header">
             {product.categoria && <span className="product-badge">{typeof product.categoria === 'object' ? product.categoria.nombre : product.categoria}</span>}
             <h1 className="product-title">{product.nombre}</h1>
-            <div className="product-meta">
-              <div className="rating">
-                <span className="rating-stars">⭐⭐⭐⭐⭐</span>
-                <span className="rating-value">5.0</span>
-                <span className="rating-count">(Nuevo)</span>
-              </div>
-              <div className="category-badge">{typeof product.categoria === 'object' ? product.categoria.nombre : (product.categoria || 'Relojes')}</div>
-            </div>
           </div>
 
           {/* 💰 PRECIO */}

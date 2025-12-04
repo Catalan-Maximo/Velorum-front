@@ -250,6 +250,23 @@
   flex-wrap: wrap;
 }
 
+/* 🎨 NAVBAR ESTILOS */
+.navbar {
+  background-color: var(--bg-primary);
+  color: rgba(255, 255, 255, 0.85); /* Blanco suave */
+}
+
+.navbar a,
+.navbar i {
+  color: rgba(255, 255, 255, 0.85); /* Blanco suave */
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover,
+.navbar i:hover {
+  color: rgba(255, 255, 255, 1); /* Blanco más intenso al pasar el mouse */
+}
+
 /* 📱 RESPONSIVE */
 @media (max-width: 768px) {
   /* Hero más compacto */

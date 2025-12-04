@@ -290,9 +290,6 @@ function Products() {
               </div>
               
               <div className="product-info">
-                <div className="product-rating">
-                  <span className="stars">★★★★★</span>
-                </div>
                 <h3>{product.name}</h3>
                 {product.description && (
                   <p 

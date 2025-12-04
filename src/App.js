@@ -99,7 +99,7 @@ function AppContent() {
             <p>Tenés hasta <strong>30 días corridos</strong> desde la recepción para solicitar devolución o cambio.</p>
             <ol style={{lineHeight:'1.6'}}>
               <li>El producto debe estar sin uso, con films, etiquetas y embalaje original.</li>
-              <li>Escribinos a <a href="mailto:joakobengolea5@gmail.com">joakobengolea5@gmail.com</a> con asunto: DEVOLUCIÓN + Nº de pedido.</li>
+              <li>Escribinos a <a href="mailto:velorum.oficial@gmail.com">velorum.oficial@gmail.com</a> con asunto: DEVOLUCIÓN + Nº de pedido.</li>
               <li>Te enviamos etiqueta / coordinamos retiro. Una vez recibido y controlado emitimos reintegro (hasta 7 días hábiles).</li>
             </ol>
             <p style={{fontSize:'0.85rem',opacity:.8}}>Productos personalizados o con signos de manipulación indebida quedan excluidos.</p>
@@ -109,7 +109,7 @@ function AppContent() {
         return (
           <div>
             <h2>Carreras</h2>
-            <p>Próximamente publicaremos oportunidades para sumarte al equipo Velorum (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:joakobengolea5@gmail.com?subject=CV%20Velorum">joakobengolea5@gmail.com</a>.</p>
+            <p>Próximamente publicaremos oportunidades para sumarte al equipo Velorum (áreas: producto, marketing, e‑commerce y atención). Mandanos CV espontáneo a <a href="mailto:velorum.oficial@gmail.com?subject=CV%20Velorum">velorum.oficial@gmail.com</a>.</p>
           </div>
         );
       default:
@@ -196,13 +196,41 @@ function AppContent() {
         <div className="navbar-container">
           {isMobile && (
             <button
-              aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-              className={"navbar-burger" + (mobileMenuOpen ? ' open' : '')}
-              onClick={() => setMobileMenuOpen(o => !o)}
+              aria-label="Abrir carrito"
+              className="navbar-cart-mobile"
+              onClick={toggleCart}
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '8px',
+                color: '#D3D3CE'
+              }}
             >
-              <span />
-              <span />
-              <span />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="9" cy="21" r="1"/>
+                <circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+              </svg>
+              {getTotalItems() > 0 && (
+                <span style={{
+                  background: '#c9a646',
+                  color: '#1a1200',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '11px',
+                  fontWeight: '600'
+                }}>
+                  {getTotalItems()}
+                </span>
+              )}
             </button>
           )}
           {/* 📍 SECCIÓN IZQUIERDA - Enlaces de navegación */}
@@ -254,7 +282,7 @@ function AppContent() {
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                 >
                   <img 
-                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik04IDdhNCA0IDAgMSAwIDggMGE0IDQgMCAwIDAtOCAwTTYgMjF2LTJhNCA0IDAgMCAxIDQtNGg0YTQgNCAwIDAgMSA0IDR2MiIvPjwvc3ZnPg=="
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik0xMiAyYTUgNSAwIDEgMCA1IDVhNSA1IDAgMCAwLTUtNW0wIDhhMyAzIDAgMSAxIDMtM2EzIDMgMCAwIDEtMyAzbTkgMTF2LTFhNyA3IDAgMCAwLTctN2gtNGE3IDcgMCAwIDAtNyA3djFoMnYtMWE1IDUgMCAwIDEgNS01aDRhNSA1IDAgMCAxIDUgNXYxeiIvPjwvc3ZnPg=="
                     alt="User"
                     width="20"
                     height="20"
@@ -319,38 +347,37 @@ function AppContent() {
               </button>
             )}
             
-            {/* 🛒 BOTONES DE CARRITO Y FAVORITOS - SOLO PARA USUARIOS LOGUEADOS */}
+            {/* ❤️ BOTÓN DE FAVORITOS - SOLO PARA USUARIOS LOGUEADOS */}
             {isLoggedIn && (
-              <>
-                <button 
-                  className="icon-btn-minimal"
-                  onClick={toggleFavorites}
-                  title="Ver Favoritos"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                  {getFavoritesCount() > 0 && (
-                    <span className="favorites-count">{getFavoritesCount()}</span>
-                  )}
-                </button>
-                
-                <button 
-                  className="icon-btn-minimal"
-                  onClick={toggleCart}
-                  title="Ver Carrito"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M16 10a4 4 0 0 1-8 0"/>
-                  </svg>
-                  {getTotalItems() > 0 && (
-                    <span className="cart-count">{getTotalItems()}</span>
-                  )}
-                </button>
-              </>
+              <button 
+                className="icon-btn-minimal"
+                onClick={toggleFavorites}
+                title="Ver Favoritos"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                {getFavoritesCount() > 0 && (
+                  <span className="favorites-count">{getFavoritesCount()}</span>
+                )}
+              </button>
             )}
+            
+            {/* 🛒 BOTÓN DE CARRITO - SIEMPRE VISIBLE */}
+            <button 
+              className="icon-btn-minimal"
+              onClick={toggleCart}
+              title="Ver Carrito"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              {getTotalItems() > 0 && (
+                <span className="cart-count">{getTotalItems()}</span>
+              )}
+            </button>
           </div>
         </div>
       </nav>
@@ -376,12 +403,13 @@ function AppContent() {
                 <button className="mobile-link" onClick={() => navigateAndClose('/login')}>INICIAR SESIÓN</button>
               )}
             </nav>
-            {isLoggedIn && (
-              <div className="mobile-quick-actions">
+            <div className="mobile-quick-actions">
+              {isLoggedIn && (
                 <button className="quick-action" onClick={() => { toggleFavorites(); setMobileMenuOpen(false); }}>Favoritos ({getFavoritesCount()})</button>
-                <button className="quick-action" onClick={() => { toggleCart(); setMobileMenuOpen(false); }}>Carrito ({getTotalItems()})</button>
-              </div>
-            )}
+              )}
+              {/* 🛒 Carrito siempre visible en móvil */}
+              <button className="quick-action" onClick={() => { toggleCart(); setMobileMenuOpen(false); }}>Carrito ({getTotalItems()})</button>
+            </div>
           </div>
         </div>
       )}
@@ -492,7 +520,7 @@ function AppContent() {
         <div className="footer-content footer-container">
           <div className="footer-section">
             <div className="footer-logo">VELORUM</div>
-            <p className="footer-tag">Curamos y vendemos relojes seleccionados por calidad y estilo.</p>
+            <p className="footer-tag">Exploramos el arte de la relojería para ofrecerte piezas únicas.</p>
             {/* social links removed per request */}
           </div>
 

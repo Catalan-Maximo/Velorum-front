@@ -160,6 +160,7 @@ function Login() {
         // 📢 NOTIFICAR A OTROS COMPONENTES QUE EL USUARIO SE LOGUEÓ
         window.dispatchEvent(new Event('storage'));
         window.dispatchEvent(new Event('userChanged'));
+        window.dispatchEvent(new Event('userLoggedIn')); // 🛒 Disparar migración de carrito
         
         // ⏰ REDIRIGIR DESPUÉS DE 2.5 SEGUNDOS
         setTimeout(() => {

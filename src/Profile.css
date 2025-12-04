@@ -14,7 +14,7 @@
 }
 
 .profile-panel { font-family:'Poppins',sans-serif; background:#ffffff; color:var(--text); }
-.profile-container { max-width:1400px; margin:0 auto; padding:40px 20px; min-height:100vh; }
+.profile-container { max-width:1400px; margin:0 auto; padding:40px 20px; min-height:100vh; margin-top: 60px; }
 
 /* Header */
 .profile-header.enhanced { display:flex; justify-content:space-between; gap:40px; align-items:flex-end; flex-wrap:wrap; margin-bottom:46px; }

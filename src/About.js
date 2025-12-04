@@ -42,11 +42,11 @@ function About() {
               <div className="history-timeline">
                 <div className="timeline-item">
                   <div className="year">2023</div>
-                  <div className="milestone">Inicio de actividades: selección y curación</div>
+                  <div className="milestone">Inicio de actividades: exploración y descubrimiento</div>
                 </div>
                 <div className="timeline-item">
                   <div className="year">2024</div>
-                  <div className="milestone">Crecimiento del catálogo curado</div>
+                  <div className="milestone">Expansión del catálogo y alianzas estratégicas</div>
                 </div>
                 <div className="timeline-item">
                   <div className="year">2025</div>
@@ -184,16 +184,10 @@ function About() {
                 className="btn-primary contact-main-btn"
                 aria-label="Enviar correo a Velorum"
                 onClick={() => {
-                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=joakobengolea5@gmail.com&su=Consulta%20Velorum','_blank');
+                  window.open('https://mail.google.com/mail/?view=cm&fs=1&to=velorum.oficial@gmail.com&su=Consulta%20Velorum','_blank');
                 }}
               >
                 CONTÁCTANOS
-              </button>
-              <button
-                className="btn-secondary contact-secondary-btn"
-                onClick={() => navigate('/products')}
-              >
-                Ver Colección
               </button>
             </div>
           </div>

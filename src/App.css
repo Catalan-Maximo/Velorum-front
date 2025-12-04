@@ -72,10 +72,25 @@
   font-family: 'Poppins', sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
 body {
   background-color: #ffffff;
   /* color: var(--text-primary); */
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* 🔙 Botón volver minimal en páginas de detalle */
@@ -219,8 +234,11 @@ ul {
 .modern-navbar {
   background-color: #09101A; /* Cambiar el color de la navbar */
   border-bottom: 1px solid var(--border-color);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1000;
   padding: 0;
   color: #D99909; /* Cambiar color de la tipografía de la navbar */
@@ -758,6 +776,33 @@ ul {
 @media (max-width: 768px) {
   .navbar-left { display: none; }
   
+  /* 🛒 ICONO DEL CARRITO EN MÓVIL - REDUCIDO */
+  .navbar-cart-mobile svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .navbar-cart-mobile span {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 10px !important;
+  }
+  
+  /* 👤 ICONO DEL USUARIO EN MÓVIL - REDUCIDO */
+  .user-text-btn img {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .user-text-btn .user-name {
+    font-size: 12px !important;
+  }
+  
+  .user-text-btn .dropdown-arrow {
+    width: 10px !important;
+    height: 10px !important;
+  }
+  
   /* 🍔 Menú hamburguesa visible en móvil - SOLO LAS RAYITAS */
   .navbar-burger { 
     display: flex; 
@@ -904,6 +949,7 @@ ul {
 /* ⚠️ ESTILOS DE REACT POR DEFECTO */
 .App {
   text-align: center;
+  padding-top: 78px; /* Compensar altura de la navbar fija */
 }
 
 .App-logo {
