@@ -12,6 +12,7 @@ function CheckoutSuccess() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showRegisterForm, setShowRegisterForm] = useState(false);
     const [registerData, setRegisterData] = useState({
+        username: '',
         password: '',
         confirmPassword: ''
     });
@@ -82,6 +83,11 @@ function CheckoutSuccess() {
         e.preventDefault();
         setRegisterError('');
         
+        if (!registerData.username || registerData.username.trim().length < 3) {
+            setRegisterError('El nombre de usuario debe tener al menos 3 caracteres');
+            return;
+        }
+        
         if (registerData.password !== registerData.confirmPassword) {
             setRegisterError('Las contraseñas no coinciden');
             return;
@@ -102,6 +108,7 @@ function CheckoutSuccess() {
                 },
                 body: JSON.stringify({
                     email: orderData.usuario || orderData.email,
+                    username: registerData.username,
                     password: registerData.password,
                     first_name: orderData.nombre || '',
                     last_name: orderData.apellido || '',
@@ -120,8 +127,8 @@ function CheckoutSuccess() {
                 setIsLoggedIn(true);
                 setShowRegisterForm(false);
                 
-                // Opcional: redirigir al perfil o pedidos
-                alert('¡Cuenta creada exitosamente! Ya podés seguir tu pedido.');
+                // Mostrar username creado
+                alert(`¡Cuenta creada exitosamente!\n\nTu usuario es: ${data.user.username}\nYa podés seguir tu pedido.`);
             } else {
                 setRegisterError(data.error || 'Error al crear la cuenta');
             }
@@ -205,6 +212,19 @@ function CheckoutSuccess() {
                                         disabled
                                         className="input-disabled"
                                     />
+                                </div>
+                                
+                                <div className="form-group">
+                                    <label>Nombre de Usuario *</label>
+                                    <input 
+                                        type="text"
+                                        value={registerData.username}
+                                        onChange={(e) => setRegisterData({...registerData, username: e.target.value})}
+                                        placeholder="Ej: juan123 (para iniciar sesión)"
+                                        required
+                                        minLength="3"
+                                    />
+                                    <small className="form-hint">Con este nombre vas a iniciar sesión</small>
                                 </div>
                                 
                                 <div className="form-group">
