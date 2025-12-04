@@ -195,18 +195,8 @@ const Checkout = () => {
 
     // Procesar orden y redirigir a Mercado Pago
     const processOrderAndRedirectToMP = async () => {
-        // 🔐 VERIFICAR AUTENTICACIÓN antes de procesar el pago
+        // Ya no se requiere autenticación - permitir compras como invitado
         const token = localStorage.getItem('token');
-        const userInfo = localStorage.getItem('userInfo');
-        
-        if (!token || !userInfo) {
-            // Usuario no autenticado, redirigir al login
-            // El carrito se mantendrá en localStorage y se recuperará después del login
-            console.log('🔒 Usuario no autenticado, redirigiendo al login...');
-            alert('Debes iniciar sesión para completar tu compra. Tu carrito se mantendrá guardado.');
-            navigate('/login');
-            return;
-        }
 
         setLoading(true);
         setError('');
@@ -253,8 +243,18 @@ const Checkout = () => {
             console.log('Enviando datos a MP:', requestData);
 
             // Llamar al endpoint que crea la orden y preferencia de MP
-            const response = await fetchWithAuth(`${API_BASE_URL}/market/mp/create-preference/`, {
+            // Si hay token, usar fetchWithAuth, si no, fetch normal
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            const response = await fetch(`${API_BASE_URL}/market/mp/create-preference/`, {
                 method: 'POST',
+                headers: headers,
                 body: JSON.stringify(requestData)
             });
 
