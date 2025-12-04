@@ -69,22 +69,13 @@ function Cart() {
   }, [cartItems]);
 
   const handleCheckout = () => {
-    // 🔐 VERIFICAR SI EL USUARIO ESTÁ LOGUEADO
-    const token = localStorage.getItem('token');
-    const userInfo = localStorage.getItem('userInfo');
-    
-    if (!token || !userInfo) {
-      setShowLoginModal(true);
-      return;
-    }
-    
     // 🛒 VERIFICAR QUE HAY PRODUCTOS EN EL CARRITO
     if (cartItems.length === 0) {
       alert('⚠️ No tienes productos en el carrito');
       return;
     }
     
-    // ✅ REDIRIGIR AL PROCESO DE CHECKOUT
+    // ✅ REDIRIGIR AL PROCESO DE CHECKOUT (ahora permite invitados)
     setIsCartOpen(false);
     navigate('/checkout');
   };
