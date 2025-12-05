@@ -125,6 +125,10 @@ function CheckoutSuccess() {
             const data = await response.json();
             console.log('📝 Response data:', data);
             
+            if (data.error) {
+                console.log('🔴 Error detallado:', JSON.stringify(data.error, null, 2));
+            }
+            
             if (response.ok && data.success) {
                 // Guardar tokens y usuario
                 localStorage.setItem('token', data.access);
