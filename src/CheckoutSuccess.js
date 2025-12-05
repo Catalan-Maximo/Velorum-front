@@ -101,7 +101,7 @@ function CheckoutSuccess() {
         setRegisterLoading(true);
         
         try {
-            const response = await fetch(`${API_BASE_URL}/accounts_admin/register-with-order/`, {
+            const response = await fetch(`${API_BASE_URL}/register-with-order/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
