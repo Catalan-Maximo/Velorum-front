@@ -101,28 +101,37 @@ function CheckoutSuccess() {
         setRegisterLoading(true);
         
         try {
+            const requestBody = {
+                email: orderData.email_invitado || orderData.usuario || orderData.email,
+                username: registerData.username,
+                password: registerData.password,
+                first_name: orderData.nombre_invitado || orderData.nombre || '',
+                last_name: orderData.apellido || '',
+                order_id: orderData.id
+            };
+            
+            console.log('📤 Enviando datos:', requestBody);
+            console.log('📦 orderData completo:', orderData);
+            
             const response = await fetch(`${API_BASE_URL}/register-with-order/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email: orderData.usuario || orderData.email,
-                    username: registerData.username,
-                    password: registerData.password,
-                    first_name: orderData.nombre || '',
-                    last_name: orderData.apellido || '',
-                    order_id: orderData.id
-                })
+                body: JSON.stringify(requestBody)
             });
             
+            console.log('📝 Response status:', response.status);
             const data = await response.json();
+            console.log('📝 Response data:', data);
             
-            if (data.success) {
+            if (response.ok && data.success) {
                 // Guardar tokens y usuario
                 localStorage.setItem('token', data.access);
                 localStorage.setItem('refreshToken', data.refresh);
                 localStorage.setItem('userInfo', JSON.stringify(data.user));
+                
+                console.log('✅ Usuario creado y logueado:', data.user);
                 
                 setIsLoggedIn(true);
                 setShowRegisterForm(false);
@@ -130,10 +139,11 @@ function CheckoutSuccess() {
                 // Mostrar username creado
                 alert(`¡Cuenta creada exitosamente!\n\nTu usuario es: ${data.user.username}\nYa podés seguir tu pedido.`);
             } else {
-                setRegisterError(data.error || 'Error al crear la cuenta');
+                console.error('❌ Error en respuesta:', data);
+                setRegisterError(data.error || data.message || 'Error al crear la cuenta');
             }
         } catch (error) {
-            console.error('Error al registrar:', error);
+            console.error('❌ Error al registrar:', error);
             setRegisterError('Error al crear la cuenta. Por favor intentá de nuevo.');
         } finally {
             setRegisterLoading(false);
@@ -208,7 +218,7 @@ function CheckoutSuccess() {
                                     <label>Email (ya registrado con tu compra)</label>
                                     <input 
                                         type="email" 
-                                        value={orderData.usuario || orderData.email || ''}
+                                        value={orderData.email_invitado || orderData.usuario || orderData.email || ''}
                                         disabled
                                         className="input-disabled"
                                     />
