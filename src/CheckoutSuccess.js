@@ -135,10 +135,11 @@ function CheckoutSuccess() {
                 console.log('✅ Usuario creado y logueado:', data.user);
                 
                 // Paso 2: Actualizar perfil con datos del checkout (si existen)
-                if (orderData.nombre_invitado || orderData.telefono_invitado) {
+                if (orderData.nombre_invitado || orderData.apellido_invitado || orderData.telefono_invitado) {
                     try {
                         const profileUpdate = {
                             first_name: orderData.nombre_invitado || '',
+                            last_name: orderData.apellido_invitado || '',
                             phone: orderData.telefono_invitado || '',
                             address: orderData.direccion_envio || ''
                         };
