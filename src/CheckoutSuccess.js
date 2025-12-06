@@ -129,6 +129,9 @@ function CheckoutSuccess() {
                 localStorage.setItem('refreshToken', data.refresh);
                 localStorage.setItem('userInfo', JSON.stringify(data.user));
                 
+                // Disparar evento para que App.js actualice el estado de autenticación
+                window.dispatchEvent(new Event('userChanged'));
+                
                 console.log('✅ Usuario creado y logueado:', data.user);
                 
                 // Paso 2: Actualizar perfil con datos del checkout (si existen)
