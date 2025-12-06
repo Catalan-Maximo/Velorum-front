@@ -101,41 +101,59 @@ function CheckoutSuccess() {
         setRegisterLoading(true);
         
         try {
-            const requestBody = {
-                email: orderData.email_invitado || orderData.usuario || orderData.email,
+            // Paso 1: Crear usuario con lo mínimo necesario
+            const registerBody = {
+                email: orderData.email_invitado || orderData.email,
                 username: registerData.username,
                 password: registerData.password,
-                first_name: orderData.nombre_invitado || orderData.nombre || '',
-                last_name: orderData.apellido || '',
                 order_id: orderData.id
             };
             
-            console.log('📤 Enviando datos:', requestBody);
-            console.log('📦 orderData completo:', orderData);
+            console.log('📤 Creando usuario:', registerBody);
             
-            const response = await fetch(`${API_BASE_URL}/register-with-order/`, {
+            const response = await fetch(`${API_BASE_URL}/create-user/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify(registerBody)
             });
             
             console.log('📝 Response status:', response.status);
             const data = await response.json();
             console.log('📝 Response data:', data);
             
-            if (data.error) {
-                console.log('🔴 Error detallado:', JSON.stringify(data.error, null, 2));
-            }
-            
-            if (response.ok && data.success) {
+            if (response.ok) {
                 // Guardar tokens y usuario
                 localStorage.setItem('token', data.access);
                 localStorage.setItem('refreshToken', data.refresh);
                 localStorage.setItem('userInfo', JSON.stringify(data.user));
                 
                 console.log('✅ Usuario creado y logueado:', data.user);
+                
+                // Paso 2: Actualizar perfil con datos del checkout (si existen)
+                if (orderData.nombre_invitado || orderData.telefono_invitado) {
+                    try {
+                        const profileUpdate = {
+                            first_name: orderData.nombre_invitado || '',
+                            phone: orderData.telefono_invitado || '',
+                            address: orderData.direccion_envio || ''
+                        };
+                        
+                        await fetch(`${API_BASE_URL}/profile/`, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': `Bearer ${data.access}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(profileUpdate)
+                        });
+                        
+                        console.log('✅ Perfil actualizado con datos del checkout');
+                    } catch (err) {
+                        console.log('⚠️ No se pudo actualizar perfil, pero usuario creado correctamente');
+                    }
+                }
                 
                 setIsLoggedIn(true);
                 setShowRegisterForm(false);
