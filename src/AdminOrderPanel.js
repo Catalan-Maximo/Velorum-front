@@ -271,6 +271,28 @@ const AdminOrderPanel = () => {
         });
     };
 
+    // Helpers: preferir datos de perfil, si no existen usar datos del checkout guardados en la orden
+    const getClientNombre = (o) => {
+        if (!o) return 'N/A';
+        const profFirst = o.usuario_detalle?.first_name?.trim();
+        const profLast = o.usuario_detalle?.last_name?.trim();
+        if (profFirst || profLast) return `${profFirst || ''} ${profLast || ''}`.trim();
+        const invitedFirst = (o.nombre_invitado || '').trim();
+        const invitedLast = (o.apellido_invitado || '').trim();
+        if (invitedFirst || invitedLast) return `${invitedFirst} ${invitedLast}`.trim();
+        return o.usuario_detalle?.username || o.nombre || 'N/A';
+    };
+
+    const getClientEmail = (o) => {
+        if (!o) return 'N/A';
+        return (o.usuario_detalle?.email || '').trim() || o.email_invitado || o.email || 'N/A';
+    };
+
+    const getClientPhone = (o) => {
+        if (!o) return 'N/A';
+        return (o.usuario_detalle?.phone || o.usuario_detalle?.telefono || '').trim() || o.telefono_invitado || 'N/A';
+    };
+
     // Función para abrir modal de acción
     // const abrirModalAccion = (action, order) => { /* ... */ } // Eliminado: no usado
 
@@ -420,8 +442,8 @@ const AdminOrderPanel = () => {
                                         <td>#{order.id}</td>
                                         <td>
                                             <div className="cliente-info">
-                                                <span className="nombre">{order.nombre} {order.apellido}</span>
-                                                <span className="email">{order.email}</span>
+                                                <span className="nombre">{getClientNombre(order)}</span>
+                                                <span className="email">{getClientEmail(order)}</span>
                                             </div>
                                         </td>
                                         <td>{formatearFecha(order.fecha)}</td>
@@ -492,9 +514,9 @@ const AdminOrderPanel = () => {
                         <div className="modal-body">
                             <div className="seccion">
                                 <h3>Información del Cliente</h3>
-                                <p><strong>Nombre:</strong> {selectedOrder.nombre_invitado || selectedOrder.usuario_detalle?.username || 'N/A'}</p>
-                                <p><strong>Email:</strong> {selectedOrder.email_invitado || selectedOrder.usuario_detalle?.email || 'N/A'}</p>
-                                <p><strong>Teléfono:</strong> {selectedOrder.telefono_invitado || selectedOrder.usuario_detalle?.phone || 'N/A'}</p>
+                                <p><strong>Nombre:</strong> {getClientNombre(selectedOrder)}</p>
+                                <p><strong>Email:</strong> {getClientEmail(selectedOrder)}</p>
+                                <p><strong>Teléfono:</strong> {getClientPhone(selectedOrder)}</p>
                             </div>
 
                             <div className="seccion">
