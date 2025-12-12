@@ -98,8 +98,6 @@ const AdminOrderPanel = () => {
         }
     }, [navigate]);
 
-    // Función para cambiar el estado de un pedido - Removida: estados controlados por webhook MP
-
     // Función para eliminar pedidos cancelados
     const eliminarPedido = async (pedidoId) => {
         try {
