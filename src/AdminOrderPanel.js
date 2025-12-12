@@ -272,25 +272,26 @@ const AdminOrderPanel = () => {
     };
 
     // Helpers: preferir datos de perfil, si no existen usar datos del checkout guardados en la orden
+    // Preferir datos del checkout guardados en la orden; si faltan, usar datos de perfil
     const getClientNombre = (o) => {
         if (!o) return 'N/A';
-        const profFirst = o.usuario_detalle?.first_name?.trim();
-        const profLast = o.usuario_detalle?.last_name?.trim();
-        if (profFirst || profLast) return `${profFirst || ''} ${profLast || ''}`.trim();
         const invitedFirst = (o.nombre_invitado || '').trim();
         const invitedLast = (o.apellido_invitado || '').trim();
         if (invitedFirst || invitedLast) return `${invitedFirst} ${invitedLast}`.trim();
+        const profFirst = o.usuario_detalle?.first_name?.trim();
+        const profLast = o.usuario_detalle?.last_name?.trim();
+        if (profFirst || profLast) return `${profFirst || ''} ${profLast || ''}`.trim();
         return o.usuario_detalle?.username || o.nombre || 'N/A';
     };
 
     const getClientEmail = (o) => {
         if (!o) return 'N/A';
-        return (o.usuario_detalle?.email || '').trim() || o.email_invitado || o.email || 'N/A';
+        return (o.email_invitado || '').trim() || (o.usuario_detalle?.email || '').trim() || o.email || 'N/A';
     };
 
     const getClientPhone = (o) => {
         if (!o) return 'N/A';
-        return (o.usuario_detalle?.phone || o.usuario_detalle?.telefono || '').trim() || o.telefono_invitado || 'N/A';
+        return (o.telefono_invitado || '').trim() || (o.usuario_detalle?.phone || o.usuario_detalle?.telefono || '').trim() || 'N/A';
     };
 
     // Función para abrir modal de acción
