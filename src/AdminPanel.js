@@ -192,6 +192,14 @@ const AdminPanel = () => {
 
     // Cambiar rol de usuario
     const handleChangeRole = async (userId, newRole) => {
+        // Verificar que el usuario actual sea admin
+        const currentUser = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        if (currentUser.role !== 'admin') {
+            setError('Solo los administradores pueden cambiar roles de usuario');
+            fetchUsers(); // Recargar para resetear el select
+            return;
+        }
+        
         try {
             const response = await userService.changeRole(userId, newRole);
             if (response.ok) {
@@ -499,8 +507,9 @@ const AdminPanel = () => {
                                             value={user.role}
                                             onChange={(e) => handleChangeRole(user.id, e.target.value)}
                                             className={`role-select-minimal role-${user.role}`}
+                                            disabled={JSON.parse(localStorage.getItem('userInfo') || '{}').role !== 'admin'}
                                         >
-                                            <option value="user">USUARIO</option>
+                                            <option value="client">CLIENTE</option>
                                             <option value="operator">OPERADOR</option>
                                             <option value="admin">ADMIN</option>
                                         </select>
@@ -523,7 +532,7 @@ const AdminPanel = () => {
                                                 <path d="M12 5c-7.633 0-10 7-10 7s2.367 7 10 7 10-7 10-7-2.367-7-10-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 9z"/>
                                             </svg>
                                         </button>
-                                        {user.role !== 'admin' ? (
+                                        {user.role !== 'admin' && JSON.parse(localStorage.getItem('userInfo') || '{}').role === 'admin' ? (
                                             <>
                                                 <button
                                                     className={`action-btn-simple ${user.is_active ? 'btn-pause' : 'btn-play'}`}
@@ -551,7 +560,7 @@ const AdminPanel = () => {
                                                 </button>
                                             </>
                                         ) : (
-                                            <span className="admin-protected">Protegido</span>
+                                            <span className="admin-protected">{user.role === 'admin' ? 'Protegido' : 'Solo admin'}</span>
                                         )}
                                     </td>
                                 </tr>
