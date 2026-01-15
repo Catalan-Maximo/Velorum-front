@@ -16,19 +16,37 @@ export const ProductsProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [lastFetch, setLastFetch] = useState(null);
+  const [count, setCount] = useState(0);
+  const [next, setNext] = useState(null);
+  const [previous, setPrevious] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(12);
 
-  const fetchProducts = useCallback(async (force = false) => {
-    // Si ya tenemos productos y no forzamos refresh, no hacemos nada
-    if (products.length > 0 && !force) {
-      return products;
-    }
-
+  const fetchProducts = useCallback(async ({ page: requestedPage = 1, page_size = 12, params = {} } = {}) => {
     setLoading(true);
     setError(null);
 
     try {
+      const queryParams = {
+        page: requestedPage,
+        page_size,
+        ...params
+      };
+
+      console.log('📡 Fetching products con params:', queryParams);
+
+      // Construir query string
+      const queryString = new URLSearchParams();
+      Object.entries(queryParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryString.set(key, String(value));
+        }
+      });
+
+      const url = `${API_BASE_URL}/market/model/products/?${queryString.toString()}`;
+      console.log('🌐 URL:', url);
       
-      const response = await fetch(`${API_BASE_URL}/market/model/products/`);
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -36,6 +54,14 @@ export const ProductsProvider = ({ children }) => {
 
       const data = await response.json();
       const list = Array.isArray(data) ? data : (data.results || []);
+      
+      console.log('📦 Respuesta del servidor:', {
+        count: Array.isArray(data) ? list.length : (data.count ?? 0),
+        products: list.length,
+        page: requestedPage,
+        hasNext: !Array.isArray(data) && data.next,
+        hasPrevious: !Array.isArray(data) && data.previous
+      });
       
       const mappedProducts = list.map((p, index) => {
         if (index === 0) {
@@ -76,6 +102,11 @@ export const ProductsProvider = ({ children }) => {
       });
 
       setProducts(mappedProducts);
+      setCount(Array.isArray(data) ? mappedProducts.length : (data.count ?? mappedProducts.length));
+      setNext(Array.isArray(data) ? null : (data.next ?? null));
+      setPrevious(Array.isArray(data) ? null : (data.previous ?? null));
+      setPage(requestedPage);
+      setPageSize(page_size);
       setLastFetch(new Date());
       
       return mappedProducts;
@@ -86,18 +117,18 @@ export const ProductsProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [products.length]);
+  }, []);
 
   // Cargar productos al montar el contexto
   useEffect(() => {
     if (products.length === 0) {
-      fetchProducts();
+      fetchProducts({ page: 1, page_size: 12 });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const refreshProducts = useCallback(() => {
-    return fetchProducts(true);
+  const refreshProducts = useCallback((params = {}) => {
+    return fetchProducts({ page: 1, page_size: 12, params });
   }, [fetchProducts]);
 
   const clearProducts = useCallback(() => {
@@ -110,6 +141,11 @@ export const ProductsProvider = ({ children }) => {
     loading,
     error,
     lastFetch,
+    count,
+    next,
+    previous,
+    page,
+    pageSize,
     fetchProducts,
     refreshProducts,
     clearProducts

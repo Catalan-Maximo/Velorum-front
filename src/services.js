@@ -1,6 +1,17 @@
 // Configuración base (revertida a localhost fijo a pedido del usuario)
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
 
+// Helper para construir query strings
+const buildQuery = (params = {}) => {
+  const qs = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v === undefined || v === null || v === '') return;
+    qs.set(k, String(v));
+  });
+  const s = qs.toString();
+  return s ? `?${s}` : '';
+};
+
 // Función para obtener headers de autenticación
 export const getAuthHeaders = () => {
   // Preferimos access_token; mantenemos compatibilidad con keys antiguas
@@ -270,8 +281,9 @@ export const userService = {
 // SERVICIO DE PRODUCTOS
 // =============================================================================
 export const productService = {
-  getAll: async () => {
-    const response = await fetch(`${API_BASE_URL}/market/model/products/`, {
+  getAll: async (params = {}) => {
+    const query = buildQuery(params);
+    const response = await fetch(`${API_BASE_URL}/market/model/products/${query}`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -306,7 +318,7 @@ export const productService = {
   },
 
   search: async (query) => {
-    const response = await fetch(`${API_BASE_URL}/market/model/products/?search=${encodeURIComponent(query)}`, {
+    const response = await fetch(`${API_BASE_URL}/market/model/products/?q=${encodeURIComponent(query)}`, {
       headers: getAuthHeaders()
     });
     return response.json();
