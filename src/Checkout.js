@@ -225,10 +225,11 @@ const Checkout = () => {
                     price: item.price,
                     name: item.name || item.marca || 'Producto'
                 })),
-                total: getTotalPrice(),
+                total: getTotalWithShipping(),
                 costo_envio: promotions.hasFreeShipping ? 0 : costoEnvio,
                 codigo_descuento: descuentoAplicado ? descuentoAplicado.codigo : null,
                 descuento_porcentaje: descuentoAplicado ? descuentoAplicado.porcentaje : 0,
+                descuento_monto: (getTotalPrice() + (promotions.hasFreeShipping ? 0 : costoEnvio)) - getTotalWithShipping(),
                 // Agregar información de promociones desbloqueadas
                 promo_discount: promotions.hasDiscount ? 10 : 0,
                 promo_free_shipping: promotions.hasFreeShipping,
@@ -282,23 +283,12 @@ const Checkout = () => {
     };
 
     const getTotalWithShipping = () => {
-        let subtotal = getTotalPrice();
-        
-        // Aplicar descuento por código primero (solo sobre productos)
-        if (descuentoAplicado) {
-            const descuentoCodigo = (subtotal * descuentoAplicado.porcentaje) / 100;
-            subtotal -= descuentoCodigo;
-        }
-        
-        // Aplicar descuento por promoción desbloqueada (10%) después
-        if (promotions.hasDiscount) {
-            subtotal = subtotal * 0.9; // 10% de descuento
-        }
-        
-        // Aplicar envío gratis si está desbloqueado
+        const subtotal = getTotalPrice();
+        const descuentoCodigo = descuentoAplicado ? (subtotal * descuentoAplicado.porcentaje) / 100 : 0;
+        const subtotalAfterCode = subtotal - descuentoCodigo;
+        const promoDiscount = promotions.hasDiscount ? subtotalAfterCode * 0.1 : 0;
         const shipping = promotions.hasFreeShipping ? 0 : costoEnvio;
-        let total = subtotal + shipping;
-        
+        const total = subtotalAfterCode - promoDiscount + shipping;
         return total;
     };
 
@@ -319,6 +309,14 @@ const Checkout = () => {
         
         return descuentoTotal;
     };
+
+    // Variables derivadas para mostrar desglose consistente
+    const subtotal = getTotalPrice();
+    const codeDiscountAmount = descuentoAplicado ? (subtotal * descuentoAplicado.porcentaje) / 100 : 0;
+    const subtotalAfterCode = subtotal - codeDiscountAmount;
+    const promoDiscountAmount = promotions.hasDiscount ? subtotalAfterCode * 0.1 : 0;
+    const shippingFee = promotions.hasFreeShipping ? 0 : costoEnvio;
+    const totalWithShipping = subtotalAfterCode - promoDiscountAmount + shippingFee;
 
     // Render del paso actual
     const renderStep = () => {
@@ -553,7 +551,7 @@ const Checkout = () => {
                             <div className="transfer-modal-actions">
                                 <button
                                     onClick={() => {
-                                        const msg = encodeURIComponent(`Hola! Envío comprobante del pedido #${createdOrderId}.\n\nNombre: ${customerData.nombre} ${customerData.apellido}\nTotal: $${getTotalWithShipping().toFixed(2)}`);
+                                        const msg = encodeURIComponent(`Hola! Envío comprobante del pedido #${createdOrderId}.\n\nNombre: ${customerData.nombre} ${customerData.apellido}\nTotal: $${totalWithShipping.toFixed(2)}`);
                                         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
                                     }}
                                 >
@@ -619,7 +617,7 @@ const Checkout = () => {
                         {promotions.hasDiscount && (
                             <div className="price-line" style={{ color: '#10b981' }}>
                                 <span>Descuento 10%:</span>
-                                <span>-${(getTotalPrice() * 0.1).toFixed(2)}</span>
+                                <span>-${promoDiscountAmount.toFixed(2)}</span>
                             </div>
                         )}
                         
@@ -637,7 +635,7 @@ const Checkout = () => {
                                 {promotions.hasFreeShipping ? (
                                     <span style={{ color: '#10b981', fontWeight: '600' }}>GRATIS</span>
                                 ) : (
-                                    `$${costoEnvio.toFixed(2)}`
+                                    `$${shippingFee.toFixed(2)}`
                                 )}
                             </span>
                         </div>
@@ -645,13 +643,13 @@ const Checkout = () => {
                         {descuentoAplicado && (
                             <div className="price-line" style={{ color: '#10b981' }}>
                                 <span>Código {descuentoAplicado.codigo} ({descuentoAplicado.porcentaje}%):</span>
-                                <span>-${(getTotalPrice() * descuentoAplicado.porcentaje / 100).toFixed(2)}</span>
+                                <span>-${codeDiscountAmount.toFixed(2)}</span>
                             </div>
                         )}
                         
                         <div className="price-line total">
                             <span>Total:</span>
-                            <span>${getTotalWithShipping().toFixed(2)}</span>
+                            <span>${totalWithShipping.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>
