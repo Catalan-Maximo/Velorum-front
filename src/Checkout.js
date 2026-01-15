@@ -217,14 +217,63 @@ const Checkout = () => {
                     zona_envio: shippingData.zona_envio,
                     notas_envio: shippingData.notas_envio
                 },
-                cart_items: cartItems.map(item => ({
-                    id: item.id,
-                    watch_id: item.watch_id || item.id_backend || item.id,
-                    id_backend: item.id_backend || item.id,
-                    quantity: item.quantity,
-                    price: item.price,
-                    name: item.name || item.marca || 'Producto'
-                })),
+                // Enviar items con precios ajustados para que MP reciba el total final
+                cart_items: (() => {
+                    const originalSubtotal = getTotalPrice();
+                    const codeDiscount = descuentoAplicado ? (originalSubtotal * descuentoAplicado.porcentaje) / 100 : 0;
+                    const afterCode = originalSubtotal - codeDiscount;
+                    const promoDisc = promotions.hasDiscount ? afterCode * 0.1 : 0;
+                    const productsTotal = Math.max(0, afterCode - promoDisc);
+
+                    if (!originalSubtotal || originalSubtotal <= 0) {
+                        return cartItems.map(item => ({
+                            id: item.id,
+                            watch_id: item.watch_id || item.id_backend || item.id,
+                            id_backend: item.id_backend || item.id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            name: item.name || item.marca || 'Producto'
+                        }));
+                    }
+
+                    const adjusted = [];
+                    let accumulated = 0;
+                    cartItems.forEach((item) => {
+                        const baseTotal = (item.price || 0) * (item.quantity || 1);
+                        let adjTotal = (baseTotal / originalSubtotal) * productsTotal;
+                        adjTotal = Math.round(adjTotal * 100) / 100;
+                        const unitPrice = adjTotal / (item.quantity || 1) || 0;
+                        accumulated += adjTotal;
+                        adjusted.push({
+                            id: item.id,
+                            watch_id: item.watch_id || item.id_backend || item.id,
+                            id_backend: item.id_backend || item.id,
+                            quantity: item.quantity,
+                            price: unitPrice,
+                            name: item.name || item.marca || 'Producto'
+                        });
+                    });
+
+                    const diff = Math.round((productsTotal - accumulated) * 100) / 100;
+                    if (adjusted.length > 0 && Math.abs(diff) >= 0.01) {
+                        const last = adjusted[adjusted.length - 1];
+                        const lastTotal = Math.round((last.price * last.quantity + diff) * 100) / 100;
+                        last.price = Math.round((lastTotal / last.quantity) * 100) / 100;
+                    }
+
+                    if (!promotions.hasFreeShipping && costoEnvio > 0) {
+                        adjusted.push({
+                            id: 'envio',
+                            watch_id: null,
+                            id_backend: null,
+                            quantity: 1,
+                            price: Math.round(costoEnvio * 100) / 100,
+                            name: 'Envío'
+                        });
+                    }
+
+                    return adjusted;
+                })(),
                 total: getTotalWithShipping(),
                 costo_envio: promotions.hasFreeShipping ? 0 : costoEnvio,
                 codigo_descuento: descuentoAplicado ? descuentoAplicado.codigo : null,
