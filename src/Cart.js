@@ -213,8 +213,14 @@ function Cart() {
               <h3>Tu carrito está vacío</h3>
               <p className="desc">Agrega productos para continuar con la compra.</p>
               <div className="empty-actions refined">
-                <button className="cluster-like accent" onClick={handleContinueShopping}>Explorar</button>
-                <button className="cluster-like ghost" onClick={() => { setIsCartOpen(false); navigate('/'); }}>Inicio</button>
+                <button className="cluster-like accent" onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey) { window.open('/products', '_blank'); return; }
+                  handleContinueShopping();
+                }} onAuxClick={() => { window.open('/products', '_blank'); }}>Explorar</button>
+                <button className="cluster-like ghost" onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey) { window.open('/', '_blank'); return; }
+                  setIsCartOpen(false); navigate('/');
+                }} onAuxClick={() => { window.open('/', '_blank'); }}>Inicio</button>
               </div>
             </div>
           ) : (
@@ -298,7 +304,8 @@ function Cart() {
                             border: '1px solid #e2e8f0',
                             borderRadius: '8px',
                             fontSize: '13px',
-                            flex: 1
+                            flex: 1,
+                            color: '#000000'
                           }}
                         />
                         <button
@@ -407,8 +414,14 @@ function Cart() {
                   </div>
                 </div>
                 <div className="summary-actions">
-                  <button className="summary-btn ghost" onClick={handleContinueShopping}>Seguir Comprando</button>
-                  <button className="summary-btn accent" onClick={handleCheckout}>Finalizar</button>
+                  <button className="summary-btn ghost" onClick={(e) => {
+                    if (e.metaKey || e.ctrlKey) { window.open('/products', '_blank'); return; }
+                    handleContinueShopping();
+                  }} onAuxClick={() => { window.open('/products', '_blank'); }}>Seguir Comprando</button>
+                    <button className="summary-btn accent" onClick={(e) => {
+                      if (e.metaKey || e.ctrlKey) { window.open('/checkout', '_blank'); return; }
+                      handleCheckout();
+                    }} onAuxClick={() => { window.open('/checkout', '_blank'); }}>Finalizar</button>
                 </div>
               </div>
             </>
@@ -432,7 +445,10 @@ function Cart() {
               <h3>Inicia Sesión para Continuar</h3>
               <p>Para finalizar tu compra necesitas tener una cuenta. Tu carrito se mantendrá guardado.</p>
               <div className="modal-actions">
-                <button className="modal-btn primary" onClick={handleLoginRedirect}>
+                <button className="modal-btn primary" onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey) { window.open('/login', '_blank'); return; }
+                  handleLoginRedirect();
+                }} onAuxClick={() => { window.open('/login', '_blank'); }}>
                   Ir a Iniciar Sesión
                 </button>
                 <button className="modal-btn secondary" onClick={() => setShowLoginModal(false)}>

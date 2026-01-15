@@ -114,7 +114,7 @@ function Products() {
   const totalPaginas = Math.ceil(count / PRODUCTOS_POR_PAGINA);
 
   // Categorías fijas (alineadas con el backend)
-  const categorias = ['Todos', 'Relojes', 'Premium', 'Smartwatch'];
+  const categorias = ['Todos', 'Relojes', 'Premium'];
 
   // Limpiar todos los filtros
   const limpiarFiltros = () => {
