@@ -70,7 +70,7 @@ const AdminOrderPanel = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/market/orders/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ const AdminOrderPanel = () => {
     const eliminarPedido = async (pedidoId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/market/orders/${pedidoId}/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/${pedidoId}/`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -183,7 +183,7 @@ const AdminOrderPanel = () => {
     const gestionarPago = async (pedidoId, estadoPago, detalles = '') => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_BASE_URL}/market/orders/${pedidoId}/manage_payment/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/${pedidoId}/manage_payment/`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
