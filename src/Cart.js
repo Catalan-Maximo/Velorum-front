@@ -28,20 +28,20 @@ function Cart() {
   // CONFIGURACIÓN DE NIVELES DE PROMOCIONES
   const PROMO_LEVELS = [
     { 
-      threshold: 50000, 
+      threshold: 70000, 
       reward: 'Envío Gratis', 
       icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h5l3 3v5h-2m-4 0H2"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
       type: 'shipping' 
     },
     { 
-      threshold: 100000, 
+      threshold: 120000, 
       reward: '10% Descuento', 
       icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2"/><circle cx="16" cy="16" r="6"/><path d="M12 16h8"/></svg>,
       type: 'discount', 
       value: 10 
     },
     { 
-      threshold: 150000, 
+      threshold: 170000, 
       reward: 'Caja para Reloj', 
       icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>,
       type: 'gift' 

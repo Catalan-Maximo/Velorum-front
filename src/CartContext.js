@@ -207,10 +207,10 @@ export const CartProvider = ({ children }) => {
   const getUnlockedPromotions = () => {
     const total = getTotalPrice();
     const promotions = {
-      hasDiscount: total >= 100000,
-      hasFreeShipping: total >= 50000,
-      hasGiftBox: total >= 150000,
-      discountPercentage: total >= 100000 ? 10 : 0
+      hasDiscount: total >= 120000,
+      hasFreeShipping: total >= 70000,
+      hasGiftBox: total >= 170000,
+      discountPercentage: total >= 120000 ? 10 : 0
     };
     return promotions;
   };
