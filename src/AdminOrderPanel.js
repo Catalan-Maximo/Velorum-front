@@ -70,7 +70,7 @@ const AdminOrderPanel = () => {
                 return;
             }
 
-            const response = await fetch(`${API_BASE_URL}/market/model/orders/`, {
+            const response = await fetch(`${API_BASE_URL}/market/model/orders/?page_size=10000`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
