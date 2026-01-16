@@ -78,7 +78,6 @@ const AdminPanel = () => {
             const data = await adminService.getDashboard();
             setDashboard(data);
         } catch (error) {
-            console.error('Error fetching dashboard:', error);
             // No mostrar error al usuario, fallar silenciosamente
             setDashboard(null);
         }
@@ -92,7 +91,6 @@ const AdminPanel = () => {
             setUsers(data.users || data);
             setError('');
         } catch (error) {
-            console.error('❌ Error fetching users:', error);
             
             // Manejar error de autenticación específicamente
             if (error.message.includes('401')) {
@@ -138,7 +136,6 @@ const AdminPanel = () => {
                 setError(errorData.message || 'Error al crear usuario');
             }
         } catch (error) {
-            console.error('Error creating user:', error);
             setError('Error al crear usuario');
         } finally {
             setLoading(false);
@@ -163,7 +160,6 @@ const AdminPanel = () => {
                     setError(errorData.message || 'Error al eliminar usuario');
                 }
             } catch (error) {
-                console.error('Error deleting user:', error);
                 setError('Error al eliminar usuario');
             } finally {
                 setLoading(false);
@@ -185,7 +181,6 @@ const AdminPanel = () => {
                 setError(errorData.message || 'Error al cambiar estado del usuario');
             }
         } catch (error) {
-            console.error('Error toggling user status:', error);
             setError('Error al cambiar estado del usuario');
         }
     };
@@ -211,7 +206,6 @@ const AdminPanel = () => {
                 setError(errorData.message || 'Error al cambiar rol del usuario');
             }
         } catch (error) {
-            console.error('Error changing user role:', error);
             setError('Error al cambiar rol del usuario');
         }
     };
@@ -224,7 +218,6 @@ const AdminPanel = () => {
             const full = await userService.getById(user.id);
             setViewingUser(full);
         } catch (e) {
-            console.error(e);
             setViewingError('No se pudo cargar el usuario');
         } finally {
             setViewingLoading(false);

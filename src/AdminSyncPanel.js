@@ -43,7 +43,6 @@ function AdminSyncPanel() {
                     : 'Nunca'
             });
         } catch (err) {
-            console.error('Error cargando estadísticas:', err);
         }
     };
 

@@ -45,7 +45,6 @@ export const apiRequest = async (endpoint, options = {}) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(`❌ Error en ${endpoint}:`, error);
     throw error;
   }
 };
@@ -101,7 +100,6 @@ export const authService = {
         });
       }
     } catch (error) {
-      console.error('Error during logout:', error);
     } finally {
       handleTokenExpiration();
     }
@@ -159,14 +157,6 @@ export const userService = {
       const data = await response.json();
       return data.results || data.users || data;
     } else {
-      // Intentar leer el mensaje de error del backend
-      try {
-        const errorData = await response.json();
-        console.error('❌ Error response data:', errorData); // 🔍 Debug
-      } catch (e) {
-        console.error('❌ Could not parse error response'); // 🔍 Debug
-      }
-      console.error('❌ Response not ok:', response.status, response.statusText); // 🔍 Debug
       throw new Error(`Error loading users: ${response.status}`);
     }
   },
@@ -598,7 +588,6 @@ export const adminService = {
     if (response.ok) {
       return response.json();
     }
-    console.error('❌ Dashboard response not ok:', response.status, response.statusText); // 🔍 Debug
     throw new Error(`Error loading dashboard: ${response.status}`);
   },
 

@@ -88,13 +88,10 @@ const AdminOrderPanel = () => {
             }
 
             const data = await response.json();
-            console.log('📦 Datos recibidos del backend:', data);
             const ordersArray = data.results || data || [];
-            console.log('📦 Primera orden:', ordersArray[0]);
             setOrders(ordersArray);
             calcularEstadisticas(ordersArray);
         } catch (error) {
-            console.error('Error al cargar pedidos:', error);
             setError('Error al cargar pedidos: ' + error.message);
         } finally {
             setLoading(false);
@@ -121,7 +118,6 @@ const AdminOrderPanel = () => {
             obtenerPedidos();
             
         } catch (error) {
-            console.error('Error al eliminar pedido:', error);
             setError('Error al eliminar pedido: ' + error.message);
         }
     };
@@ -207,7 +203,6 @@ const AdminOrderPanel = () => {
             obtenerPedidos();
             
         } catch (error) {
-            console.error('Error al gestionar pago:', error);
             setError('Error al gestionar pago: ' + error.message);
         }
     };

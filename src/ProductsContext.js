@@ -33,8 +33,6 @@ export const ProductsProvider = ({ children }) => {
         ...params
       };
 
-      console.log('📡 Fetching products con params:', queryParams);
-
       // Construir query string
       const queryString = new URLSearchParams();
       Object.entries(queryParams).forEach(([key, value]) => {
@@ -44,7 +42,6 @@ export const ProductsProvider = ({ children }) => {
       });
 
       const url = `${API_BASE_URL}/market/model/products/?${queryString.toString()}`;
-      console.log('🌐 URL:', url);
       
       const response = await fetch(url);
       
@@ -54,14 +51,6 @@ export const ProductsProvider = ({ children }) => {
 
       const data = await response.json();
       const list = Array.isArray(data) ? data : (data.results || []);
-      
-      console.log('📦 Respuesta del servidor:', {
-        count: Array.isArray(data) ? list.length : (data.count ?? 0),
-        products: list.length,
-        page: requestedPage,
-        hasNext: !Array.isArray(data) && data.next,
-        hasPrevious: !Array.isArray(data) && data.previous
-      });
       
       const mappedProducts = list.map((p, index) => {
         if (index === 0) {
@@ -111,7 +100,6 @@ export const ProductsProvider = ({ children }) => {
       
       return mappedProducts;
     } catch (err) {
-      console.error('❌ Error al cargar productos:', err);
       setError(err.message);
       return [];
     } finally {

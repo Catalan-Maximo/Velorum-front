@@ -126,7 +126,6 @@ function Cart() {
         setDescuentoAplicado(null);
       }
     } catch (error) {
-      console.error('Error validando código:', error);
       setErrorCodigo('Error al validar el código. Intenta nuevamente.');
       setDescuentoAplicado(null);
     } finally {

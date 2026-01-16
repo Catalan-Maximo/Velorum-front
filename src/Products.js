@@ -65,7 +65,6 @@ function Products() {
       categoria: categoria !== 'Todos' ? categoria.toLowerCase() : undefined,
     };
     
-    console.log('🚀 Carga inicial desde URL - Página:', page, 'Params:', params);
     fetchProducts({ page, page_size: 12, params });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Solo al montar
@@ -89,8 +88,6 @@ function Products() {
       categoria: categoriaFiltro !== 'Todos' ? categoriaFiltro.toLowerCase() : undefined,
     };
 
-    console.log('🔍 Aplicando filtros:', params);
-    
     // Actualizar URL
     const newSearchParams = new URLSearchParams();
     newSearchParams.set('page', '1'); // Reset a página 1 cuando cambian filtros
@@ -142,8 +139,6 @@ function Products() {
       categoria: categoriaFiltro !== 'Todos' ? categoriaFiltro.toLowerCase() : undefined,
     };
 
-    console.log(`📄 Cambiando a página ${nuevaPagina} con filtros:`, params);
-    
     // Actualizar URL con la nueva página
     const newSearchParams = new URLSearchParams();
     newSearchParams.set('page', String(nuevaPagina));

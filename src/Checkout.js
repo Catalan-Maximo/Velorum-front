@@ -136,7 +136,6 @@ const Checkout = () => {
                     telefono_contacto: user.phone || ''
                 });
             } catch (error) {
-                console.error('Error parsing user info:', error);
             }
         }
     }, [cartItems.length, navigate, loading, transferModalOpen, createdOrderId]);
@@ -285,7 +284,6 @@ const Checkout = () => {
 
             const result = await response.json();
             if (!response.ok) {
-                console.error('Error del servidor:', result);
                 const errorMsg = typeof result.error === 'string' 
                     ? result.error 
                     : (typeof result.error === 'object' 
@@ -305,7 +303,6 @@ const Checkout = () => {
             }
 
         } catch (error) {
-            console.error('Error procesando pago:', error);
             setError(error.message || 'Error al procesar el pedido. Por favor intenta nuevamente.');
             setLoading(false);
         }

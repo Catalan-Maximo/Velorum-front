@@ -125,7 +125,6 @@ function Orders() {
   setError(`Error ${response.status}: ${await response.text() || 'al cargar los pedidos'}`);
       }
     } catch (error) {
-      console.error('Error:', error);
       setError('Error de red al cargar pedidos');
     } finally {
       setLoading(false);

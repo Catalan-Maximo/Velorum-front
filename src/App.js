@@ -131,7 +131,6 @@ function AppContent() {
           setUser(parsedUser);
           setIsLoggedIn(true);
         } catch (error) {
-          console.error('Error al parsear usuario:', error);
           // Si hay error, limpiar datos
           localStorage.removeItem('userInfo');
           localStorage.removeItem('accessToken');

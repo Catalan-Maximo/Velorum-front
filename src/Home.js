@@ -65,7 +65,6 @@ function Home({ user, isLoggedIn }) {
         
         setFeaturedProducts(featured);
       } catch (error) {
-        console.error('Error cargando productos destacados:', error);
         setFeaturedProducts([]);
       } finally {
         setLoadingProducts(false);
