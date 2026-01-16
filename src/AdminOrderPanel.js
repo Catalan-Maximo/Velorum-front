@@ -89,9 +89,10 @@ const AdminOrderPanel = () => {
 
             const data = await response.json();
             console.log('📦 Datos recibidos del backend:', data);
-            console.log('📦 Primera orden:', data[0]);
-            setOrders(data);
-            calcularEstadisticas(data);
+            const ordersArray = data.results || data || [];
+            console.log('📦 Primera orden:', ordersArray[0]);
+            setOrders(ordersArray);
+            calcularEstadisticas(ordersArray);
         } catch (error) {
             console.error('Error al cargar pedidos:', error);
             setError('Error al cargar pedidos: ' + error.message);
