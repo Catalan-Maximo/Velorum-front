@@ -88,6 +88,8 @@ const AdminOrderPanel = () => {
             }
 
             const data = await response.json();
+            console.log('📦 Datos recibidos del backend:', data);
+            console.log('📦 Primera orden:', data[0]);
             setOrders(data);
             calcularEstadisticas(data);
         } catch (error) {
