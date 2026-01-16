@@ -563,8 +563,10 @@ const AdminOrderPanel = () => {
                                 <p><strong>Subtotal:</strong> ${selectedOrder.total}</p>
                                 <p><strong>Costo de Envío:</strong> ${selectedOrder.costo_envio || 0}</p>
                                 <p><strong>Total Final:</strong> ${selectedOrder.total_con_envio || selectedOrder.total}</p>
-                                {selectedOrder.codigo_descuento_usado && (
+                                {selectedOrder.codigo_descuento_usado ? (
                                     <p><strong>Código de Descuento:</strong> {selectedOrder.codigo_descuento_usado}</p>
+                                ) : (
+                                    <p><strong>Código de Descuento:</strong> <span style={{color: '#999'}}>Sin código</span></p>
                                 )}
                                 {selectedOrder.numero_seguimiento && (
                                     <p><strong>Seguimiento:</strong> {selectedOrder.numero_seguimiento}</p>
