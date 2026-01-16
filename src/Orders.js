@@ -90,7 +90,7 @@ function Orders() {
         return;
       }
 
-  const response = await fetch(`${API_BASE_URL}/market/model/orders/`, {
+  const response = await fetch(`${API_BASE_URL}/market/orders/my-orders/`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -186,7 +186,7 @@ function Orders() {
     if(!canUserCancel(order)) return;
     try {
       const token = localStorage.getItem('token');
-  const resp = await fetch(`${API_BASE_URL}/market/model/orders/${order.id}/cancel/`, {
+  const resp = await fetch(`${API_BASE_URL}/market/orders/${order.id}/cancel/`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type':'application/json' }
       });
