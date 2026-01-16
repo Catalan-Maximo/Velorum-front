@@ -22,7 +22,8 @@ const Checkout = () => {
         nombre: '',
         apellido: '',
         email: '',
-        telefono_contacto: ''
+        telefono_contacto: '',
+        dni: ''
     });
 
     const [shippingData, setShippingData] = useState({
@@ -153,7 +154,8 @@ const Checkout = () => {
     // Validaciones por paso
     const validateStep1 = () => {
         return customerData.nombre && customerData.apellido && 
-               customerData.email && customerData.telefono_contacto;
+               customerData.email && customerData.telefono_contacto &&
+               customerData.dni;
     };
 
     const validateStep2 = () => {
@@ -204,7 +206,8 @@ const Checkout = () => {
                     nombre: customerData.nombre,
                     apellido: customerData.apellido,
                     email: customerData.email,
-                    telefono_contacto: customerData.telefono_contacto
+                    telefono_contacto: customerData.telefono_contacto,
+                    dni: customerData.dni
                 },
                 shipping_data: {
                     calle: shippingData.calle,
@@ -389,6 +392,16 @@ const Checkout = () => {
                                     value={customerData.telefono_contacto}
                                     onChange={(e) => setCustomerData({...customerData, telefono_contacto: e.target.value})}
                                     placeholder="+1234567890"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>DNI *</label>
+                                <input
+                                    type="text"
+                                    value={customerData.dni}
+                                    onChange={(e) => setCustomerData({...customerData, dni: e.target.value})}
+                                    placeholder="12345678"
                                     required
                                 />
                             </div>

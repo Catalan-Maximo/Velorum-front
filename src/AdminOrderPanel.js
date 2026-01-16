@@ -524,6 +524,7 @@ const AdminOrderPanel = () => {
                                 <p><strong>Nombre:</strong> {getClientNombre(selectedOrder)}</p>
                                 <p><strong>Email:</strong> {getClientEmail(selectedOrder)}</p>
                                 <p><strong>Teléfono:</strong> {getClientPhone(selectedOrder)}</p>
+                                <p><strong>DNI:</strong> {selectedOrder.dni_invitado || selectedOrder.usuario_detalle?.dni || 'N/A'}</p>
                             </div>
 
                             <div className="seccion">
