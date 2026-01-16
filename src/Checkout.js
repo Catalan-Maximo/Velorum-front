@@ -253,11 +253,11 @@ const Checkout = () => {
                     
                     return itemsAjustados;
                 })(),
-                total: getTotalWithShipping(),
+                total: Math.round(getTotalWithShipping() * 100) / 100,
                 costo_envio: promotions.hasFreeShipping ? 0 : costoEnvio,
                 codigo_descuento: descuentoAplicado ? descuentoAplicado.codigo : null,
                 descuento_porcentaje: descuentoAplicado ? descuentoAplicado.porcentaje : 0,
-                descuento_monto: (getTotalPrice() + (promotions.hasFreeShipping ? 0 : costoEnvio)) - getTotalWithShipping(),
+                descuento_monto: Math.round(((getTotalPrice() + (promotions.hasFreeShipping ? 0 : costoEnvio)) - getTotalWithShipping()) * 100) / 100,
                 // Agregar información de promociones desbloqueadas
                 promo_discount: promotions.hasDiscount ? 10 : 0,
                 promo_free_shipping: promotions.hasFreeShipping,
