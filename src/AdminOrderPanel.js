@@ -231,11 +231,14 @@ const AdminOrderPanel = () => {
         }
 
         if (filters.buscar) {
-            pedidosFiltrados = pedidosFiltrados.filter(order => 
-                order.id.toString().includes(filters.buscar) ||
-                order.email.toLowerCase().includes(filters.buscar.toLowerCase()) ||
-                (order.nombre + ' ' + order.apellido).toLowerCase().includes(filters.buscar.toLowerCase())
-            );
+            pedidosFiltrados = pedidosFiltrados.filter(order => {
+                const nombre = getClientNombre(order).toLowerCase();
+                const email = getClientEmail(order).toLowerCase();
+                const buscar = filters.buscar.toLowerCase();
+                return order.id.toString().includes(buscar) ||
+                       email.includes(buscar) ||
+                       nombre.includes(buscar);
+            });
         }
 
         // Filtro por rango de fechas (interpretar como fechas locales completas)
