@@ -142,12 +142,10 @@ export const ProductsProvider = ({ children }) => {
     }
   }, []);
 
-  // Cargar productos y rango de precios al montar el contexto
+  // Cargar solo el rango de precios al montar el contexto
+  // Los productos se cargarán desde Products.js según los parámetros de la URL
   useEffect(() => {
     fetchPriceRange();
-    if (products.length === 0) {
-      fetchProducts({ page: 1, page_size: 12 });
-    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
