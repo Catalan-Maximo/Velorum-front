@@ -48,7 +48,7 @@ function Products() {
       q: q || undefined,
       precio_min: precioMin || undefined,
       precio_max: precioMax || undefined,
-      orden: orden || undefined,
+      orden: ordenMap[orden] || undefined,
       categoria: categoria !== 'Todos' ? categoria.toLowerCase() : undefined,
     };
     
